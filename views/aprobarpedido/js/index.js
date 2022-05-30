@@ -1,6 +1,7 @@
 $(function () {
 
   console.log('joel');
+  
   creardatatable("#tbarchivo");
 
   $('#btnagregar').on('click', function () {

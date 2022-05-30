@@ -1,0 +1,100 @@
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+        <div class="content-body">
+
+
+            <section id="dashboard-analytics">
+                <div class="row" id="table-small">
+
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header border-bottom p-1">
+                                <div class="head-label">
+                                    <h6 class="mb-0"></h6>
+                                </div>
+                                <div class="dt-action-buttons text-right">
+                                    <div class="dt-buttons d-inline-flex">
+                                        <button id="btnagregar" type="button" class="dt-button create-new btn btn-primary"><i class="fa-solid fa-cart-plus fa-beat"></i>&nbsp; NUEVO PEDIDO </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-header">
+                                <h4 class="card-title"> <i class="fa-solid fa-list"></i></i> Lista de Pedidos para Compra</h4>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="tbpedidos" class="table table-sm">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>#Nro Pedido</th>
+                                                <th>Descripcion</th>
+                                                <th>Area Solicita</th>
+                                                <th>Realizado por:</th>
+                                                <th>Moneda</th>
+                                                <th>Fecha Pedido</th>
+                                                <th>Estado</th>
+                                                <th>Total</th>
+                                                <th>Avance</th>
+                                                <th>Revisar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if (isset($this->ListadoPedidosUsuario)) { ?>
+                                                <?php foreach ($this->ListadoPedidosUsuario as $pd) { ?>
+                                                    <tr>
+                                                        <td class="text-left">
+                                                            <div class="media">
+                                                                <div class="avatar bg-light-success mr-0">
+                                                                    <div class="avatar-content">
+                                                                        <i data-feather="shopping-cart" stroke-width="3" class="avatar-icon"></i>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="media-body my-auto">
+                                                                    <h5 class="font-weight-bolder mb-0"> &nbsp; <?php echo $pd['nu_correla'] ?></h5>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+
+                                                        <td class="text-left"><strong><?php echo $pd['v_nombrepedido'] ?></strong> </td>
+                                                        <td class="text-left"><strong><?php echo $pd['v_nombrearea'] ?></strong> </td>
+                                                        <td class="text-left"><?php echo $pd['v_nombreusuario'] ?></td>
+                                                        <td class="text-left"><?php echo $pd['v_moneda'] ?></td>
+                                                        <td class="text-left"><?php echo $pd['d_fecha'] ?></td>
+
+                                                        <td class="text-left">
+                                                            <div class="badge badge-light-danger"><?php echo $pd['v_estado'] ?></div>
+                                                        </td>
+
+                                                        <td class="text-left"><?php echo $pd['nu_total'] ?></td>
+                                                        <td class='text-left'>
+                                                            <span class="badge badge-glow badge-<?php echo $pd['v_color_porcentaje'] ?> "><?php echo $pd['f_porcentaje'] ?>%</span>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up text-success font-medium-2">
+                                                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                                                <polyline points="17 6 23 6 23 12"></polyline>
+                                                            </svg>
+                                                        </td>
+
+                                                        <td class='text-left'>
+                                                            <a id='<?php echo $pd['nu_correla'] ?>' <?php $variable1 =  $pd['nu_correla'] ?> href="<?php echo BASE_URL ?><?php echo $pd['v_url'] ?>=<?php echo urlencode($variable1) ?>" class="btn btn-<?php echo $pd['v_btn1'] ?>"><i class="fas solid fa-<?php echo $pd['v_btn1Imagen'] ?>"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+    </div>
+</div>

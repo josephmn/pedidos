@@ -1,0 +1,168 @@
+    <!-- BEGIN: Content-->
+    <div class="app-content content ">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-md-9 col-12 mb-2">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <h2 class="content-header-title float-left mb-0">
+                                <b><?php foreach ($_SESSION['menus'] as $menu) { ?>
+                                        <?php if ($this->_controlador == $menu['v_link']) {
+                                            echo $menu['v_descripcion'];
+                                        } else {
+                                            '';
+                                        } ?>
+                                    <?php } ?>
+                                </b>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <section class="vertical-wizard">
+                    <div class="bs-stepper vertical vertical-wizard-example">
+                        <div class="bs-stepper-header">
+                            <div class="step crossed" data-target="#account-details-vertical">
+                                <button type="button" id="enruta" class="step-trigger" aria-selected="false">
+                                    <span class="bs-stepper-box">1</span>
+                                    <span class="bs-stepper-label">
+                                        <span class="bs-stepper-title">General</span>
+                                        <span class="bs-stepper-subtitle">Informacion general</span>
+                                    </span>
+                                </button>
+                            </div>
+
+                            <div class="step active" data-target="#personal-info-vertical">
+                                <button type="button" id="fueraruta" class="step-trigger" aria-selected="true">
+                                    <span class="bs-stepper-box">2</span>
+                                    <span class="bs-stepper-label">
+                                        <span class="bs-stepper-title">Cambiar contraseña</span>
+                                        <span class="bs-stepper-subtitle">Cambiar nueva contraseña</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bs-stepper-content">
+                            <div id="account-details-vertical" class="content dstepper-block">
+                                <div class="row">
+                                    <div class="col-md-12 col-12">
+                                        <div class="media">
+                                            <a class="mr-25">
+                                                <img src="<?php echo BASE_URL . $_SESSION['foto'] ?>" id="account-upload-img" class="rounded mr-50" alt="profile image" height="160" width="150" />
+                                            </a>
+                                            <div class="row">
+
+                                                <div class="col-sm-12">
+                                                    <div class="form-group">
+                                                        <p></p>
+                                                        <p>Cargar Imagen (formato jpg o png peso max. 1MB)</p>
+                                                        <div class="input-group">
+                                                            <div class="custom-file">
+                                                                <input type="file" name="archivo" class="custom-file-input" id="archivo">
+                                                                <label class="custom-file-label" for="exampleInputFile">Cargar archivo...</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12">
+                                                    <div class="form-group">
+                                                        <button type="button" id="btnsubir" name="btnsubir" class="btn btn-success btn-block"><b><i class="fa-solid fa-circle-chevron-up fa-beat"></i>&nbsp; Subir imagen</b></button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <p></p>
+
+                                        <div class="row">
+                                            <div class="col-12 col-sm-4">
+                                                <div class="form-group">
+                                                    <label for="account-e-mail">Dni</label>
+                                                    <input class="form-control" id="dni" placeholder="dni" autocomplete="off" value='<?php echo $_SESSION['dni'] ?>' />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 col-sm-4">
+                                                <div class="form-group">
+                                                    <label for="account-username">Nombres</label>
+                                                    <input type="text" class="form-control" id="nombres" placeholder="nombre" style="text-transform:uppercase" autocomplete="off" value='<?php echo $_SESSION['nombres'] ?>' />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 col-sm-4">
+                                                <div class="form-group">
+                                                    <label for="account-name">Apellidos</label>
+                                                    <input type="text" class="form-control" id="apellidos" placeholder="apellidos" style="text-transform:uppercase" autocomplete="off" value='<?php echo $_SESSION['apellidos'] ?>' />
+                                                </div>
+                                            </div>
+                                            <!-- <div class="col-12">
+                                                <button id="btnregistros" type="submit" class="btn btn-danger mt-2 mr-1 ">Guardar cambios&nbsp; <i class="fa-solid fa-floppy-disk fa-beat"></i></button>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="personal-info-vertical" class="content dstepper-block active">
+                                <div id="div-01"></div>
+                                <div class="row">
+                                    <div class="col-md-12 col-12">
+                                        <form class="form form-horizontal">
+                                            <div class="row">
+                                                <div class="col-12">
+
+                                                    <div class="row">
+                                                        <div class="col-12 col-sm-6">
+                                                            <div class="form-group">
+                                                                <label for="account-new-password">Nueva contraseña</label>
+                                                                <div class="input-group form-password-toggle input-group-merge">
+                                                                    <input type="password" id="passwd" class="form-control" placeholder="Nueva contraseña" />
+                                                                    <div class="input-group-append">
+                                                                        <div class="input-group-text cursor-pointer">
+                                                                            <i data-feather="eye"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-sm-6">
+                                                            <div class="form-group">
+                                                                <label for="account-retype-new-password">Repite nueva contraseña</label>
+                                                                <div class="input-group form-password-toggle input-group-merge">
+                                                                    <input type="password" id="passwd2" class="form-control" placeholder="Repita nueva contraseña" />
+                                                                    <div class="input-group-append">
+                                                                        <div class="input-group-text cursor-pointer"><i data-feather="eye"></i></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <!-- <button id="btnpassword" type="button" class="btn btn-warning mr-1 mt-1">Guardar cambios</button> -->
+                                                            <button id="btnpassword" type="button" class="btn btn-danger mt-2 mr-1 "><i class="fa-solid fa-floppy-disk fa-beat"></i> &nbsp; Guardar cambios</button>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+
+                <!-- / account setting page -->
+
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->

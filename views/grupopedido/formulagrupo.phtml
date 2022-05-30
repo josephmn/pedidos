@@ -1,0 +1,314 @@
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+
+        <div class="content-header row">
+            <div class="content-header-left col-md-9 col-12 mb-2">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <h4 class="content-header-title float-left mb-0">
+                            <a href="http://localhost:8080/pedidos/grupopedido/index"><strong><i class="fa-solid fa-caret-left fa-beat"></i> Regresar</strong></a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <section id="dashboard-analytics">
+                <div class="row" id="table-small">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header border-bottom p-1">
+                                <div class="head-label">
+                                    <h6 class="mb-0"></h6>
+                                </div>
+                                <div class="dt-action-buttons text-right">
+                                    <div class="dt-buttons d-inline-flex">
+                                        <button id="btnagregararea" type="button" class="dt-button create-new btn btn-primary"><i class="fa-solid fa-user-group"></i>&nbsp; AGREGAR AREA </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header">
+                                <h4 class="card-title"> <i class="fa-solid fa-user-group"></i> Detalle de Grupos y Areas</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="tbarea" class="table table-sm">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th class="text-left">#Grupo</th>
+                                                <th class="text-left">Grupo</th>
+                                                <th class="text-left">#Area</th>
+                                                <th class="text-left">Area</th>
+                                                <th class="text-left">Estado</th>
+                                                <th class="text-center">Editar</th>
+                                                <th class="text-center">Variable</th>
+                                                <th class="text-center">Eliminar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if (isset($this->ListadoGrupoArea)) { ?>
+                                                <?php foreach ($this->ListadoGrupoArea as $pd) { ?>
+                                                    <tr>
+                                                        <td class="text-left"><strong><?php echo $pd['v_id_grupo'] ?></strong> </td>
+                                                        <td class="text-left"><strong><?php echo $pd['v_descripcion'] ?></strong> </td>
+                                                        <td class="text-left"><?php echo $pd['v_idarea'] ?></td>
+                                                        <td class="text-left"><?php echo $pd['v_area'] ?></td>
+                                                        <td class="text-left"><?php echo $pd['v_nombre_estado'] ?></td>
+                                                        <td class="text-center"><a id='<?php echo $pd['v_idarea'] ?>' class="btn btn-info btn-sm text-white editar"><span class="fa-solid fa-marker fa-beat"><b></b></span></a></td>
+                                                        <td class="text-center"><a id='<?php echo $pd['v_idarea'] ?>' class="btn btn-success btn-sm text-white formula"><span class="fa-solid fa-cog fa-spin"><b></b></span></a></td>
+                                                        <td class="text-center"><a id='<?php echo $pd['v_idarea'] ?>' class="btn btn-danger btn-sm text-white delete"><span class="fa-solid fa-trash-can"><b></b></span></a></td>
+                                                    </tr>
+                                                <?php } ?>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header border-bottom p-1">
+                                <div class="head-label">
+                                    <h6 class="mb-0"></h6>
+                                </div>
+
+                                <div class="dt-action-buttons text-right">
+                                    <div class="dt-buttons d-inline-flex">
+                                        <button id="btnformula" type="button" class="dt-button create-new btn btn-primary"><i class="fas solid fa-square-root-variable"></i>&nbsp; AGREGAR FORMULA </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header">
+                                <h4 class="card-title"> <i class="fas solid fa-square-root-variable"></i> &nbsp;Detalle Formula para el Area: (<b id="frmarea" style="color:#14AC33"></b>) (<b id="frmareanombre" style="color:#14AC33"></b>) &nbsp;del Grupo : (<b id="frmgrupo" style="color:#14AC33"></b>) </h4>
+                            </div>
+
+                            <div class="card-body">
+                                <div id="div-load"></div>
+                                <div class="table-responsive">
+                                    <table id="tbformula" class="table table-sm">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th class="text-left">#Grupo</th>
+                                                <th class="text-left">#Area</th>
+                                                <th class="text-left">#ID</th>
+                                                <th class="text-left">Descripcion</th>
+                                                <th class="text-left">Condicion</th>
+                                                <th class="text-left">M.Inicio</th>
+                                                <th class="text-left">M.Tope</th>
+                                                <th class="text-left">Aprueba</th>
+                                                <th class="text-left">Encargado</th>
+                                                <th class="text-left">Correo</th>
+                                                <th class="text-left">Val.Monto</th>
+                                                <th class="text-left">Aprueba</th>
+                                                <th class="text-left">Rechaza</th>
+                                                <th class="text-left">Modifica</th>
+                                                <th class="text-left">Rcp.</th>
+                                                <th class="text-center"><i class="fa-solid fa-pen-to-square"></i>&nbsp;</th>
+                                                <th class="text-center"><i class="fa-solid fa-trash-can"></i>&nbsp;</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tablita-formula">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL CREAR AREA-->
+<div class="modal fade" id="modal-area" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xs" role="document">
+        <div class="modal-content">
+            <div class="modal-header  bg-gradient-success">
+                <h5 class="modal-title"><i class="fa-solid fa-layer-group"></i> &nbsp;<b id="titulomodalarea"></b></h5><b><span></span></b>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label font-weight-bolder">#Grupo</label>
+                        <input type="text" id="xid" tabindex="1" class="form-control" readonly="readonly" autocomplete="off" />
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="form-label font-weight-bolder">Area</label>
+                        <select id="xarea" class="select2 form-control form-control-lg">
+                            <?php foreach ($this->ComboArea as $ar) { ?>
+                                <option value="<?php echo $ar['v_areid']; ?>"><?php echo $ar['v_nombre']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="form-label font-weight-bolder">Estado</label>
+                        <select id="xestado" class="select2 form-control form-control-lg">
+                            <?php foreach ($this->ComboEstadoGrupo as $st) { ?>
+                                <option value="<?php echo $st['i_id']; ?>"><?php echo $st['v_nombre']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button id="xbtnguardar" type="button" class="btn btn-success btn-block">
+                            <i class="fas fa-save"></i>
+                            <b>Guardar</b></button>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="col-sm-6">
+                        <button id="xbtncancelar" type="button" class="btn btn-danger btn-block">
+                            <i class="fas fa-ban"></i>
+                            <b>Cancelar</b></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL CREAR USUARIO-->
+<div class="modal fade" id="modal-formula" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header  bg-gradient-success">
+                <h5 class="modal-title"><i class="fas solid fa-square-root-variable"></i> &nbsp;<b id="titulomodalformula"></b></h5><b><span id="idtabla"></span></b>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="div-load"></div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label font-weight-bolder">#Grupo</label>
+                        <input type="text" id="fxid" tabindex="1" class="form-control" readonly="readonly" autocomplete="off" />
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="form-label font-weight-bolder">#IDFormula</label>
+                        <input type="text" id="fxidformula" tabindex="1" class="form-control" readonly="readonly" autocomplete="off" />
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="form-label font-weight-bolder">#Area</label>
+                        <input type="text" id="fxidarea" tabindex="1" class="form-control" readonly="readonly" autocomplete="off" />
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="form-label font-weight-bolder">Nombre Area</label>
+                        <input type="text" id="fxidareanombre" tabindex="1" class="form-control" readonly="readonly" autocomplete="off" />
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="form-label font-weight-bolder">Descripcion</label>
+                        <input type="text" id="fxdescripcion" tabindex="1" class="form-control" placeholder="Ingrese decripcion" autocomplete="off" />
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="form-label font-weight-bolder">Condicion</label>
+                        <input type="text" id="fxcondicion" tabindex="1" class="form-control" placeholder=">= or <= or =" autocomplete="off" />
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="form-label font-weight-bolder">Monto Inicio</label>
+                        <div class="form-group">
+                            <input type="number" class="form-control font-weight-bolder" id="itemquantity1" aria-describedby="itemquantity" placeholder="0.00">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="form-label font-weight-bolder">Monto Fin</label>
+                        <div class="form-group">
+                            <input type="number" class="form-control font-weight-bolder" id="itemquantity2" aria-describedby="itemquantity" placeholder="0.00">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="form-label font-weight-bolder">Cargo</label>
+                        <select id="fxcargo" class="select2 form-control form-control-lg">
+                            <?php foreach ($this->ComboCargo as $cg) { ?>
+                                <option value="<?php echo $cg['v_carid']; ?>"><?php echo $cg['v_carnombre']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group col-md-6">
+                        <label class="form-label font-weight-bolder">Correo</label>
+                        <div class="input-group input-group-alternative">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i data-feather='mail'></i></span>
+                            </div>
+                            <input class="form-control" name="mail" id="mail" placeholder="Correo electrónico" autocomplete="off" type="email" required>
+                        </div>
+                        <span id="error" style="display:none;color:red;"></span>
+                        <span id="success" style="display:none;color:green;"></span>
+                        <span style="color: red; font-size: 12px; display: none;" class="errores correoerror">Ingresa tu correo</span>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <br>
+                        <div class="custom-control custom-control-success custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="customSwitch10" checked="">
+                            <label class="custom-control-label" for="customSwitch10"><strong>Valida Montos</strong></label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <br>
+                        <div class="custom-control custom-control-success custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="customSwitch101" checked="">
+                            <label class="custom-control-label" for="customSwitch101"><strong>Aprueba</strong></label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <br>
+                        <div class="custom-control custom-control-success custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="customSwitch102" checked="">
+                            <label class="custom-control-label" for="customSwitch102"><strong>Rechaza</strong></label>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <br>
+                        <div class="custom-control custom-control-success custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="customSwitch103" checked="">
+                            <label class="custom-control-label" for="customSwitch103"><strong>Envia modificar</strong></label>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <button id="fxbtnguardar" type="button" class="btn btn-success btn-block">
+                            <i class="fas fa-save"></i>
+                            <b>Guardar</b></button>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="col-sm-6">
+                        <button id="xfbtncancelar" type="button" class="btn btn-danger btn-block">
+                            <i class="fas fa-ban"></i>
+                            <b>Cancelar</b></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

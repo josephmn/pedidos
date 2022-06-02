@@ -65,15 +65,20 @@ class pedidosController extends Controller
 				"exceptions" => false,
 			);
 
-			$soap = new SoapClient($wsdl, $options);
+
 			$dni = array(
 				'v_username' => $_SESSION['dni'],
 			);
 
+
+
+			$soap = new SoapClient($wsdl, $options);
 			$result = $soap->ListadoPedidosUsuario($dni);
 			$ListadoPedidosUsuario = json_decode($result->ListadoPedidosUsuarioResult, true);
 
+
 			$this->_view->ListadoPedidosUsuario = $ListadoPedidosUsuario;
+
 
 			$this->_view->setJs(array('index'));
 			$this->_view->renderizar('index');
@@ -182,6 +187,11 @@ class pedidosController extends Controller
 				'fecha' => 	$currentTime,
 			);
 
+			$tope = array(
+				'post' =>  1,
+				'nu_correla' => '',
+				'v_idarea' => $_SESSION['idarea'],
+			);
 
 			$soap = new SoapClient($wsdl, $options);
 			$result = $soap->ListadoProveedor($proveedor);
@@ -208,6 +218,11 @@ class pedidosController extends Controller
 			$result = $soap->ListadoUnidad();
 			$ListadoUnidad = json_decode($result->ListadoUnidadResult, true);
 
+
+			$result = $soap->ConsultaTopePedido($tope);
+			$ConsultaTopePedido = json_decode($result->ConsultaTopePedidoResult, true);
+
+
 			$this->_view->proveedores = $proveedores;
 			$this->_view->PedidoEstado  = $PedidoEstado;
 			$this->_view->ListadoProducto  = $ListadoProducto;
@@ -216,7 +231,7 @@ class pedidosController extends Controller
 			$this->_view->ListadoNombrePppto  = $ListadoNombrePppto;
 			$this->_view->ListadoSubAcct  = $ListadoSubAcct;
 			$this->_view->ListadoUnidad  = $ListadoUnidad;
-
+			$this->_view->ConsultaTopePedido = $ConsultaTopePedido;
 
 			$this->_view->setJs(array('realizarpedido'));
 			$this->_view->renderizar('realizarpedido');
@@ -498,6 +513,7 @@ class pedidosController extends Controller
 				$v_encargado =   $data[0]['v_encargado'];
 				$i_idestado =   $data[0]['i_idestado'];
 				$i_idorden_aprobacion =   $data[0]['i_idorden_aprobacion'];
+				$i_filas =   $data[0]['i_filas'];
 
 				//Combo Local
 				$FilasMoneda = "";
@@ -526,6 +542,7 @@ class pedidosController extends Controller
 						"Cantidad" => $da['nu_cantidad'],
 						"Precio" => $da['nu_precio'],
 						"Total" => $da['nu_total'],
+						"v_disabled" => $da['v_disabled'],
 					);
 					$filas += ["$i" => $propiedades1];
 					$i++;
@@ -549,6 +566,7 @@ class pedidosController extends Controller
 					'v_encargado' => $v_encargado,
 					'i_idestado' => $i_idestado,
 					'i_idorden_aprobacion' => $i_idorden_aprobacion,
+					'i_filas' => $i_filas,
 					'FilasMoneda' => $FilasMoneda,
 					'FilasEstado' => $FilasEstado,
 					'data' => $filas
@@ -731,6 +749,56 @@ class pedidosController extends Controller
 					)
 				);
 			}
+		} else {
+			$this->redireccionar('index/logout');
+		}
+	}
+
+
+	public function ConsultaPedidoFile() //2
+	{
+		if (isset($_SESSION['usuario'])) {
+			putenv("NLS_LANG=SPANISH_SPAIN.AL32UTF8");
+			putenv("NLS_CHARACTERSET=AL32UTF8");
+			$this->getLibrary('json_php/JSON');
+			$json = new Services_JSON();
+
+			$post = $_POST['post'];
+			$nu_correla = $_POST['nropedido'];
+			$v_codprod = $_POST['codprodnote']; 
+
+			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
+
+			$options = array(
+				"uri" => $wsdl,
+				"style" => SOAP_RPC,
+				"use" => SOAP_ENCODED,
+				"soap_version" => SOAP_1_1,
+				"connection_timeout" => 60,
+				"trace" => false,
+				"encoding" => "UTF-8",
+				"exceptions" => false,
+			);
+
+			$client = array(
+				'post' =>		$post,
+				'nu_correla' =>		$nu_correla,
+				'v_codprod' =>		$v_codprod,
+			);
+
+
+			$soap = new SoapClient($wsdl, $options);
+			$result = $soap->ConsultaPedidoFile($client);
+			$data = json_decode($result->ConsultaPedidoFileResult, true);
+
+		 
+			header('Content-type: application/json; charset=utf-8');
+
+			echo $json->encode(
+				array(
+					"i_existe_file_pedido" => $data[0]['i_existe_file_pedido'],
+				)
+			);
 		} else {
 			$this->redireccionar('index/logout');
 		}

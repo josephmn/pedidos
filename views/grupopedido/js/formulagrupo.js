@@ -112,6 +112,7 @@ $(function () {
           let i_recepciona = res.data[property].i_recepciona;
           let v_btn1Nombre = res.data[property].v_btn1Nombre;
           let v_btn1Color = res.data[property].v_btn1Color;
+          let v_correo_next = res.data[property].v_correo_next;
           let fila =
             "<tr><td class='text-center'>" +
             v_id_grupo +
@@ -121,21 +122,19 @@ $(function () {
             i_idorden +
             "</td><td class='text-left'>" +
             v_descripcion_uno +
-            "</td><td class='text-left'> <strong>" +
-            v_condicion_uno +
             "</strong></td><td class='text-center'> <strong>" +
             f_valorinicio_condicion_uno +
             "</strong></td><td class='text-center'><strong>" +
             f_valortope_condicion_uno +
             "</strong></td><td class='text-center'>" +
             v_validar_tope +
-            // "</td><td class='text-left'>" +
-            // v_idcargo +
             "</td><td class='text-left'><strong>" +
             v_aprobador_uno +
-            "</strong></td><td class='text-left'>" +
+            "</td><td class='text-left'> <strong>" +
             v_correo +
-            "</td><td class='text-center'>" +
+            "</strong></td><td class='text-left'> <strong>" +
+            v_correo_next +
+            "</strong> </td><td class='text-center'>" +
             v_validar_tope +
             "</td><td class='text-center'>" +
             i_btn_aprobar +
@@ -266,7 +265,6 @@ $(function () {
       })
       return;
     }
-
     var v_idarea = frmarea;
     $.ajax({
       type: 'POST',
@@ -286,7 +284,7 @@ $(function () {
         }
 
         $("#fxdescripcion").val('');
-        $("#fxcondicion").val('');
+        $("#mailfinal").val('');
         $("#itemquantity1").val(res.f_monto_sgte);
         $("#itemquantity2").val('');
         $("#fxcargo").html("");
@@ -337,7 +335,7 @@ $(function () {
 
         $("#fxidformula").val(res.i_idorden);
         $("#fxdescripcion").val(res.v_descripcion_uno);
-        $("#fxcondicion").val(res.v_condicion_uno);
+        $("#mailfinal").val(res.v_correo_next);
         $("#itemquantity1").val(res.f_valorinicio_condicion_uno);
         $("#itemquantity2").val(res.f_valortope_condicion_uno);
         $("#fxcargo").html("");
@@ -372,12 +370,13 @@ $(function () {
     var v_idarea = $('#fxidarea').val();
     i_idorden = i_idorden;
     var v_descripcion_uno = $('#fxdescripcion').val();
-    var v_condicion_uno = $('#fxcondicion').val();
+    var v_condicion_uno = '';
     var f_valorinicio_condicion_uno = $('#itemquantity1').val()
     var f_valortope_condicion_uno = $('#itemquantity2').val()
     var v_idcargo = $('#fxcargo option:selected').val();
     var v_aprobador_uno = $('#fxcargo option:selected').text();
-    var v_correo = $('#mail').val()
+    var v_correo = $('#mail').val();
+    var v_correo_next = $('#mailfinal').val();
     var v_validar_tope = document.getElementById("customSwitch10").checked;
     var i_btn_aprobar = document.getElementById("customSwitch101").checked;
     var i_btn_rechazar = document.getElementById("customSwitch102").checked;
@@ -390,13 +389,10 @@ $(function () {
 
     var success = document.getElementById("success").innerHTML;
 
-
-
-
     if (Number(f_valorinicio_condicion_uno) > Number(f_valortope_condicion_uno)) {
       $("#itemquantity1").focus();
       Swal.fire({
-        title: "MONTO INICIAL NO PUEDE SER MAYOR AL MONTO FINAL",
+        title: "MONTO FINAL NO PUEDE SER MAYOR AL MONTO INICIAL",
         timer: 3000,
         timerProgressBar: true,
         showClass: {
@@ -442,10 +438,6 @@ $(function () {
       return;
     }
 
-
-
-
-
     if ((v_correo == '' || v_correo == null)) {
       $("#mail").focus();
       Swal.fire({
@@ -478,8 +470,6 @@ $(function () {
     //   return;
     // }
 
-
-
     Swal.fire({
       title: "Estas seguro de guardar en el Sistema?",
       text: "",
@@ -506,6 +496,7 @@ $(function () {
             v_idcargo: v_idcargo,
             v_aprobador_uno: v_aprobador_uno,
             v_correo: v_correo,
+            v_correo_next: v_correo_next,
             v_validar_tope: v_validar_tope,
             i_btn_aprobar: i_btn_aprobar,
             i_btn_rechazar: i_btn_rechazar,
@@ -548,6 +539,22 @@ $(function () {
     }
   })
 
+
+  $('#mailfinal').on('keyup', function () {
+    var re = /([A-Z0-9a-z_-][^@])+?@[^$#<>?]+?\.[\w]{2,4}/.test(this.value);
+    // var re = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(this.value);
+    if (!re) {
+      $('#errorfinal').show();
+      document.getElementById("errorfinal").innerHTML = 'Correo no valido';
+      $('#successfinal').hide();
+      document.getElementById("successfinal").innerHTML = '';
+    } else {
+      $('#errorfinal').hide();
+      document.getElementById("errorfinal").innerHTML = '';
+      $('#successfinal').show();
+      document.getElementById("successfinal").innerHTML = 'Correo valido';
+    }
+  })
 
 });
 

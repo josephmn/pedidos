@@ -358,6 +358,7 @@ class grupopedidoController extends Controller
 				$i_btn_rechazar  = $data[0]['i_btn_rechazar'];
 				$i_btn_modificar  = $data[0]['i_btn_modificar'];
 				$f_monto_sgte  = $data[0]['f_monto_sgte'];
+				$v_correo_next  = $data[0]['v_correo_next'];
 			} else {
 				//Combo Cargo
 				$i_idorden  =  "";
@@ -378,6 +379,7 @@ class grupopedidoController extends Controller
 				$i_btn_rechazar  = "";
 				$i_btn_modificar  = "";
 				$f_monto_sgte   = $ConsultaNextMonto[0]['f_monto_sgte'];
+				$v_correo_next   = "";
 			}
 
 			header('Content-type: application/json; charset=utf-8');
@@ -396,6 +398,7 @@ class grupopedidoController extends Controller
 					"i_btn_rechazar" => $i_btn_rechazar,
 					"i_btn_modificar" => $i_btn_modificar,
 					"f_monto_sgte" => $f_monto_sgte,
+					"v_correo_next" => $v_correo_next,
 
 				)
 			);
@@ -598,6 +601,7 @@ class grupopedidoController extends Controller
 			$v_idcargo       = $_POST['v_idcargo'];
 			$v_aprobador_uno       = $_POST['v_aprobador_uno'];
 			$v_correo       = $_POST['v_correo'];
+			$v_correo_next       = $_POST['v_correo_next'];
 			$v_validar_tope       = $_POST['v_validar_tope'];
 			$i_btn_aprobar       = $_POST['i_btn_aprobar'];
 			$i_btn_rechazar       = $_POST['i_btn_rechazar'];
@@ -627,6 +631,7 @@ class grupopedidoController extends Controller
 				'v_idcargo'      => $v_idcargo,
 				'v_aprobador_uno'      => $v_aprobador_uno,
 				'v_correo'      => $v_correo,
+				'v_correo_next'      => $v_correo_next,
 				'v_validar_tope'      => $v_validar_tope,
 				'i_btn_aprobar'      => $i_btn_aprobar,
 				'i_btn_rechazar'      => $i_btn_rechazar,
@@ -712,6 +717,7 @@ class grupopedidoController extends Controller
 						"i_recepciona" => $da['i_recepciona'],
 						"v_btn1Nombre" => $da['v_btn1Nombre'],
 						"v_btn1Color" => $da['v_btn1Color'],
+						"v_correo_next" => $da['v_correo_next'],
 					);
 					$filas += ["$i" => $propiedades1];
 					$i++;

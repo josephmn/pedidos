@@ -1,6 +1,6 @@
 <?php
 
-class aprobarpedidoController extends Controller
+class pedidoaprobadoController extends Controller
 {
 
 	public function __construct()
@@ -46,13 +46,11 @@ class aprobarpedidoController extends Controller
 					'plugins/vendors/js/vendors.min',
 					'plugins/vendors/js/forms/wizard/bs-stepper.min',
 
-
 					'plugins/vendors/js/charts/apexcharts',
 					'plugins/vendors/js/charts/chart.min',
 					'plugins/vendors/js/charts/apexcharts.min',
 					'plugins/vendors/js/extensions/toastr.min',
 					'plugins/vendors/js/extensions/moment.min',
-
 
 					'plugins/vendors/js/forms/select/select2.full.min',
 					'plugins/vendors/js/forms/validation/jquery.validate.min',
@@ -65,11 +63,8 @@ class aprobarpedidoController extends Controller
 					'dist/js/scripts/forms/form-input-mask',
 					'plugins/vendors/js/forms/cleave/cleave.min',
 					'dist/js/scripts/forms/form-wizard',
-
 					'dist/js/scripts/progressbar/progressbar',
 					'dist/js/scripts/progressbar/progressbar.min',
-
-
 				)
 			);
 			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
@@ -86,23 +81,20 @@ class aprobarpedidoController extends Controller
 			);
 			$soap = new SoapClient($wsdl, $options);
 
-			$cargo = array(
-				'post' => 1,
+			$lst = array(
+				'post' => 2,
 				'v_cargo' => $_SESSION['id_cargo'],
 				'i_perfil' => $_SESSION['idperfil'],
-				'i_estado' => 3,
+				'i_estado' => 1,
 			);
-
-			$result = $soap->ListadoPedidosAprobacion($cargo);
+			$result = $soap->ListadoPedidosAprobacion($lst);
 			$ListadoPedidosAprobacion = json_decode($result->ListadoPedidosAprobacionResult, true);
 
 
 			$estadopedido = array(
-				'post' =>	2,
+				'post' =>	3,
 				'v_usuario' => $_SESSION['dni'],
 			);
-
-
 			$result = $soap->PedidoEstados($estadopedido);
 			$PedidoEstado = json_decode($result->PedidoEstadosResult, true);
 
@@ -153,7 +145,6 @@ class aprobarpedidoController extends Controller
 			$soap = new SoapClient($wsdl, $options);
 			$result = $soap->MostrarTimelinePedido($client);
 			$data = json_decode($result->MostrarTimelinePedidoResult, true);
-
 			$f_porcentaje  =  intval($data[0]['f_porcentaje']);
 
 
@@ -180,6 +171,7 @@ class aprobarpedidoController extends Controller
 					"v_botones_aprobacion" => $da['v_botones_aprobacion'],
 					"v_descripcion_aprobador" => $da['v_descripcion_aprobador'],
 					"d_fecha_registrotrk" => $da['d_fecha_registrotrk'],
+					"v_botones_final" => $da['v_botones_final'],
 				);
 				$filas += ["$i" => $propiedades1];
 				$i++;
@@ -316,7 +308,7 @@ class aprobarpedidoController extends Controller
 				$mail->isSMTP();
 				$mail->SMTPDebug = 0;
 				$mail->SMTPAuth = true;
-				// $mail->SMTPSecure = 'tls';
+				$mail->SMTPSecure = 'tls';
 				$mail->Mailer = 'smtp';
 				$mail->Host = $conficorreo[0]['v_servidor_entrante'];
 				$mail->Username  = $conficorreo[0]['v_correo_salida'];
@@ -506,7 +498,7 @@ class aprobarpedidoController extends Controller
 			);
 
 			$pdo = array(
-				'post' => 1,
+				'post' => 2,
 				'v_cargo' => $_SESSION['id_cargo'],
 				'i_perfil' => $_SESSION['idperfil'],
 				'i_estado' => $i_estado,

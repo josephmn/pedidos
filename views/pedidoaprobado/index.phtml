@@ -2,6 +2,7 @@
 <div class="app-content content ">
     <div class="content-overlay"></div>
     <div class="header-navbar-shadow"></div>
+
     <div class="content-wrapper">
         <div class="content-body">
 
@@ -28,6 +29,13 @@
                                                         <option value="<?php echo $st['i_id']; ?>"><?php echo $st['v_nombre']; ?></option>
                                                     <?php } ?>
                                                 </select>
+
+                                                <!-- <select id="estado" class="form-control mb-1" disabled>
+                                                    <option value="1">Option</option>
+                                                    <option value="2">Option2</option>
+                                                </select> -->
+
+
                                             </div>
                                         </div>
                                     </div>
@@ -36,7 +44,6 @@
 
                             <div class="card-body">
                                 <div id="div-load1"></div>
-
                                 <div class="table-responsive">
                                     <table id="tbpedidos" class="table table-sm">
                                         <thead class="thead-dark">
@@ -73,8 +80,6 @@
                                                         <td class="text-left"><?php echo $pd['v_moneda'] ?></td>
                                                         <td class="text-left"><?php echo $pd['d_fecha'] ?></td>
                                                         <td class="text-left"><?php echo $pd['nu_total'] ?></td>
-
-
                                                         <td class='text-left'>
                                                             <span class="badge badge-glow badge-<?php echo $pd['v_color_porcentaje'] ?> "><?php echo $pd['f_porcentaje'] ?>%</span>
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up text-success font-medium-2">
@@ -82,14 +87,9 @@
                                                                 <polyline points="17 6 23 6 23 12"></polyline>
                                                             </svg>
                                                         </td>
-
-
                                                         <td class='text-center'>
                                                             <a href="<?php echo BASE_URL ?>aprobarpedido/documentopedido/<?php echo  $pd['nu_correla'] ?>" class="btn btn-danger btn-sm bol" target="_blank" style="color:white"><i class="fas fa-file-pdf fa-beat"></i></a>
                                                         </td>
-
-
-
                                                         <td><a id='<?php echo $pd['nu_correla'] ?>' class="btn btn-primary btn-sm text-white revisar"><span class="fa-solid fa-eye fa-beat"><b></b></span></a></td>
                                                     </tr>
                                                 <?php } ?>
@@ -116,11 +116,9 @@
                                 <ul id="idtimeline" class="timeline">
                                 </ul>
                                 <hr>
-                                <p style="text-align:center;height:5px"><strong>AVANCE DE APROBACION(%)</strong></p>
-                                <div id="circle-container"></div>
+                                <p style="text-align:center;height:5px"><strong>APROBACION COMPLETADA(%)</strong></p>
+                                <div id="support-tracker-chart"></div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>

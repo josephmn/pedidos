@@ -35,13 +35,17 @@ $(function () {
   });
 
   $("#tbpedidos tbody").on("click", "a.revisar", function () {
+
+
     var i_estado = $("#estado").val();
+
+
     var nu_correla = $(this).attr("id");
     document.getElementById('nropedido').innerHTML = nu_correla;
     document.getElementById("nropedido").style.color = "green";
     $.ajax({
       type: "POST",
-      url: "/pedidos/aprobarpedido/MostrarTimelinePedido",
+      url: "/pedidos/pedidoaprobado/MostrarTimelinePedido",
       data: { nu_correla: nu_correla, i_estado: i_estado },
       beforeSend: function () {
         $("#div-load").html("");
@@ -64,6 +68,8 @@ $(function () {
           let v_botones_aprobacion = res.data[property].v_botones_aprobacion;
           let v_descripcion_aprobador = res.data[property].v_descripcion_aprobador;
           let d_fecha_registrotrk = res.data[property].d_fecha_registrotrk;
+          let v_botones_final = res.data[property].v_botones_final;
+
 
           $("#idtimeline").append(
             "<li class='timeline-item'>\
@@ -79,121 +85,86 @@ $(function () {
                 <p>"+ v_descripcion_aprobador + "</p>\
                 <div class='media align-items-center'>\
                 </div>\ " +
-            v_botones_aprobacion + " \
+            v_botones_final + " \
             </div >\
           </li > "
           );
         }
+
+
         $("#idico").append(
           "<i class='fa-solid fa-hourglass fa-spin'></i>"
         );
 
-        var numero = parseInt(res.f_porcentaje) / 100;
+        $("#support-tracker-chart").html("");
+        var numero = parseInt(res.f_porcentaje);
+        var $avgSessionStrokeColor2 = '#ebf0f7';
+        var $textHeadingColor = '#5e5873';
+        var $white = '#fff';
+        var $strokeColor = '#ebe9f1';
+        var $supportTrackerChart = document.querySelector('#support-tracker-chart');
+        var supportTrackerChartOptions;
+        var gainedChart;
+        var orderChart;
+        var avgSessionsChart;
+        var supportTrackerChart;
+        var salesVisitChart;
+        var isRtl = $('html').attr('data-textdirection') === 'rtl';
 
-        // var $avgSessionStrokeColor2 = '#ebf0f7';
-        // var $textHeadingColor = '#5e5873';
-        // var $white = '#fff';
-        // var $strokeColor = '#ebe9f1';
-        // var $supportTrackerChart = document.querySelector('#perro');
-
-        // var supportTrackerChartOptions;
-        // var gainedChart;
-        // var orderChart;
-        // var avgSessionsChart;
-        // var supportTrackerChart;
-        // var salesVisitChart;
-        // var isRtl = $('html').attr('data-textdirection') === 'rtl';
-
-        // supportTrackerChartOptions = {
-        //   chart: {
-        //     height: 200,
-        //     type: 'radialBar'
-        //   },
-        //   plotOptions: {
-        //     radialBar: {
-        //       size: 150,
-        //       offsetY: 20,
-        //       startAngle: -150,
-        //       endAngle: 150,
-        //       hollow: {
-        //         size: '65%'
-        //       },
-        //       track: {
-        //         background: $white,
-        //         strokeWidth: '100%'
-        //       },
-        //       dataLabels: {
-        //         name: {
-        //           offsetY: -5,
-        //           color: $textHeadingColor,
-        //           fontSize: '1rem'
-        //         },
-        //         value: {
-        //           offsetY: 15,
-        //           color: $textHeadingColor,
-        //           fontSize: '1.714rem'
-        //         }
-        //       }
-        //     }
-        //   },
-        //   colors: [window.colors.solid.danger],
-        //   fill: {
-        //     type: 'gradient',
-        //     gradient: {
-        //       shade: 'dark',
-        //       type: 'horizontal',
-        //       shadeIntensity: 0.5,
-        //       gradientToColors: [window.colors.solid.primary],
-        //       inverseColors: true,
-        //       opacityFrom: 1,
-        //       opacityTo: 1,
-        //       stops: [0, 100]
-        //     }
-        //   },
-        //   stroke: {
-        //     dashArray: 8
-        //   },
-        //   series: [numero],
-        //   labels: ['Avance']
-        // };
-
-        // supportTrackerChart = new ApexCharts($supportTrackerChart, supportTrackerChartOptions);
-        // supportTrackerChart.render();
-
-
-        $("#circle-container").html("");
-        var circleBar = new ProgressBar.Circle("#circle-container", {
-          color: "white",
-          strokeWidth: 4,
-          trailWidth: 25,
-          trailColor: "black",
-          easing: "easeInOut",
-          from: { color: "#F32C1E", width: 24 },
-          to: { color: "#03b300", width: 25 },
-          text: {
-            value: '0',
-            className: 'progress-text',
-            style: {
-              color: 'black',
-              position: 'absolute',
-              top: '45%',
-              left: '42%',
-              padding: 0,
-              margin: 0,
-              transform: null
+        supportTrackerChartOptions = {
+          chart: {
+            height: 200,
+            type: 'radialBar'
+          },
+          plotOptions: {
+            radialBar: {
+              size: 150,
+              offsetY: 20,
+              startAngle: -150,
+              endAngle: 150,
+              hollow: {
+                size: '65%'
+              },
+              track: {
+                background: $white,
+                strokeWidth: '100%'
+              },
+              dataLabels: {
+                name: {
+                  offsetY: -5,
+                  color: $textHeadingColor,
+                  fontSize: '1rem'
+                },
+                value: {
+                  offsetY: 15,
+                  color: $textHeadingColor,
+                  fontSize: '1.714rem'
+                }
+              }
             }
           },
-          step: (state, shape) => {
-            shape.path.setAttribute("stroke", state.color);
-            shape.path.setAttribute("stroke-width", state.width);
-            shape.setText(Math.round(numero * 100) + ' %');
-            console.log(shape.value());
-          }
-        });
-        circleBar.animate(numero, {
-          duration: 1250
-        });
-        console.log(circleBar);
+          colors: [window.colors.solid.danger],
+          fill: {
+            type: 'gradient',
+            gradient: {
+              shade: 'dark',
+              type: 'horizontal',
+              shadeIntensity: 0.5,
+              gradientToColors: [window.colors.solid.primary],
+              inverseColors: true,
+              opacityFrom: 1,
+              opacityTo: 1,
+              stops: [0, 100]
+            }
+          },
+          stroke: {
+            dashArray: 8
+          },
+          series: [numero],
+          labels: ['Completo']
+        };
+        supportTrackerChart = new ApexCharts($supportTrackerChart, supportTrackerChartOptions);
+        supportTrackerChart.render();
       },
     });
   });
@@ -203,7 +174,7 @@ $(function () {
     var i_estado = $("#estado").val();
     $.ajax({
       type: 'POST',
-      url: '/pedidos/aprobarpedido/ListadoAprobacionesPedido',
+      url: '/pedidos/pedidoaprobado/ListadoAprobacionesPedido',
       data: { i_estado: i_estado },
 
       beforeSend: function () {
@@ -402,7 +373,7 @@ function checkInput(r) {
       if (result.isConfirmed) {
         $.ajax({
           type: 'POST',
-          url: '/pedidos/aprobarpedido/ProcesoAprobacionPedido',
+          url: '/pedidos/pedidoaprobado/ProcesoAprobacionPedido',
           data: {
             post: post,
             nu_correla: nu_correla
@@ -612,7 +583,7 @@ function checkInput(r) {
       if (count == 1) {
         $.ajax({
           type: 'POST',
-          url: '/pedidos/aprobarpedido/MostrarFilePedido',
+          url: '/pedidos/pedidoaprobado/MostrarFilePedido',
           data: { post: post, nropedido: nropedido, codprodnote: codprodnote, v_nombre_file: v_nombre_file },
 
           beforeSend: function () {

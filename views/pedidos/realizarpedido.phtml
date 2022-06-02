@@ -9,7 +9,7 @@
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
                         <h4 class="content-header-title float-left mb-0">
-                            <a href="http://localhost:8080/pedidos/pedidos/index"><strong><i class="fa-solid fa-caret-left fa-beat"></i> Regresar</strong></a>
+                            <a href="http://localhost/pedidos/pedidos/index"><strong><i class="fa-solid fa-caret-left fa-beat"></i> Regresar</strong></a>
                         </h4>
                     </div>
                 </div>
@@ -112,9 +112,8 @@
                                         <br>
                                         <button id="pptoadd" type="button" style="height:40px" class="btn btn-relief-primary bg-darken-2 colors-container rounded text-white btn-block btn-sm"><i class="fa-solid fa-coins fa-beat"></i><strong>&nbsp; Presupuesto</strong></button>
                                     </div>
-
                                 </div>
-                                <p></p>
+
                                 <p style="text-align:center;height:5px"><strong>Detalle del Pedido</strong></p>
                                 <hr>
                                 <table id="example2" class="table table-sm">
@@ -144,6 +143,11 @@
                                     <h6 class="mb-0" style="color:rgb(0,0,0)" id="fecharesumen"><strong></strong> </h6>
                                     <hr style="color:rgb(122,182,21)">
                                     <b style="color:rgb(0,0,0)">Importe total &nbsp; (<b id="monedaimporte"></b>) :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b> <strong><b style="font-weight: bold" id="resumentotal"></b></strong>
+                                    <hr style="color:rgb(122,182,21)">
+                                    <b style="color:rgb(0,0,0)">Monto Limite del Pedido S/. &nbsp; (<b class="alert-success" id="montolimite"><?php echo $this->ConsultaTopePedido[0]['f_valortope_condicion_uno']; ?></b>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b> <strong><b style="font-weight: bold"></b></strong>
+
+
+
                                 </div>
                             </div>
 
@@ -177,6 +181,11 @@
                                     </div>
 
                                     <div class="col-md-2" style="height:50px;">
+                                        <br>
+                                        <div class="custom-control custom-control-success custom-radio">
+                                            <input type="radio" id="customRadio1" name="customRadio1" class="custom-control-input" />
+                                            <label class="custom-control-label" for="customRadio1">Control</label>
+                                        </div>
                                     </div>
 
                                     <div class="col-md-3" style="height:50px;">
@@ -186,7 +195,7 @@
                                         <h6 class="text-center" style="color:rgb(179, 27, 0);height:3px">
                                         </h6>
                                         <div class="form-group">
-                                            <button id="btnsendpedido" type="button" style="height:40px" class="btn btn-relief-info bg-darken-2 colors-container rounded text-white btn-block btn-sm"><i class="fa-solid fa-paper-plane fa-beat"></i><strong>&nbsp; Enviar pedido para su aprobacion</strong></button>
+                                            <button id="btnsendpedido" type="button" style="height:40px" class="btn btn-relief-primary bg-darken-2 colors-container rounded text-white btn-block btn-sm"><i class="fa-solid fa-paper-plane fa-beat"></i><strong>&nbsp; Enviar para aprobacion</strong></button>
                                         </div>
                                     </div>
                                 </div>
@@ -223,10 +232,10 @@
                                                         <table id="tbproducto" class="table table-sm">
                                                             <thead class="thead-dark">
                                                                 <tr>
-                                                                    <th>#Codigo</th>
+                                                                    <th>Codigo</th>
                                                                     <th>Nombre</th>
-                                                                    <th>Unidad</th>
-                                                                    <th>#</th>
+                                                                    <th class='text-left'>Und</th>
+                                                                    <th class='text-center'><i class="fa-solid fa-plus"></i> &nbsp;</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -235,9 +244,9 @@
                                                                         <tr>
                                                                             <td class="text-center"><strong><?php echo $prod['v_invtid'] ?></strong> </td>
                                                                             <td class="text-left"><?php echo $prod['v_nombre'] ?></td>
-                                                                            <td class="text-left"><?php echo $prod['v_unidad'] ?></td>
+                                                                            <td class="text-center"><?php echo $prod['v_unidad'] ?></td>
                                                                             <td class='text-center'>
-                                                                                <a id="<?php echo $prod['v_invtid'] ?>" class="btn btn-<?php echo $prod['v_btn1Boton'] ?>"><i class="fas fa-<?php echo $prod['v_btn1Imagen'] ?>"></i></a>
+                                                                                <a id="<?php echo $prod['v_invtid'] ?>" class="btn btn-<?php echo $prod['v_btn1Boton'] ?>"><i class="fa-solid fa-<?php echo $prod['v_btn1Imagen'] ?>"></i></a>
                                                                             </td>
                                                                         </tr>
                                                                     <?php } ?>
@@ -309,7 +318,6 @@
                                                                                 <button type="button" id="additem" class="btn btn-primary waves-effect waves-float waves-light"><i class="fa-solid fa-cart-plus fa-beat"></i>&nbsp; Agregar</button>
                                                                                 </button>
                                                                             </div>
-
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -328,7 +336,6 @@
                 </div>
             </section>
         </div>
-
     </div>
 </div>
 
@@ -430,7 +437,6 @@
     </div>
 </div>
 
-
 <!-- MODAL AGREGAR ARCHIVOS -->
 <div class="modal fade" id="modal-nota" data-backdrop="static">
     <div class="modal-dialog modal-lg">
@@ -513,6 +519,41 @@
     </div>
 </div>
 
+<!-- MODAL AGREGAR ARCHIVOS (CUANDO YA GENERA EL PEDIDO Y LO ENVIA)-->
+<div class="modal fade" id="modal-files" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header   bg-gradient-warning " style="height:35px;">
+                <h5 class="modal-title col-11 text-center"><b><i class="fa-solid fa-file fa-bounce"></i>&nbsp;&nbsp;ARCHIVOS CARGADOS</b></h5>
+                <button id="close_pedido2" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <div id="div-files"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <table id="tbarchivos" class="table table-sm">
+                                <thead class="thead-dark">
+                                    <tr class="text-left">
+                                        <th>#Pedido</th>
+                                        <th class="text-left">Item</th>
+                                        <th class="text-left">Descripcion</th>
+                                        <th class="text-center"><i class="fa-solid fa-eye"></i> &nbsp;&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablita-files">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- MODAL AGREGAR PRESUPUESTO-->
 <div class="modal fade" id="modal-ppto" data-backdrop="static">
@@ -520,7 +561,7 @@
         <div class="modal-content">
             <div class="modal-header  bg-gradient-success" style="height:37px">
                 <h4 class="modal-title col-11 text-center"><b><i class="fa-solid fa-wallet fa-bounce"></i>&nbsp;PRESUPUESTO</b></h4>
-                <button id="close_pedido" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button id="close_pedido1" type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -607,8 +648,6 @@
                                     </div>
                                 </div>
 
-
-
                                 <div class="col-sm-2">
                                     <div class="form-group">
                                         <label class="form-label font-weight-bolder badge badge-light-success">Guardar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -616,9 +655,7 @@
                                         <button type="button" id="agregarppto" name="agregarppto" class="btn btn-primary btn-block"><b><i class="fa-solid fa-floppy-disk fa-beat"></i></b></button>
                                     </div>
                                 </div>
-
                             </div>
-
 
                             <p style="text-align:center;height:5px;color:rgb(0,0,0)"><strong>Detalle registrado</strong></p>
                             <!-- <table id="tbpptopedido" class="table table-bordered"> -->
@@ -638,13 +675,70 @@
                                 <tbody id="tablita-ppto">
                                 </tbody>
                             </table>
-
-
-
-
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal-pptos" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header  bg-gradient-success" style="height:37px">
+                <h4 class="modal-title col-11 text-center"><b><i class="fa-solid fa-wallet fa-bounce"></i>&nbsp;PRESUPUESTO AGREGADO</b></h4>
+                <button id="close_pptos" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <div id="div-pptos"></div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <p style="text-align:center;height:5px;color:rgb(0,0,0)"><strong>Detalle registrado</strong></p>
+                            <table id="tbpptopedidos" class="table table-sm">
+                                <thead class="thead-dark">
+                                    <tr class="text-left">
+                                        <th class="text-left">#Pedido</th>
+                                        <th class="text-left">#IdPpto</th>
+                                        <th class="text-left">#Partida</th>
+                                        <th class="text-left">Periodo</th>
+                                        <th class="text-left">Mes</th>
+                                        <th class="text-left">Monto</th>
+                                        <th class="text-left">Centrocosto</th>
+                                        <th class="text-center"><i class="fa-solid fa-trash-can"></i> &nbsp;&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablita-pptos">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL INSERTANDO -->
+<div class="modal fade" id="modal-insert" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-warning" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-warning"><strong> <i class="fa-solid fa-spinner fa-spin-pulse"></i>&nbsp; PROCESANDO...</strong></h5>
+            </div>
+
+            <div class="modal-body">
+                <p>
+                    <strong>Se estan procesando los datos</strong>
+                </p>
+                <p>
+                    <strong>Tiempo transcurrido: <b id="number"></b> segundos</strong>
+                </p>
             </div>
         </div>
     </div>

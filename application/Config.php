@@ -6,7 +6,7 @@
  * -------------------------------------
  */
 
-define('BASE_URL', 'http://localhost:8080/pedidos/');
+define('BASE_URL', 'http://localhost/pedidos/');
 define('BASE_ROOT',$_SERVER['DOCUMENT_ROOT'].'/pedidos/');
 // define('BASE_ROOT',$_SERVER['DOCUMENT_ROOT']);
 define('DEFAULT_CONTROLLER', 'index');
@@ -17,4 +17,3 @@ define('DB_HOST1', 'localhost');
 define('DB_USER1', 'root');
 define('DB_PASS1', '');
 define('DB_NAME1', 'verdum_altomayo');
-?>

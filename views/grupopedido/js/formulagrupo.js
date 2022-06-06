@@ -113,6 +113,8 @@ $(function () {
           let v_btn1Nombre = res.data[property].v_btn1Nombre;
           let v_btn1Color = res.data[property].v_btn1Color;
           let v_correo_next = res.data[property].v_correo_next;
+          let v_btn2Nombre = res.data[property].v_btn2Nombre;
+          let v_btn2Color = res.data[property].v_btn2Color;
           let fila =
             "<tr><td class='text-center'>" +
             v_id_grupo +
@@ -149,7 +151,7 @@ $(function () {
             " class='btn btn-" + v_btn1Color + " btn-sm text-white " + v_btn1Nombre + "'><span class='fa-solid fa-marker fa-beat'><b></b></span></a></td>" +
             "</td><td><a id=" +
             i_idorden +
-            " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+            " class='btn btn-" + v_btn2Color + " btn-sm text-white " + v_btn2Nombre + "'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
           let btn = document.createElement("tr");
           btn.innerHTML = fila;
           document.getElementById("tablita-formula").appendChild(btn);
@@ -289,6 +291,12 @@ $(function () {
         $("#itemquantity2").val('');
         $("#fxcargo").html("");
         $("#fxcargo").append(res.FilascomboCargo);
+
+
+        $("#fxusername").html("");
+        $("#fxusername").append(res.FilascomboUsuario);
+
+        $("#fxnombrecorreo").val('');
         $("#mail").val('');
         document.getElementById("customSwitch10").checked = false;
         document.getElementById("customSwitch101").checked = true;
@@ -340,6 +348,12 @@ $(function () {
         $("#itemquantity2").val(res.f_valortope_condicion_uno);
         $("#fxcargo").html("");
         $("#fxcargo").append(res.FilascomboCargo);
+
+        $("#fxusername").html("");
+        $("#fxusername").append(res.FilascomboUsuario);
+
+        $("#fxnombrecorreo").val(res.v_nombre_correo);
+
         $("#mail").val(res.v_correo);
         document.getElementById("customSwitch10").checked = parseInt(res.v_validar_tope);
         document.getElementById("customSwitch101").checked = parseInt(res.i_btn_aprobar);
@@ -355,6 +369,11 @@ $(function () {
   });
 
 
+
+  $("#fxusername").change(function () {
+    var fxusername = $('#fxusername option:selected').text();
+    $("#fxnombrecorreo").val(fxusername);
+  });
 
   $('#fxbtnguardar').on('click', function () {
     var i_idorden = 0;
@@ -389,6 +408,12 @@ $(function () {
 
     var success = document.getElementById("success").innerHTML;
 
+    var v_username = $('#fxusername option:selected').val();
+    var v_nombre_correo = $('#fxnombrecorreo').val();
+    var v_genero = 'M';
+
+
+
     if (Number(f_valorinicio_condicion_uno) > Number(f_valortope_condicion_uno)) {
       $("#itemquantity1").focus();
       Swal.fire({
@@ -410,6 +435,22 @@ $(function () {
       $("#fxcargo").focus();
       Swal.fire({
         title: "SELECCIONE UN CARGO, PARA QUE VALIDE LOS MONTOS INGRESADOS",
+        timer: 3000,
+        timerProgressBar: true,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
+    if ((v_username == 'XXXXXXXX')) {
+      $("#fxusername").focus();
+      Swal.fire({
+        title: "SELECCIONE UN USUARIO",
         timer: 3000,
         timerProgressBar: true,
         showClass: {
@@ -453,6 +494,8 @@ $(function () {
       })
       return;
     }
+
+
 
     // if ((success == '' || success == null)) {
     //   $("#mail").focus();
@@ -500,7 +543,11 @@ $(function () {
             v_validar_tope: v_validar_tope,
             i_btn_aprobar: i_btn_aprobar,
             i_btn_rechazar: i_btn_rechazar,
-            i_btn_modificar: i_btn_modificar
+            i_btn_modificar: i_btn_modificar,
+            v_username: v_username,
+            v_nombre_correo: v_nombre_correo,
+            v_genero: v_genero,
+
           },
           success: function (res) {
             Swal.fire({

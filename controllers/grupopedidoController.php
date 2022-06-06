@@ -325,6 +325,9 @@ class grupopedidoController extends Controller
 			$result = $soap->ComboCargo();
 			$ComboCargo = json_decode($result->ComboCargoResult, true);
 
+			$result = $soap->ComboUsuario();
+			$ComboUsuario = json_decode($result->ComboUsuarioResult, true);
+
 			$sgtmonto = array(
 				'v_id_grupo' => $v_id_grupo,
 				'v_idarea' => $v_idarea,
@@ -351,6 +354,18 @@ class grupopedidoController extends Controller
 					}
 					$FilascomboCargo .= "<option " . $selcargo . " value=" . $dp['v_carid'] . ">" . $dp['v_carnombre'] . "</option>";
 				}
+
+				$FilascomboUsuario = "";
+				$selusuario = "";
+				foreach ($ComboUsuario as $dp) {
+					if ($dp['v_dni'] == $data[0]['v_username']) {
+						$selusuario = "selected='selected'";
+					} else {
+						$selusuario = "";
+					}
+					$FilascomboUsuario .= "<option " . $selusuario . " value=" . $dp['v_dni'] . ">" . $dp['v_nombres'] . "</option>";
+				}
+
 				$v_aprobador_uno  = $data[0]['v_aprobador_uno'];
 				$v_correo  = $data[0]['v_correo'];
 				$v_validar_tope  = $data[0]['v_validar_tope'];
@@ -359,6 +374,8 @@ class grupopedidoController extends Controller
 				$i_btn_modificar  = $data[0]['i_btn_modificar'];
 				$f_monto_sgte  = $data[0]['f_monto_sgte'];
 				$v_correo_next  = $data[0]['v_correo_next'];
+				$v_nombre_correo  = $data[0]['v_nombre_correo'];
+				$v_genero  = $data[0]['v_genero'];
 			} else {
 				//Combo Cargo
 				$i_idorden  =  "";
@@ -372,6 +389,15 @@ class grupopedidoController extends Controller
 				foreach ($ComboCargo as $dp) {
 					$FilascomboCargo .= "<option " . $selcargo . " value=" . $dp['v_carid'] . ">" . $dp['v_carnombre'] . "</option>";
 				}
+
+
+				$FilascomboUsuario = "";
+				$selusuario = "";
+				foreach ($ComboUsuario as $dp) {
+					$FilascomboUsuario .= "<option " . $selusuario . " value=" . $dp['v_dni'] . ">" . $dp['v_nombres'] . "</option>";
+				}
+
+
 				$v_aprobador_uno  = "";
 				$v_correo  = "";
 				$v_validar_tope  = "";
@@ -380,6 +406,8 @@ class grupopedidoController extends Controller
 				$i_btn_modificar  = "";
 				$f_monto_sgte   = $ConsultaNextMonto[0]['f_monto_sgte'];
 				$v_correo_next   = "";
+				$v_nombre_correo  =  "";
+				$v_genero  =  "";
 			}
 
 			header('Content-type: application/json; charset=utf-8');
@@ -391,6 +419,7 @@ class grupopedidoController extends Controller
 					"f_valorinicio_condicion_uno" => $f_valorinicio_condicion_uno,
 					"f_valortope_condicion_uno" => $f_valortope_condicion_uno,
 					"FilascomboCargo" => $FilascomboCargo,
+					"FilascomboUsuario" => $FilascomboUsuario,
 					"v_aprobador_uno" => $v_aprobador_uno,
 					"v_correo" => $v_correo,
 					"v_validar_tope" => $v_validar_tope,
@@ -399,7 +428,8 @@ class grupopedidoController extends Controller
 					"i_btn_modificar" => $i_btn_modificar,
 					"f_monto_sgte" => $f_monto_sgte,
 					"v_correo_next" => $v_correo_next,
-
+					"v_nombre_correo" => $v_nombre_correo,
+					"v_genero" => $v_genero,
 				)
 			);
 		} else {
@@ -606,6 +636,9 @@ class grupopedidoController extends Controller
 			$i_btn_aprobar       = $_POST['i_btn_aprobar'];
 			$i_btn_rechazar       = $_POST['i_btn_rechazar'];
 			$i_btn_modificar       = $_POST['i_btn_modificar'];
+			$v_username       = $_POST['v_username'];
+			$v_nombre_correo       = $_POST['v_nombre_correo'];
+			$v_genero       = $_POST['v_genero'];
 
 			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
 			$options = array(
@@ -636,6 +669,9 @@ class grupopedidoController extends Controller
 				'i_btn_aprobar'      => $i_btn_aprobar,
 				'i_btn_rechazar'      => $i_btn_rechazar,
 				'i_btn_modificar'      => $i_btn_modificar,
+				'v_username'      => $v_username,
+				'v_nombre_correo'      => $v_nombre_correo,
+				'v_genero'      => $v_genero,
 			);
 
 			$result2 = $soap->GuardarGrupoFormula($params);
@@ -718,6 +754,8 @@ class grupopedidoController extends Controller
 						"v_btn1Nombre" => $da['v_btn1Nombre'],
 						"v_btn1Color" => $da['v_btn1Color'],
 						"v_correo_next" => $da['v_correo_next'],
+						"v_btn2Nombre" => $da['v_btn2Nombre'],
+						"v_btn2Color" => $da['v_btn2Color'],
 					);
 					$filas += ["$i" => $propiedades1];
 					$i++;

@@ -303,13 +303,20 @@ class aprobarpedidoController extends Controller
 				'v_cargo' => $v_cargo,
 			);
 
+			$client = array(
+				'nu_correla' =>		$nu_correla,
+			);
+
 			$soap = new SoapClient($wsdl, $options);
 			$result2 = $soap->ProcesoAprobacionPedido($params);
 			$ProcesoAprobacionPedido = json_decode($result2->ProcesoAprobacionPedidoResult, true);
 			if (count($ProcesoAprobacionPedido) > 0) {
-
 				$result2 = $soap->ListadoCorreo();
 				$conficorreo = json_decode($result2->ListadoCorreoResult, true);
+
+				$result = $soap->MostrarPedido($client);
+				$MostrarPedido = json_decode($result->MostrarPedidoResult, true);
+
 				$this->getLibrary('phpmailer/class.phpmailer');
 				$this->getLibrary('phpmailer/PHPMailerAutoload');
 				$mail = new PHPMailer;
@@ -325,24 +332,90 @@ class aprobarpedidoController extends Controller
 
 				$mail->From = ($conficorreo[0]['v_correo_salida']);
 				$mail->FromName = 'VERDUM PERÚ SAC';
-				$mail->addAddress('programador.app03@verdum.com');
+				// $mail->addAddress('programador.app03@verdum.com');
+				$mail->addAddress(trim($ProcesoAprobacionPedido[0]['v_correo_next']));
+
+				$saludo = "";
+				$timezone = -5;
+				$hora =  strval(gmdate("H", time() + 3600 * ($timezone + date("I"))));
+
+				if ($hora >= 0 && $hora <= 11) {
+					$saludo = 'buenos días,';
+				} else if ($hora >= 12 && $hora <= 18) {
+					$saludo = 'buenas tardes,';
+				} else if ($hora >= 19 && $hora <= 23) {
+					$saludo = 'buenas noches,';
+				}
+
+				$saludo_envio = "";
+				$mensaje_final_solped = "";
+				$mensaje_final_detalle = "";
+				if (trim($ProcesoAprobacionPedido[0]['m_v_alias_correo']) == 'FIN') {
+					$saludo_envio = 'Estimado Marco, ' . $saludo;
+					$mensaje_final_solped = 'PROCESO DE APROBACIONES DE (SOLPED) FINALIZADO';
+					$mensaje_final_detalle = 'Se ha completado la fase de aprobacion de la Siguiente SOLPED:';
+				} else {
+					$alias_correo = "";
+					if (intval($ProcesoAprobacionPedido[0]['m_i_genero'])  == 1) {
+						$alias_correo = 'Estimado ';
+					} else {
+						$alias_correo = 'Estimada ';
+					}
+
+					$mensaje_final_solped = 'CORREO PARA APROBACION DE SOLPED';
+					$saludo_envio = $alias_correo . (trim($ProcesoAprobacionPedido[0]['m_v_alias_correo'])) . ', ' . $saludo;
+					$mensaje_final_detalle = 'Envío mi solicitud de pedido para su aprobacion:';
+				}
+
+				$filas = "";
+				$filas .= "
+					<tr>
+						<td style='border: 1px solid black; border-collapse: collapse; border-color: black;' ALIGN=center>" . $MostrarPedido[0]['nu_correla'] . "</td>
+						<td style='border: 1px solid black; border-collapse: collapse; border-color: black;' ALIGN=left>" . $MostrarPedido[0]['v_nombrepedido'] . "</td>
+						<td style='border: 1px solid black; border-collapse: collapse; border-color: black;' ALIGN=center>" . $MostrarPedido[0]['v_area'] . "</td>
+						<td style='border: 1px solid black; border-collapse: collapse; border-color: black;' ALIGN=center>" . $MostrarPedido[0]['v_moneda'] . "</td>
+						<td style='border: 1px solid black; border-collapse: collapse; border-color: black;' ALIGN=right>" . number_format($MostrarPedido[0]['f_importotal'], 2) . "</td>
+					</tr>
+					";
+
 
 				$mail->isHTML(true);
 				$mail->CharSet = "utf-8";
-				$mail->Subject = 'ENVIO DE CORREO RECUPERACION DE CLAVE';
+				$mail->Subject = $mensaje_final_solped;
 				$mail->Body = "
-				Hola  
+				 " . $saludo_envio . "</b>
 				<br>
 				<br>
-				Tiene el Siguiente pedido pendiente de Aprobar<br>
-				<br> 
+				$mensaje_final_detalle<br>
+				<br>
+				<table cellspacing='1' cellpadding='5'>
+					<thead>
+						<tr ALIGN=center>
+							<th style='border: 1px solid black; border-collapse: collapse; border-color: black;' bgcolor='#46C435'>#SOLPED</th>
+							<th style='border: 1px solid black; border-collapse: collapse; border-color: black;' bgcolor='#46C435'>DESCRIPCION</th>
+							<th style='border: 1px solid black; border-collapse: collapse; border-color: black;' bgcolor='#46C435'>AREA SOLICITA.</th>
+							<th style='border: 1px solid black; border-collapse: collapse; border-color: black;' bgcolor='#46C435'>MONEDA</th>
+							<th style='border: 1px solid black; border-collapse: collapse; border-color: black;' bgcolor='#46C435'>IMPORTE TOTAL</th>
+						</tr>
+					</thead>
+					<tbody>
+						" . $filas . "
+					</tbody>				
+				</table>
+				<br>				
+				Puede ingresar al sistema de SOLPED, desde la siguiente direccion : http://localhost/pedidos
 				<br>
 				<br>
-				Saludo,
+				Saludos,<br>"
+					. $_SESSION['usuario'] . "
 				<br>
-				VERDUM PERU SAC.
+				VERDUM PERU SAC- SOLPED PORTAL WEB - " . date("Y") . " 
 				<br>
 				<br>";
+				//<img src='" . BASE_URL2 . "public/dist/img/footer.png'>";
+
+
+
 				if (!$mail->send()) {
 					$output = 0; //	ERROR AL ENVIAR CORREO
 				} else {
@@ -359,6 +432,7 @@ class aprobarpedidoController extends Controller
 					"itimer" 		=> $ProcesoAprobacionPedido[0]['i_timer'],
 					"icase" 		=> $ProcesoAprobacionPedido[0]['i_case'],
 					"vprogressbar" 	=> $ProcesoAprobacionPedido[0]['v_progressbar'],
+					"v_correo_next" 	=> $ProcesoAprobacionPedido[0]['v_correo_next'],
 					"output" 		=> $output,
 				)
 			);
@@ -412,8 +486,8 @@ class aprobarpedidoController extends Controller
 			$pdf = new alphapdf();
 			$pdf->AddPage();
 
-			$pdf->Image('./public/dist/img/logo_verdum.jpg', 10, 8, 125);
-			$pdf->Ln(22);
+			$pdf->Image('./public/dist/img/logo_verdum.jpg', 10, 8, 120);
+
 
 			$col = array();
 			$col[] = array('text' => utf8_decode("Código del país (Country code)  "), 'width' => '29', 'height' => '5', 'align' => 'R', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
@@ -432,10 +506,9 @@ class aprobarpedidoController extends Controller
 			$pdf->SetXY(112, 40);
 			$pdf->WriteTable($columns1);
 
-			$pdf->SetXY(10, 27);
+			$pdf->SetXY(10, 25);
 			$pdf->SetFont('Arial', 'B', 22, 'L');
 			$pdf->Cell(190, 20, utf8_decode("SOLPED: # " . $data[0]['nu_correla']), 10, 8, 'L');
-
 
 			$col2 = array();
 			$col2[] = array('text' => 'Empresa / Company', 'width' => '80', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
@@ -444,7 +517,6 @@ class aprobarpedidoController extends Controller
 
 			$pdf->SetXY(10, 47);
 			$pdf->WriteTable($columns2);
-
 
 			// PARA LA TABLA DEL DETALLE
 			$coltb = array();

@@ -116,7 +116,7 @@
 
                                 <p style="text-align:center;height:5px"><strong>Detalle del Pedido</strong></p>
                                 <hr>
-                                <table id="example2" class="table table-sm">
+                                <table id="example2" class="table table-sm table-hover">
                                     <thead class="thead-dark">
                                         <tr class="text-center">
                                             <th>#</th>
@@ -145,9 +145,6 @@
                                     <b style="color:rgb(0,0,0)">Importe total &nbsp; (<b id="monedaimporte"></b>) :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b> <strong><b style="font-weight: bold" id="resumentotal"></b></strong>
                                     <hr style="color:rgb(122,182,21)">
                                     <b style="color:rgb(0,0,0)">Monto Limite del Pedido S/. &nbsp; (<b class="alert-success" id="montolimite"><?php echo $this->ConsultaTopePedido[0]['f_valortope_condicion_uno']; ?></b>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b> <strong><b style="font-weight: bold"></b></strong>
-
-
-
                                 </div>
                             </div>
 
@@ -220,6 +217,7 @@
                                             </svg> Opcion2</a>
                                     </li>
                                 </ul>
+
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="homeIcon" aria-labelledby="homeIcon-tab" role="tabpanel">
                                         <div class="card-header">
@@ -228,32 +226,32 @@
                                         <div class="card-body">
                                             <form class="form form-horizontal">
                                                 <div class="row">
-                                                    <div class="table-responsive nowrap table-bordered">
-                                                        <table id="tbproducto" class="table table-sm">
-                                                            <thead class="thead-dark">
-                                                                <tr>
-                                                                    <th>Codigo</th>
-                                                                    <th>Nombre</th>
-                                                                    <th class='text-left'>Und</th>
-                                                                    <th class='text-center'><i class="fa-solid fa-plus"></i> &nbsp;</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <?php if (isset($this->ListadoProducto)) { ?>
-                                                                    <?php foreach ($this->ListadoProducto as $prod) { ?>
-                                                                        <tr>
-                                                                            <td class="text-center"><strong><?php echo $prod['v_invtid'] ?></strong> </td>
-                                                                            <td class="text-left"><?php echo $prod['v_nombre'] ?></td>
-                                                                            <td class="text-center"><?php echo $prod['v_unidad'] ?></td>
-                                                                            <td class='text-center'>
-                                                                                <a id="<?php echo $prod['v_invtid'] ?>" class="btn btn-<?php echo $prod['v_btn1Boton'] ?>"><i class="fa-solid fa-<?php echo $prod['v_btn1Imagen'] ?>"></i></a>
-                                                                            </td>
-                                                                        </tr>
-                                                                    <?php } ?>
+
+                                                    <table id="tbproducto" class="table table-sm table-hover">
+                                                        <thead class="thead-dark">
+                                                            <tr>
+                                                                <th>Codigo</th>
+                                                                <th>Nombre</th>
+                                                                <th class='text-left'>Und</th>
+                                                                <th class='text-center'><i class="fa-solid fa-plus"></i> &nbsp;</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php if (isset($this->ListadoProducto)) { ?>
+                                                                <?php foreach ($this->ListadoProducto as $prod) { ?>
+                                                                    <tr>
+                                                                        <td class="text-center"><strong><?php echo $prod['v_invtid'] ?></strong> </td>
+                                                                        <td class="text-left"><?php echo $prod['v_nombre'] ?></td>
+                                                                        <td class="text-center"><?php echo $prod['v_unidad'] ?></td>
+                                                                        <td class='text-center'>
+                                                                            <a id="<?php echo $prod['v_invtid'] ?>" class="btn btn-<?php echo $prod['v_btn1Boton'] ?>"><i class="fa-solid fa-<?php echo $prod['v_btn1Imagen'] ?>"></i></a>
+                                                                        </td>
+                                                                    </tr>
                                                                 <?php } ?>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
+                                                            <?php } ?>
+                                                        </tbody>
+                                                    </table>
+
                                                 </div>
                                             </form>
                                         </div>
@@ -724,7 +722,7 @@
     </div>
 </div>
 
-<!-- MODAL INSERTANDO -->
+<!-- MODAL PROGRESO -->
 <div class="modal fade" id="modal-insert" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-warning" role="document">
         <div class="modal-content">
@@ -734,7 +732,7 @@
 
             <div class="modal-body">
                 <p>
-                    <strong>Se estan procesando los datos</strong>
+                    <strong> Se estan procesando los datos</strong>
                 </p>
                 <p>
                     <strong>Tiempo transcurrido: <b id="number"></b> segundos</strong>

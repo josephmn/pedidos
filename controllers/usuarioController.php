@@ -194,13 +194,17 @@ class usuarioController extends Controller
 				$v_nombres  = $data[0]['v_nombres'];
 				$v_apellidos  = $data[0]['v_apellidos'];
 				$v_correo  = $data[0]['v_correo'];
+
+				$i_persexo  = $data[0]['i_persexo'];
+				$v_persexo_nombre  = $data[0]['v_persexo_nombre'];
 			} else {
 				$estado  =  0;
 				$v_dni  =  "";
 				$v_nombres  =  "";
 				$v_apellidos  =  "";
 				$v_correo  =  "";
-
+				$i_persexo   =  "";
+				$v_persexo_nombre   =  "";
 				// Combo perfil
 				$FilascomboPerfil = "";
 				$selcombo = "";
@@ -239,6 +243,8 @@ class usuarioController extends Controller
 					"v_nombres" => $v_nombres,
 					"v_apellidos" => $v_apellidos,
 					"v_correo" => $v_correo,
+					"i_persexo" => $i_persexo,
+					"v_persexo_nombre" => $v_persexo_nombre,
 					"FilascomboPerfil" => $FilascomboPerfil,
 					"FilascomboCargo" => $FilascomboCargo,
 					"FilascomboArea" => $FilascomboArea,
@@ -287,11 +293,15 @@ class usuarioController extends Controller
 				$v_dni  = $data[0]['v_dni'];
 				$v_nombres  = $data[0]['v_nombres'];
 				$v_apellidos  = $data[0]['v_apellidos'];
+				$i_persexo  = $data[0]['persexo'];
+				$v_persexo_nombre  = $data[0]['persexo_nombre'];
 			} else {
 				$estado  =  0;
 				$v_dni  =  "";
 				$v_nombres  =  "";
 				$v_apellidos  =  "";
+				$i_persexo =  "";
+				$v_persexo_nombre =  "";
 			}
 
 			header('Content-type: application/json; charset=utf-8');
@@ -301,6 +311,9 @@ class usuarioController extends Controller
 					"v_dni" => $v_dni,
 					"v_nombres" => $v_nombres,
 					"v_apellidos" => $v_apellidos,
+
+					"i_persexo" => $i_persexo,
+					"v_persexo_nombre" => $v_persexo_nombre,
 				)
 			);
 		} else {
@@ -330,6 +343,9 @@ class usuarioController extends Controller
 			$v_id_cargo = $_POST['v_id_cargo'];
 			$v_id_local = $_POST['v_id_local'];
 			$v_id_area = $_POST['v_id_area'];
+			$i_persexo = $_POST['i_persexo'];
+			$v_persexo_nombre = $_POST['v_persexo_nombre'];
+
 
 			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
 
@@ -357,6 +373,8 @@ class usuarioController extends Controller
 				'v_id_cargo' => $v_id_cargo,
 				'v_id_local' => $v_id_local,
 				'v_id_area' => $v_id_area,
+				'i_persexo' => $i_persexo,
+				'v_persexo_nombre' => $v_persexo_nombre,
 			);
 
 			$result2 = $soap->MantenimientoUsuario($params);

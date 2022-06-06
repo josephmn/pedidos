@@ -244,7 +244,7 @@ $(function () {
                 </div>\
               </div>\
               <div class='media-body my-auto'>\
-                <h5 class='font-weight-bolder mb-0'> &nbsp; "+ nu_correla + " </h5>\
+                <h5 class='font-weight-bolder mb-0'>"+ nu_correla + " </h5>\
             </div>\
             </div>"
             +
@@ -418,24 +418,39 @@ function checkInput(r) {
             }, 2000);
           },
 
-
           success: function (res) {
-
-            $("#modal-insert").modal("hide");
-
-            Swal.fire({
-              icon: res.vicon,
-              title: res.vtitle,
-              text: res.vtext,
-              timer: res.itimer,
-              timerProgressBar: res.vprogressbar,
-              showCancelButton: false,
-              showConfirmButton: false,
-            });
-            var id = setInterval(function () {
-              location.reload();
-              clearInterval(id);
-            }, res.itimer);
+            if (Number(res.output) == 1) {
+              $("#modal-insert").modal("hide");
+              Swal.fire({
+                icon: res.vicon,
+                title: res.vtitle,
+                text: res.vtext + ', se envio un correo de notificacion a: ' + res.v_correo_next,
+                timer: res.itimer,
+                timerProgressBar: res.vprogressbar,
+                showCancelButton: false,
+                showConfirmButton: false,
+              });
+              var id = setInterval(function () {
+                location.reload();
+                clearInterval(id);
+              }, res.itimer);
+            }
+            else {
+              $("#modal-insert").modal("hide");
+              Swal.fire({
+                icon: res.vicon,
+                title: res.vtitle,
+                text: res.vtext + ', No se pudo enviar el correo de notificacion',
+                timer: res.itimer,
+                timerProgressBar: res.vprogressbar,
+                showCancelButton: false,
+                showConfirmButton: false,
+              });
+              var id = setInterval(function () {
+                location.reload();
+                clearInterval(id);
+              }, res.itimer);
+            }
           }
         });
       }

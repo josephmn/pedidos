@@ -51,6 +51,9 @@ $(function () {
           $('#xcorreo').val(res.v_correo.replace("&Ntilde;", "Ñ"));
           $('#xpassword').val(v_dni);
 
+          $('#xidgenero').val(res.i_persexo);
+          $('#xgenero').val(res.v_persexo_nombre);
+
           $("#xperfil").html("");
           $("#xperfil").append(res.FilascomboPerfil);
 
@@ -69,6 +72,10 @@ $(function () {
           $('#xnombres').val(res.v_nombres.replace("&Ntilde;", "Ñ"));
           $('#xapellidos').val(res.v_apellidos.replace("&Ntilde;", "Ñ"));
           $('#xcorreo').val(res.v_correo.replace("&Ntilde;", "Ñ"));
+
+          $('#xidgenero').val(res.i_persexo);
+          $('#xgenero').val(res.v_persexo_nombre);
+
 
           $("#xperfil").html("");
           $("#xperfil").append(res.FilascomboPerfil);
@@ -120,6 +127,10 @@ $(function () {
           $('#xapellidos').val(res.v_apellidos.replace("&Ntilde;", "Ñ"));
           $('#xcorreo').val(res.v_correo.replace("&Ntilde;", "Ñ"));
           $('#xpassword').val(v_dni);
+          $('#xidgenero').val(res.i_persexo);
+          $('#xgenero').val(res.v_persexo_nombre);
+
+
 
           $("#xperfil").html("");
           $("#xperfil").append(res.FilascomboPerfil);
@@ -147,6 +158,11 @@ $(function () {
                   $('#xnombres').val(res.v_nombres.replace("&Ntilde;", "Ñ"));
                   $('#xapellidos').val(res.v_apellidos.replace("&Ntilde;", "Ñ"));
                   $('#xpassword').val(v_dni);
+                  $('#xidgenero').val(res.i_persexo);
+                  $('#xgenero').val(res.v_persexo_nombre);
+
+
+
                   break;
                 case 0:
                   Swal.fire({
@@ -162,6 +178,8 @@ $(function () {
                   })
                   $("#xdni").val("");
                   $('#xpassword').val("");
+                  $('#xidgenero').val("");
+                  $('#xgenero').val("");
                   return;
                   break;
               }
@@ -217,6 +235,10 @@ $(function () {
           $('#xcorreo').val(res.v_correo.replace("&Ntilde;", "Ñ"));
           $('#xpassword').val(v_dni);
 
+
+          $('#xidgenero').val(res.i_persexo);
+          $('#xgenero').val(res.v_persexo_nombre);
+
           $("#xperfil").html("");
           $("#xperfil").append(res.FilascomboPerfil);
 
@@ -233,6 +255,12 @@ $(function () {
           $('#xnombres').val(res.v_nombres.replace("&Ntilde;", "Ñ"));
           $('#xapellidos').val(res.v_apellidos.replace("&Ntilde;", "Ñ"));
           $('#xcorreo').val(res.v_correo.replace("&Ntilde;", "Ñ"));
+
+
+
+
+          $('#xidgenero').val(res.i_persexo);
+          $('#xgenero').val(res.v_persexo_nombre);
 
           $("#xperfil").html("");
           $("#xperfil").append(res.FilascomboPerfil);
@@ -280,6 +308,10 @@ $(function () {
           $('#xcorreo').val(res.v_correo.replace("&Ntilde;", "Ñ"));
           $('#xpassword').val(v_dni);
 
+          $('#xidgenero').val(res.i_persexo);
+          $('#xgenero').val(res.v_persexo_nombre);
+
+
           $("#xperfil").html("");
           $("#xperfil").append(res.FilascomboPerfil);
 
@@ -306,6 +338,11 @@ $(function () {
                   $('#xnombres').val(res.v_nombres.replace("&Ntilde;", "Ñ"));
                   $('#xapellidos').val(res.v_apellidos.replace("&Ntilde;", "Ñ"));
                   $('#xpassword').val(v_dni);
+
+                  $('#xidgenero').val(res.i_persexo);
+                  $('#xgenero').val(res.v_persexo_nombre);
+
+
                   break;
                 case 0:
                   Swal.fire({
@@ -321,6 +358,8 @@ $(function () {
                   })
                   $("#xdni").val("");
                   $('#xpassword').val("");
+                  $('#xidgenero').val("");
+                  $('#xgenero').val("");
                   return;
                   break;
               }
@@ -371,6 +410,8 @@ $(function () {
     } else {
       v_clave = '';
     }
+    var i_persexo = $('#xidgenero').val();
+    var v_persexo_nombre = $('#xgenero').val();
 
     Swal.fire({
       title: "Estas seguro de guardar en el Sistema?",
@@ -398,6 +439,8 @@ $(function () {
             v_id_cargo: v_id_cargo,
             v_id_local: v_id_local,
             v_id_area: v_id_area,
+            i_persexo: i_persexo,
+            v_persexo_nombre: v_persexo_nombre,
           },
           success: function (res) {
             Swal.fire({

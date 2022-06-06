@@ -515,6 +515,7 @@ class pedidosController extends Controller
 				$i_idorden_aprobacion =   $data[0]['i_idorden_aprobacion'];
 				$i_filas =   $data[0]['i_filas'];
 
+
 				//Combo Local
 				$FilasMoneda = "";
 				$selMoneda = "";
@@ -543,6 +544,7 @@ class pedidosController extends Controller
 						"Precio" => $da['nu_precio'],
 						"Total" => $da['nu_total'],
 						"v_disabled" => $da['v_disabled'],
+						"v_note_detalle" => $da['v_note_detalle'],
 					);
 					$filas += ["$i" => $propiedades1];
 					$i++;
@@ -765,7 +767,7 @@ class pedidosController extends Controller
 
 			$post = $_POST['post'];
 			$nu_correla = $_POST['nropedido'];
-			$v_codprod = $_POST['codprodnote']; 
+			$v_codprod = $_POST['codprodnote'];
 
 			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
 
@@ -791,7 +793,7 @@ class pedidosController extends Controller
 			$result = $soap->ConsultaPedidoFile($client);
 			$data = json_decode($result->ConsultaPedidoFileResult, true);
 
-		 
+
 			header('Content-type: application/json; charset=utf-8');
 
 			echo $json->encode(

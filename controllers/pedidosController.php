@@ -619,6 +619,7 @@ class pedidosController extends Controller
 			echo $json->encode(
 				array(
 					"respuesta" 		=> $EliminarFila[0]['respuesta'],
+					"v_mensaje" 		=> $EliminarFila[0]['v_mensaje'],
 				)
 			);
 		} else {

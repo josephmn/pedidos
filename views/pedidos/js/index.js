@@ -43,7 +43,18 @@ $(function () {
     let nropediodo = $(this).attr("id");
     alert(nropediodo);
   });
-  
+
+
+  $("#tbpedidos tbody").on("click", "a.observado", function () {
+    let observacion = $(this).attr("id");
+    $("#notadescripcion").val(observacion);
+    $("#modal-observacion").modal("show");
+  });
+
+  $("#btncancelaretorno").on("click", function () { //aqui ppto
+    $("#modal-observacion").modal('hide');
+  });
+
 });
 
 

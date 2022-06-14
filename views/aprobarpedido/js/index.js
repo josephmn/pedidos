@@ -1,6 +1,5 @@
 $(function () {
   creardatatable("#tbarchivo");
-
   var table = $("#tbpedidos").DataTable({
     lengthChange: true,
     responsive: true,
@@ -33,6 +32,39 @@ $(function () {
       ["25", "50", "100", "Todo"],
     ],
   });
+
+  $("#carousel-example-generic").append(
+    " <ol class='carousel-indicators'>\
+    <li data-target='#carousel-example-generic' data-slide-to='0' class='active'></li>\
+    <li data-target='#carousel-example-generic' data-slide-to='1'></li>\
+    <li data-target='#carousel-example-generic' data-slide-to='2'></li>\
+      </ol >\
+    <div class='carousel-inner' role='listbox'>\
+      <div class='carousel-item active'>\
+        <img class='img-fluid' src='../public/dist/img/Productosss.jpg' alt='First slide' />\
+      </div>\
+      <div class='carousel-item'>\
+        <img class='img-fluid' src='../public/dist/img/Inicio.jpeg' alt='Second slide' />\
+      </div>\
+      <div class='carousel-item'>\
+        <img class='img-fluid' src='../public/dist/img/Productsssos.jpg' alt='Third slide' />\
+      </div>\
+    </div>\
+    <a class='carousel-control-prev' href='#carousel-example-generic' role='button' data-slide='prev'>\
+      <span class='carousel-control-prev-icon' aria-hidden='true'></span>\
+      <span class='sr-only'>Previous</span>\
+    </a>\
+    <a class='carousel-control-next' href='#carousel-example-generic' role='button' data-slide='next'>\
+      <span class='carousel-control-next-icon' aria-hidden='true'></span>\
+      <span class='sr-only'>Next</span>\
+    </a> "
+  );
+
+  document.getElementById('titulo_avance').innerHTML = "";
+
+
+
+
 
   $("#tbpedidos tbody").on("click", "a.revisar", function () {
     var i_estado = $("#estado").val();
@@ -84,84 +116,19 @@ $(function () {
           </li > "
           );
         }
+
+        $("#carousel-example-generic").html("")
+
         $("#idico").append(
           "<i class='fa-solid fa-hourglass fa-spin'></i>"
         );
+        document.getElementById('titulo_avance').innerHTML = "<b>AVANCE DE APROBACION(%)</b>";
 
         var numero = parseInt(res.f_porcentaje) / 100;
 
-        // var $avgSessionStrokeColor2 = '#ebf0f7';
-        // var $textHeadingColor = '#5e5873';
-        // var $white = '#fff';
-        // var $strokeColor = '#ebe9f1';
-        // var $supportTrackerChart = document.querySelector('#perro');
-
-        // var supportTrackerChartOptions;
-        // var gainedChart;
-        // var orderChart;
-        // var avgSessionsChart;
-        // var supportTrackerChart;
-        // var salesVisitChart;
-        // var isRtl = $('html').attr('data-textdirection') === 'rtl';
-
-        // supportTrackerChartOptions = {
-        //   chart: {
-        //     height: 200,
-        //     type: 'radialBar'
-        //   },
-        //   plotOptions: {
-        //     radialBar: {
-        //       size: 150,
-        //       offsetY: 20,
-        //       startAngle: -150,
-        //       endAngle: 150,
-        //       hollow: {
-        //         size: '65%'
-        //       },
-        //       track: {
-        //         background: $white,
-        //         strokeWidth: '100%'
-        //       },
-        //       dataLabels: {
-        //         name: {
-        //           offsetY: -5,
-        //           color: $textHeadingColor,
-        //           fontSize: '1rem'
-        //         },
-        //         value: {
-        //           offsetY: 15,
-        //           color: $textHeadingColor,
-        //           fontSize: '1.714rem'
-        //         }
-        //       }
-        //     }
-        //   },
-        //   colors: [window.colors.solid.danger],
-        //   fill: {
-        //     type: 'gradient',
-        //     gradient: {
-        //       shade: 'dark',
-        //       type: 'horizontal',
-        //       shadeIntensity: 0.5,
-        //       gradientToColors: [window.colors.solid.primary],
-        //       inverseColors: true,
-        //       opacityFrom: 1,
-        //       opacityTo: 1,
-        //       stops: [0, 100]
-        //     }
-        //   },
-        //   stroke: {
-        //     dashArray: 8
-        //   },
-        //   series: [numero],
-        //   labels: ['Avance']
-        // };
-
-        // supportTrackerChart = new ApexCharts($supportTrackerChart, supportTrackerChartOptions);
-        // supportTrackerChart.render();
-
 
         $("#circle-container").html("");
+
         var circleBar = new ProgressBar.Circle("#circle-container", {
           color: "white",
           strokeWidth: 4,
@@ -282,6 +249,113 @@ $(function () {
 
 
   });
+
+
+  $("#btnguardaretorno").on("click", function () { //aqui ppto
+    var nu_correla = document.getElementById("nropedido").innerHTML;
+    var post = 0;
+
+    let v_comentario
+    v_comentario = $("#notadescripcion").val();
+
+    if (v_comentario == "" || v_comentario == null) {
+      $("#notadescripcion").focus();
+      Swal.fire({
+        title: "INGRESE UN MOTIVO",
+        timer: 2500,
+        timerProgressBar: true,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
+    Swal.fire({
+      title: "Seguro de enviar para su Modificacion ?",
+      text: "Se enviara paso anterior para su cambio",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#61C250",
+      cancelButtonColor: "#ea5455",
+      confirmButtonText: "Si, Retornar!",
+      cancelButtonText: "No",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: 'POST',
+          url: '/pedidos/aprobarpedido/ProcesoRetornoPedido',
+          data: {
+            post: post,
+            nu_correla: nu_correla,
+            v_comentario: v_comentario
+          },
+
+          beforeSend: function () {
+            $("#modal-insert").modal("show");
+            var n = 0;
+            var l = document.getElementById("number");
+            window.setInterval(function () {
+              l.innerHTML = n;
+              n++;
+            }, 2000);
+          },
+
+          success: function (res) {
+            if (Number(res.output) == 1) {
+              $("#modal-insert").modal("hide");
+              Swal.fire({
+                icon: res.vicon,
+                title: res.vtitle,
+                text: res.vtext + ', se envio un correo de notificacion a: ' + res.v_correo_next,
+                timer: res.itimer,
+                timerProgressBar: res.vprogressbar,
+                showCancelButton: false,
+                showConfirmButton: false,
+              });
+              var id = setInterval(function () {
+                location.reload();
+                clearInterval(id);
+              }, res.itimer);
+            }
+            else {
+              $("#modal-insert").modal("hide");
+              Swal.fire({
+                icon: res.vicon,
+                title: res.vtitle,
+                text: res.vtext + ', No se pudo enviar el correo de notificacion',
+                timer: res.itimer,
+                timerProgressBar: res.vprogressbar,
+                showCancelButton: false,
+                showConfirmButton: false,
+              });
+              var id = setInterval(function () {
+                location.reload();
+                clearInterval(id);
+              }, res.itimer);
+            }
+          }
+        });
+      }
+    });
+
+
+
+
+
+  });
+
+
+
+  $("#btncancelaretorno").on("click", function () { //aqui ppto
+    $("#modal-retorno").modal('hide');
+  });
+
+
+
 
 });
 
@@ -460,153 +534,88 @@ function checkInput(r) {
 
 
   if (respuesta == "Rechazar") {
-    Swal.fire({
-      title: "Seguro de Rechazar el pedido?",
-      text: "Pedido sera Rechazado",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#61C250",
-      cancelButtonColor: "#ea5455",
-      confirmButtonText: "Si, Rechazar!",
-      cancelButtonText: "No",
-    }).then((result) => {
-      if (result.isConfirmed) {
 
-        // $.ajax({
-        //   type: 'POST',
-        //   url: '/pedidos/pedidos/eliminar_fila_ppto',
-        //   data: { nu_correla: nu_correla, v_idlinea: v_idlinea },
-        //   success: function (res) {
+    $("#modal-retorno").modal("show");
 
-        //     if (res.respuesta == 1) {
-        //       $.ajax({
-        //         type: 'POST',
-        //         url: '/pedidos/pedidos/Mostrar_pedido_ppto',
-        //         data: { nu_correla: nu_correla },
-        //         success: function (res) {
 
-        //           $("#tbpptopedido").dataTable().fnDestroy();
-        //           $("#tablita-ppto").children().remove();
+    // Swal.fire({
+    //   title: "Seguro de Rechazar el pedido?",
+    //   text: "Pedido sera Rechazado",
+    //   icon: "warning",
+    //   showCancelButton: true,
+    //   confirmButtonColor: "#61C250",
+    //   cancelButtonColor: "#ea5455",
+    //   confirmButtonText: "Si, Rechazar!",
+    //   cancelButtonText: "No",
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
 
-        //           let myArray = [];
-        //           for (const property in res.data) {
-        //             let nu_correla = res.data[property].nu_correla;
-        //             let v_idlinea = res.data[property].v_idlinea;
-        //             let v_idppto = res.data[property].v_idppto;
-        //             let v_idpartida = res.data[property].v_idpartida;
-        //             let v_idmes = res.data[property].v_idmes;
-        //             let v_nombremes = res.data[property].v_nombremes;
-        //             let f_monto = res.data[property].f_monto;
-        //             let v_centrocosto = res.data[property].v_centrocosto;
+    //     // $.ajax({
+    //     //   type: 'POST',
+    //     //   url: '/pedidos/pedidos/eliminar_fila_ppto',
+    //     //   data: { nu_correla: nu_correla, v_idlinea: v_idlinea },
+    //     //   success: function (res) {
 
-        //             let fila =
-        //               "<tr><td class='text-center'>" +
-        //               nu_correla +
-        //               "</td><td class='text-left'>" +
-        //               v_idppto +
-        //               "</td><td class='text-left'>" +
-        //               v_idpartida +
-        //               "</td><td class='text-left'>" +
-        //               v_idmes +
-        //               "</td><td class='text-left'>" +
-        //               v_nombremes +
-        //               "</td><td class='text-left'>" +
-        //               f_monto +
-        //               "</td><td class='text-left'>" +
-        //               v_centrocosto +
-        //               "</td><td><a id=" +
-        //               v_idlinea +
-        //               " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+    //     //     if (res.respuesta == 1) {
+    //     //       $.ajax({
+    //     //         type: 'POST',
+    //     //         url: '/pedidos/pedidos/Mostrar_pedido_ppto',
+    //     //         data: { nu_correla: nu_correla },
+    //     //         success: function (res) {
 
-        //             let btn = document.createElement("tr");
-        //             btn.innerHTML = fila;
-        //             document.getElementById("tablita-ppto").appendChild(btn);
-        //           }
-        //           creardatatable("#tbpptopedido"); //perro
-        //         }
-        //       });
-        //     }
+    //     //           $("#tbpptopedido").dataTable().fnDestroy();
+    //     //           $("#tablita-ppto").children().remove();
 
-        //   }
-        // });
+    //     //           let myArray = [];
+    //     //           for (const property in res.data) {
+    //     //             let nu_correla = res.data[property].nu_correla;
+    //     //             let v_idlinea = res.data[property].v_idlinea;
+    //     //             let v_idppto = res.data[property].v_idppto;
+    //     //             let v_idpartida = res.data[property].v_idpartida;
+    //     //             let v_idmes = res.data[property].v_idmes;
+    //     //             let v_nombremes = res.data[property].v_nombremes;
+    //     //             let f_monto = res.data[property].f_monto;
+    //     //             let v_centrocosto = res.data[property].v_centrocosto;
 
-      }
-    });
+    //     //             let fila =
+    //     //               "<tr><td class='text-center'>" +
+    //     //               nu_correla +
+    //     //               "</td><td class='text-left'>" +
+    //     //               v_idppto +
+    //     //               "</td><td class='text-left'>" +
+    //     //               v_idpartida +
+    //     //               "</td><td class='text-left'>" +
+    //     //               v_idmes +
+    //     //               "</td><td class='text-left'>" +
+    //     //               v_nombremes +
+    //     //               "</td><td class='text-left'>" +
+    //     //               f_monto +
+    //     //               "</td><td class='text-left'>" +
+    //     //               v_centrocosto +
+    //     //               "</td><td><a id=" +
+    //     //               v_idlinea +
+    //     //               " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+
+    //     //             let btn = document.createElement("tr");
+    //     //             btn.innerHTML = fila;
+    //     //             document.getElementById("tablita-ppto").appendChild(btn);
+    //     //           }
+    //     //           creardatatable("#tbpptopedido"); //perro
+    //     //         }
+    //     //       });
+    //     //     }
+
+    //     //   }
+    //     // });
+
+    //   }
+    // });
+
+
   }
 
   if (respuesta == "Retornar") {
-    Swal.fire({
-      title: "Seguro de enviar a  Modificar el pedido?",
-      text: "Regresara un paso Anterior para su modificacion",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#61C250",
-      cancelButtonColor: "#ea5455",
-      confirmButtonText: "Si, Enviar!",
-      cancelButtonText: "No",
-    }).then((result) => {
-      if (result.isConfirmed) {
-
-        // $.ajax({
-        //   type: 'POST',
-        //   url: '/pedidos/pedidos/eliminar_fila_ppto',
-        //   data: { nu_correla: nu_correla, v_idlinea: v_idlinea },
-        //   success: function (res) {
-
-        //     if (res.respuesta == 1) {
-        //       $.ajax({
-        //         type: 'POST',
-        //         url: '/pedidos/pedidos/Mostrar_pedido_ppto',
-        //         data: { nu_correla: nu_correla },
-        //         success: function (res) {
-
-        //           $("#tbpptopedido").dataTable().fnDestroy();
-        //           $("#tablita-ppto").children().remove();
-
-        //           let myArray = [];
-        //           for (const property in res.data) {
-        //             let nu_correla = res.data[property].nu_correla;
-        //             let v_idlinea = res.data[property].v_idlinea;
-        //             let v_idppto = res.data[property].v_idppto;
-        //             let v_idpartida = res.data[property].v_idpartida;
-        //             let v_idmes = res.data[property].v_idmes;
-        //             let v_nombremes = res.data[property].v_nombremes;
-        //             let f_monto = res.data[property].f_monto;
-        //             let v_centrocosto = res.data[property].v_centrocosto;
-
-        //             let fila =
-        //               "<tr><td class='text-center'>" +
-        //               nu_correla +
-        //               "</td><td class='text-left'>" +
-        //               v_idppto +
-        //               "</td><td class='text-left'>" +
-        //               v_idpartida +
-        //               "</td><td class='text-left'>" +
-        //               v_idmes +
-        //               "</td><td class='text-left'>" +
-        //               v_nombremes +
-        //               "</td><td class='text-left'>" +
-        //               f_monto +
-        //               "</td><td class='text-left'>" +
-        //               v_centrocosto +
-        //               "</td><td><a id=" +
-        //               v_idlinea +
-        //               " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
-
-        //             let btn = document.createElement("tr");
-        //             btn.innerHTML = fila;
-        //             document.getElementById("tablita-ppto").appendChild(btn);
-        //           }
-        //           creardatatable("#tbpptopedido"); //perro
-        //         }
-        //       });
-        //     }
-
-        //   }
-        // });
-
-      }
-    });
+    $("#modal-retorno").modal("show");
   }
 
   if (respuesta == "Ver Archivos") {

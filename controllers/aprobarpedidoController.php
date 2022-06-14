@@ -441,6 +441,149 @@ class aprobarpedidoController extends Controller
 		}
 	}
 
+	public function ProcesoRetornoPedido() //1
+	{
+		if (isset($_SESSION['usuario'])) {
+			putenv("NLS_LANG=SPANISH_SPAIN.AL32UTF8");
+			putenv("NLS_CHARACTERSET=AL32UTF8");
+
+			$this->getLibrary('json_php/JSON');
+			$json = new Services_JSON();
+
+			$post = $_POST['post'];
+			$nu_correla = $_POST['nu_correla'];
+			$v_comentario = $_POST['v_comentario'];
+			$v_username =  $_SESSION['dni'];
+			$v_idarea =  $_SESSION['idarea'];
+			$v_cargo =  $_SESSION['id_cargo'];
+
+
+			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
+			$options = array(
+				"uri" => $wsdl,
+				"style" => SOAP_RPC,
+				"use" => SOAP_ENCODED,
+				"soap_version" => SOAP_1_1,
+				"connection_timeout" => 60,
+				"trace" => false,
+				"encoding" => "UTF-8",
+				"exceptions" => false,
+			);
+
+			$params = array(
+				'post' => $post,
+				'nu_correla' => $nu_correla,
+				'v_username' => $v_username,
+				'v_idarea' => $v_idarea,
+				'v_cargo' => $v_cargo,
+				'v_comentario' => $v_comentario,
+			);
+
+
+			$soap = new SoapClient($wsdl, $options);
+			$result2 = $soap->ProcesoRetornoPedido($params);
+			$ProcesoRetornoPedido = json_decode($result2->ProcesoRetornoPedidoResult, true);
+
+			if (count($ProcesoRetornoPedido) > 0) {
+				$result2 = $soap->ListadoCorreo();
+				$conficorreo = json_decode($result2->ListadoCorreoResult, true);
+
+
+				$this->getLibrary('phpmailer/class.phpmailer');
+				$this->getLibrary('phpmailer/PHPMailerAutoload');
+				$mail = new PHPMailer;
+				$mail->isSMTP();
+				$mail->SMTPDebug = 0;
+				$mail->SMTPAuth = true;
+				// $mail->SMTPSecure = 'tls';
+				$mail->Mailer = 'smtp';
+				$mail->Host = $conficorreo[0]['v_servidor_entrante'];
+				$mail->Username  = $conficorreo[0]['v_correo_salida'];
+				$mail->Password = $conficorreo[0]['v_password'];
+				$mail->Port = $conficorreo[0]['i_puerto'];
+
+				$mail->From = ($conficorreo[0]['v_correo_salida']);
+				$mail->FromName = 'VERDUM PERÚ SAC';
+				// $mail->addAddress('programador.app03@verdum.com');
+				$mail->addAddress(trim($ProcesoRetornoPedido[0]['v_correo_next']));
+
+				$saludo = "";
+				$timezone = -5;
+				$hora =  strval(gmdate("H", time() + 3600 * ($timezone + date("I"))));
+
+				if ($hora >= 0 && $hora <= 11) {
+					$saludo = 'buenos días,';
+				} else if ($hora >= 12 && $hora <= 18) {
+					$saludo = 'buenas tardes,';
+				} else if ($hora >= 19 && $hora <= 23) {
+					$saludo = 'buenas noches,';
+				}
+
+				$saludo_envio = "";
+				$mensaje_final_solped = "";
+				$mensaje_final_detalle = "";
+				if (trim($ProcesoRetornoPedido[0]['m_v_alias_correo']) == 'FIN') {
+					$saludo_envio = 'Estimado Marco, ' . $saludo;
+					$mensaje_final_solped = 'PROCESO DE APROBACIONES DE (SOLPED) FINALIZADO';
+					$mensaje_final_detalle = 'Se ha completado la fase de aprobacion de la Siguiente SOLPED:';
+				} else {
+					$alias_correo = "";
+					if (intval($ProcesoRetornoPedido[0]['m_i_genero'])  == 1) {
+						$alias_correo = 'Estimado ';
+					} else {
+						$alias_correo = 'Estimada ' . $saludo;
+					}
+
+					$mensaje_final_solped = 'CORREO PARA MODIFICACION DE SOLPED (' . $nu_correla . ')';
+					$saludo_envio = $alias_correo . (trim($ProcesoRetornoPedido[0]['m_v_alias_correo'])) . ', ' . $saludo;
+					$mensaje_final_detalle = 'El siguiente pedido, debe ser modificado debido a que: 
+						<br>'
+						. $ProcesoRetornoPedido[0]['m_v_motivo'];
+				}
+
+				$mail->isHTML(true);
+				$mail->CharSet = "utf-8";
+				$mail->Subject = $mensaje_final_solped;
+				$mail->Body = "
+				 " . $saludo_envio . "</b>
+				<br>
+				<br>
+				$mensaje_final_detalle<br>
+				<br>							
+				Puede ingresar al sistema de SOLPED, desde la siguiente direccion : http://localhost/pedidos
+				<br>
+				<br>
+				Saludos,<br>"
+					. $_SESSION['usuario'] . "
+				<br>
+				VERDUM PERU SAC- SOLPED PORTAL WEB - " . date("Y") . " 
+				<br>
+				<br>";
+				//<img src='" . BASE_URL2 . "public/dist/img/footer.png'>";
+				if (!$mail->send()) {
+					$output = 0; //	ERROR AL ENVIAR CORREO
+				} else {
+					$output = 1; // SE ENVIO CORRECTAMENTE
+				}
+			}
+			header('Content-type: application/json; charset=utf-8');
+			echo $json->encode(
+				array(
+					"vicon" 		=> $ProcesoRetornoPedido[0]['v_icon'],
+					"vtitle" 		=> $ProcesoRetornoPedido[0]['v_title'],
+					"vtext" 		=> $ProcesoRetornoPedido[0]['v_text'],
+					"itimer" 		=> $ProcesoRetornoPedido[0]['i_timer'],
+					"icase" 		=> $ProcesoRetornoPedido[0]['i_case'],
+					"vprogressbar" 	=> $ProcesoRetornoPedido[0]['v_progressbar'],
+					"v_correo_next" 	=> $ProcesoRetornoPedido[0]['v_correo_next'],
+					"output" 		=> $output,
+				)
+			);
+		} else {
+			$this->redireccionar('index/logout');
+		}
+	}
+
 
 	public function documentopedido($nu_correla)
 	{
@@ -620,6 +763,62 @@ class aprobarpedidoController extends Controller
 			$this->redireccionar('index/logout');
 		}
 	}
+
+
+
+	public function ValidacionPedido() //1
+	{
+		if (isset($_SESSION['usuario'])) {
+
+			putenv("NLS_LANG=SPANISH_SPAIN.AL32UTF8");
+			putenv("NLS_CHARACTERSET=AL32UTF8");
+
+			$this->getLibrary('json_php/JSON');
+			$json = new Services_JSON();
+			$post = $_POST['post'];
+			$nu_correla = $_POST['nu_correla'];
+
+			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
+
+			$options = array(
+				"uri" => $wsdl,
+				"style" => SOAP_RPC,
+				"use" => SOAP_ENCODED,
+				"soap_version" => SOAP_1_1,
+				"connection_timeout" => 60,
+				"trace" => false,
+				"encoding" => "UTF-8",
+				"exceptions" => false,
+			);
+
+			$param = array(
+				'post' =>		$post,
+				'nu_correla' =>		$nu_correla,
+			);
+
+			$soap = new SoapClient($wsdl, $options);
+			$result = $soap->ValidacionPedido($param);
+			$data = json_decode($result->ValidacionPedidoResult, true);
+
+
+			if (count($data) > 0) {
+				$i_valor =   $data[0]['i_valor'];
+				$v_mensaje =   $data[0]['v_mensaje'];
+			}
+
+			header('Content-type: application/json; charset=utf-8');
+			echo $json->encode(
+				array(
+					'i_valor' => $i_valor,
+					'v_mensaje' => $v_mensaje,
+				)
+			);
+		} else {
+			$this->redireccionar('index/logout');
+		}
+	}
+
+
 
 
 	public function enviar_correo()

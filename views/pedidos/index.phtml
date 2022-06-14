@@ -39,7 +39,9 @@
                                                 <th>Fecha Pedido</th>
                                                 <th>Estado</th>
                                                 <th>Total</th>
+                                                <th>Observado</th>
                                                 <th>Avance</th>
+                                                <th class='text-center'>Imprimir</th>
                                                 <th>Revisar</th>
                                             </tr>
                                         </thead>
@@ -71,12 +73,19 @@
                                                         </td>
 
                                                         <td class="text-left"><?php echo $pd['nu_total'] ?></td>
+
+                                                        <td class="text-center"><a id='<?php echo $pd['v_observacion'] ?>' class='<?php echo $pd['v_btn_observacion'] ?>'><span class='<?php echo $pd['v_span_observacion'] ?>'><b></b></span></a></td>                                                    
+
                                                         <td class='text-left'>
                                                             <span class="badge badge-glow badge-<?php echo $pd['v_color_porcentaje'] ?> "><?php echo $pd['f_porcentaje'] ?>%</span>
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up text-success font-medium-2">
                                                                 <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
                                                                 <polyline points="17 6 23 6 23 12"></polyline>
                                                             </svg>
+                                                        </td>
+
+                                                        <td class='text-center'>
+                                                            <a href="<?php echo BASE_URL ?>aprobarpedido/documentopedido/<?php echo  $pd['nu_correla'] ?>" class="btn btn-danger btn-sm bol" target="_blank" style="color:white"><i class="fas fa-file-pdf fa-beat"></i></a>
                                                         </td>
 
                                                         <td class='text-left'>
@@ -96,5 +105,41 @@
 
         </div>
 
+    </div>
+</div>
+
+
+
+<div class="modal fade text-left" id="modal-observacion" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="myModalLabel160" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-primary">
+                <h5 style="color:rgb(255,255,255)" class="modal-title"><i class="fa-solid fa-square-check"></i> NOTA DE OBSERVACION </h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label style="color:rgb(255,165,0)" class="form-label font-weight-bolder">Observacion</label>
+                        <div class="input-group input-group-merge">
+                            <div class=" input-group-prepend">
+                                <span class="input-group-text"><i data-feather='folder-plus'></i></span>
+                            </div>
+                            <textarea class="form-control" rows="3" placeholder="Ingrese descripcion" readonly="readonly" id="notadescripcion"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!-- <button id="btnguardaretorno" type="button" class="btn btn-success btn-block waves-effect waves-float waves-light"><b>Retornar</b></button> -->
+                        </div>
+                        <div class="col-sm-6">
+                            <button id="btncancelaretorno" type="button" class="btn btn-danger btn-block waves-effect waves-float waves-light"><b>Cancelar</b></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -159,6 +159,7 @@ $(function () {
         datosaci = myArray;
         console.log(datosaci);
         document.getElementById('monedaimporte').innerHTML = $('#moneda option:selected').text();
+
       }
     });
   }
@@ -226,11 +227,6 @@ $(function () {
       })
       return;
     }
-
-
-
-
-
   });
 
   $("#cantidad").change(function () {
@@ -498,308 +494,150 @@ $(function () {
             url: '/pedidos/pedidos/eliminar_fila',
             data: { post: post, nu_correla: nu_correla, i_item: i_item },
             success: function (res) {
+              if (res.v_mensaje == '' && Number(res.respuesta) == 1) {
+                let valor = parseInt(id);
+                $('#resumentotal').val('');
+                $("#example2").dataTable().fnDestroy();
+                $("#tablita-aci").children().remove();
 
-              // if (res.respuesta == 1) {
-              //   alert('ingresa aqui');
+                let index = datosaci.findIndex(object => object.id === valor);
+                datosaci.splice(index, 1);
 
-              //   let valor = id;
-              //   $('#resumentotal').val('');
-              //   $("#example2").dataTable().fnDestroy();
-              //   $("#tablita-aci").children().remove();
-              //   let index = datosaci.findIndex((item) => item.id === valor);
-              //   datosaci.splice(index, 1);
+                let myArray = [];
+                let contador = 1;
+                let v_color = '';
+                for (const property in datosaci) {
+                  let item = datosaci[property].Item;
+                  let nombre = datosaci[property].Descripcion;
+                  let v_unidad = datosaci[property].Unidad;
+                  let qty = datosaci[property].Cantidad;
+                  let price = datosaci[property].Precio;
+                  let importe = datosaci[property].Total;
+                  let v_note_detalle = datosaci[property].v_note_detalle;
 
-              //   let myArray = [];
-              //   let v_color = '';
-              //   let contador = 1;
-
-              //   console.log(valor);
-              //   console.log(index);
-
-              //   for (const property in datosaci) {
-              //     let item = datosaci[property].Item;
-              //     let nombre = datosaci[property].Descripcion;
-              //     let v_unidad = datosaci[property].Unidad;
-              //     let qty = datosaci[property].Cantidad;
-              //     let price = datosaci[property].Precio;
-              //     let importe = datosaci[property].Total;
-              //     let v_note_detalle = datosaci[property].v_note_detalle;
-
-              //     if (v_note_detalle == 'SI') {
-              //       v_color = 'color:rgb(66,222,10)';
-              //     } else {
-              //       v_color = 'color:rgb(3,164,90)';
-              //     }
-
-              //     let fila =
-              //       "<tr><td class='text-center'>" +
-              //       contador +
-              //       "</td><td><span class='fa-solid fa-truck fa-beat'   style='" + v_color + "'></span>" +
-
-              //       "</td><td class='text-left'>" +
-              //       item +
-              //       "</td><td class='text-left'>" +
-              //       nombre +
-              //       "</td><td class='text-left'>" +
-              //       v_unidad +
-              //       "</td><td class='text-left'>" +
-              //       qty +
-              //       "</td><td class='text-left'>" +
-              //       price +
-              //       "</td><td class='text-left'>" +
-              //       importe +
-              //       "</td><td><a id=" +
-              //       item +
-              //       " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
-              //       "</td><td><a id=" +
-              //       contador +
-              //       " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
-
-              //     let btn = document.createElement("tr");
-              //     btn.innerHTML = fila;
-              //     document.getElementById("tablita-aci").appendChild(btn);
-              //     myArray.push({ id: contador, Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
-              //     contador = contador + 1;
-              //   }
-
-
-              //   creardatatable("#example2");
-              //   console.log('myArray');
-              //   console.log(myArray);
-
-              //   datosaci.splice(0, datosaci.length);
-              //   datosaci = myArray;
-              //   countaci = contador;
-
-              //   //CALCULAR
-              //   var resumentotal = 0;
-              //   $('#example2 tr').each(function () {
-              //     var total = $(this).find("td").eq(7).html();
-              //     if ((parseFloat(total)) > 0) {
-              //       resumentotal = (parseFloat(resumentotal) + parseFloat(total));
-              //     }
-              //   });
-              //   document.getElementById('resumentotal').innerHTML = resumentotal;
-
-              //   // console.log(datosaci);
-
-
-
-              //   // $.ajax({
-              //   //   type: 'POST',
-              //   //   url: '/pedidos/pedidos/MostrarPedido',
-              //   //   data: { nu_correla: nu_correla },
-              //   //   success: function (res) {
-              //   //     countaci = Number(res.i_filas) + 1;
-              //   //     console.log(res.data);
-              //   //     $("#example2").dataTable().fnDestroy();
-              //   //     $("#tablita-aci").children().remove();
-
-              //   //     let myArray = [];
-              //   //     let v_color = '';
-              //   //     for (const property in res.data) {
-              //   //       let id = res.data[property].id;
-              //   //       let item = res.data[property].Item;
-              //   //       let nombre = res.data[property].Descripcion;
-              //   //       let v_unidad = res.data[property].v_unidad;
-              //   //       let qty = res.data[property].Cantidad;
-              //   //       let price = res.data[property].Precio;
-              //   //       let importe = res.data[property].Total;
-              //   //       let v_disabled = res.data[property].v_disabled;
-              //   //       let v_note_detalle = res.data[property].v_note_detalle;
-
-              //   //       if (v_note_detalle == 'SI') {
-              //   //         v_color = 'color:rgb(66,222,10)';
-              //   //       } else {
-              //   //         v_color = 'color:rgb(3,164,90)';
-              //   //       }
-
-
-              //   //       let fila =
-              //   //         "<tr><td class='text-center'>" +
-              //   //         id +
-              //   //         "</td><td><span class='fa-solid fa-truck fa-beat' style='" + v_color + "'></span>" +
-
-              //   //         "</td><td class='text-left'>" +
-              //   //         item +
-              //   //         "</td><td class='text-left'>" +
-              //   //         nombre +
-              //   //         "</td><td class='text-left'>" +
-              //   //         v_unidad +
-              //   //         "</td><td class='text-left'>" +
-              //   //         qty +
-              //   //         "</td><td class='text-left'>" +
-              //   //         price +
-              //   //         "</td><td class='text-left'>" +
-              //   //         importe +
-              //   //         "</td><td><a id=" +
-              //   //         item +
-              //   //         " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
-              //   //         "</td><td><a id=" +
-              //   //         id +
-              //   //         " class='btn btn-danger btn-sm text-white delete " + v_disabled + "'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
-
-              //   //       let btn = document.createElement("tr");
-              //   //       btn.innerHTML = fila;
-              //   //       document.getElementById("tablita-aci").appendChild(btn);
-
-              //   //       myArray.push({ id: id, Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
-              //   //     }
-              //   //     creardatatable("#example2");
-              //   //     datosaci.splice(0, datosaci.length);
-              //   //     datosaci = myArray;
-              //   //     console.log(datosaci);
-              //   //   }
-              //   // });
-
-
-              // } else {
-              //   let valor = id;
-              //   $('#resumentotal').val('');
-              //   $("#example2").dataTable().fnDestroy();
-              //   let index = datosaci.findIndex((item) => item.id === valor);
-              //   datosaci.splice(index, 1);
-              //   $("#tablita-aci").children().remove();
-              //   let myArray = [];
-              //   let v_color = '';
-              //   let contador = 1;
-              //   for (const property in datosaci) {
-              //     let item = datosaci[property].Item;
-              //     let nombre = datosaci[property].Descripcion;
-              //     let v_unidad = datosaci[property].Unidad;
-              //     let qty = datosaci[property].Cantidad;
-              //     let price = datosaci[property].Precio;
-              //     let importe = datosaci[property].Total;
-              //     let v_note_detalle = datosaci[property].v_note_detalle;
-
-              //     if (v_note_detalle == 'SI') {
-              //       v_color = 'color:rgb(66,222,10)';
-              //     } else {
-              //       v_color = 'color:rgb(3,164,90)';
-              //     }
-
-              //     let fila =
-              //       "<tr><td class='text-center'>" +
-              //       contador +
-              //       "</td><td><span class='fa-solid fa-truck fa-beat'   style='" + v_color + "'></span>" +
-
-              //       "</td><td class='text-left'>" +
-              //       item +
-              //       "</td><td class='text-left'>" +
-              //       nombre +
-              //       "</td><td class='text-left'>" +
-              //       v_unidad +
-              //       "</td><td class='text-left'>" +
-              //       qty +
-              //       "</td><td class='text-left'>" +
-              //       price +
-              //       "</td><td class='text-left'>" +
-              //       importe +
-              //       "</td><td><a id=" +
-              //       item +
-              //       " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
-              //       "</td><td><a id=" +
-              //       contador +
-              //       " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
-
-              //     let btn = document.createElement("tr");
-              //     btn.innerHTML = fila;
-              //     document.getElementById("tablita-aci").appendChild(btn);
-              //     myArray.push({ id: contador, Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
-              //     contador = contador + 1;
-
-              //     //CALCULAR
-              //     var resumentotal = 0;
-              //     $('#example2 tr').each(function () {
-              //       var total = $(this).find("td").eq(7).html();
-              //       if ((parseFloat(total)) > 0) {
-              //         resumentotal = (parseFloat(resumentotal) + parseFloat(total));
-              //       }
-              //     });
-              //     document.getElementById('resumentotal').innerHTML = resumentotal;
-              //   }
-
-              //   creardatatable("#example2");
-              //   datosaci.splice(0, datosaci.length);
-              //   datosaci = myArray;
-              //   countaci = contador;
-              //   console.log(datosaci);
-              // }
-
-              let valor = parseInt(id);
-              $('#resumentotal').val('');
-              $("#example2").dataTable().fnDestroy();
-              $("#tablita-aci").children().remove();
-
-              // let index = datosaci.findIndex((item) => item.id === valor);
-              let index = datosaci.findIndex(object => object.id === valor);
-              datosaci.splice(index, 1);
-              // console.log(datosaci.findIndex((item) => item.id === valor));
-              // console.log(index);
-              // console.log(valor);
-
-              let myArray = [];
-              let contador = 1;
-              let v_color = '';
-              for (const property in datosaci) {
-                let item = datosaci[property].Item;
-                let nombre = datosaci[property].Descripcion;
-                let v_unidad = datosaci[property].Unidad;
-                let qty = datosaci[property].Cantidad;
-                let price = datosaci[property].Precio;
-                let importe = datosaci[property].Total;
-                let v_note_detalle = datosaci[property].v_note_detalle;
-
-                if (v_note_detalle == 'SI') {
-                  v_color = 'color:rgb(66,222,10)';
-                } else {
-                  v_color = 'color:rgb(3,164,90)';
-                }
-
-                let fila =
-                  "<tr><td class='text-center'>" +
-                  contador +
-                  "</td><td><span class='fa-solid fa-truck fa-beat'  style='" + v_color + "'></span>" +
-
-                  "</td><td class='text-left'>" +
-                  item +
-                  "</td><td class='text-left'>" +
-                  nombre +
-                  "</td><td class='text-left'>" +
-                  v_unidad +
-                  "</td><td class='text-left'>" +
-                  qty +
-                  "</td><td class='text-left'>" +
-                  price +
-                  "</td><td class='text-left'>" +
-                  importe +
-                  "</td><td><a id=" +
-                  item +
-                  " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
-                  "</td><td><a id=" +
-                  contador +
-                  " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
-                let btn = document.createElement("tr");
-                btn.innerHTML = fila;
-                document.getElementById("tablita-aci").appendChild(btn);
-                myArray.push({ id: parseInt(contador), Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
-                contador = contador + 1;
-
-                //CALCULAR
-                var resumentotal = 0;
-                $('#example2 tr').each(function () {
-                  var total = $(this).find("td").eq(7).html();
-                  if ((parseFloat(total)) > 0) {
-                    resumentotal = (parseFloat(resumentotal) + parseFloat(total));
+                  if (v_note_detalle == 'SI') {
+                    v_color = 'color:rgb(66,222,10)';
+                  } else {
+                    v_color = 'color:rgb(3,164,90)';
                   }
-                });
-                document.getElementById('resumentotal').innerHTML = resumentotal;
+
+                  let fila =
+                    "<tr><td class='text-center'>" +
+                    contador +
+                    "</td><td><span class='fa-solid fa-truck fa-beat'  style='" + v_color + "'></span>" +
+
+                    "</td><td class='text-left'>" +
+                    item +
+                    "</td><td class='text-left'>" +
+                    nombre +
+                    "</td><td class='text-left'>" +
+                    v_unidad +
+                    "</td><td class='text-left'>" +
+                    qty +
+                    "</td><td class='text-left'>" +
+                    price +
+                    "</td><td class='text-left'>" +
+                    importe +
+                    "</td><td><a id=" +
+                    item +
+                    " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
+                    "</td><td><a id=" +
+                    contador +
+                    " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+                  let btn = document.createElement("tr");
+                  btn.innerHTML = fila;
+                  document.getElementById("tablita-aci").appendChild(btn);
+                  myArray.push({ id: parseInt(contador), Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
+                  contador = contador + 1;
+
+                  //CALCULAR
+                  var resumentotal = 0;
+                  $('#example2 tr').each(function () {
+                    var total = $(this).find("td").eq(7).html();
+                    if ((parseFloat(total)) > 0) {
+                      resumentotal = (parseFloat(resumentotal) + parseFloat(total));
+                    }
+                  });
+                  document.getElementById('resumentotal').innerHTML = resumentotal;
+                }
+                creardatatable("#example2");
+                datosaci.splice(0, datosaci.length);
+                datosaci = myArray;
+                countaci = contador;
+                console.log(datosaci);
+              } else {
+
+                let valor = parseInt(id);
+                $('#resumentotal').val('');
+                $("#example2").dataTable().fnDestroy();
+                $("#tablita-aci").children().remove();
+
+                let index = datosaci.findIndex(object => object.id === valor);
+                datosaci.splice(index, 1);
+
+                let myArray = [];
+                let contador = 1;
+                let v_color = '';
+                for (const property in datosaci) {
+                  let item = datosaci[property].Item;
+                  let nombre = datosaci[property].Descripcion;
+                  let v_unidad = datosaci[property].Unidad;
+                  let qty = datosaci[property].Cantidad;
+                  let price = datosaci[property].Precio;
+                  let importe = datosaci[property].Total;
+                  let v_note_detalle = datosaci[property].v_note_detalle;
+
+                  if (v_note_detalle == 'SI') {
+                    v_color = 'color:rgb(66,222,10)';
+                  } else {
+                    v_color = 'color:rgb(3,164,90)';
+                  }
+
+                  let fila =
+                    "<tr><td class='text-center'>" +
+                    contador +
+                    "</td><td><span class='fa-solid fa-truck fa-beat'  style='" + v_color + "'></span>" +
+
+                    "</td><td class='text-left'>" +
+                    item +
+                    "</td><td class='text-left'>" +
+                    nombre +
+                    "</td><td class='text-left'>" +
+                    v_unidad +
+                    "</td><td class='text-left'>" +
+                    qty +
+                    "</td><td class='text-left'>" +
+                    price +
+                    "</td><td class='text-left'>" +
+                    importe +
+                    "</td><td><a id=" +
+                    item +
+                    " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
+                    "</td><td><a id=" +
+                    contador +
+                    " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+                  let btn = document.createElement("tr");
+                  btn.innerHTML = fila;
+                  document.getElementById("tablita-aci").appendChild(btn);
+                  myArray.push({ id: parseInt(contador), Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
+                  contador = contador + 1;
+
+                  //CALCULAR
+                  var resumentotal = 0;
+                  $('#example2 tr').each(function () {
+                    var total = $(this).find("td").eq(7).html();
+                    if ((parseFloat(total)) > 0) {
+                      resumentotal = (parseFloat(resumentotal) + parseFloat(total));
+                    }
+                  });
+                  document.getElementById('resumentotal').innerHTML = resumentotal;
+                }
+                creardatatable("#example2");
+                datosaci.splice(0, datosaci.length);
+                datosaci = myArray;
+                countaci = contador;
+                console.log(datosaci);
               }
-              creardatatable("#example2");
-              datosaci.splice(0, datosaci.length);
-              datosaci = myArray;
-              countaci = contador;
-              console.log(datosaci);
             },
           });
 
@@ -1337,6 +1175,7 @@ $(function () {
     });
   });
 
+
   $('#btnsendpedido').on('click', function () {  //ENVIAR CORREO
     var post = 0;
     var nu_correla = document.getElementById("nropedido").innerHTML;
@@ -1355,9 +1194,15 @@ $(function () {
       })
       return;
     }
+
+
+
+
+
+
     Swal.fire({
       title: "Seguro de enviar para su Aprobacion ?",
-      text: "Se enviara para la Aprobacion de las Jefaturas",
+      text: "Se enviara para Aprobacion de las Jefaturas",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#61C250",
@@ -1366,76 +1211,104 @@ $(function () {
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
+
+
+
         $.ajax({
           type: 'POST',
-          url: '/pedidos/aprobarpedido/ProcesoAprobacionPedido',
+          url: '/pedidos/aprobarpedido/ValidacionPedido',
           data: {
             post: post,
             nu_correla: nu_correla
           },
-
-          beforeSend: function () {
-            $("#btnsendpedido").attr("disabled", "disabled");
-            $("#btnguardar").attr("disabled", "disabled");
-            $("#cancelar").attr("disabled", "disabled");
-            $("#btnsendpedido").html(
-              "<span class='spinner-border spinner-border-sm'></span> \
-                              <span class='ml-25 align-middle'>Enviando...</span>"
-            );
-          },
-
-          beforeSend: function () {
-            $("#modal-insert").modal("show");
-            var n = 0;
-            var l = document.getElementById("number");
-            window.setInterval(function () {
-              l.innerHTML = n;
-              n++;
-            }, 2000);
-          },
-
           success: function (res) {
 
-            if (Number(res.output) == 1) {
-              $("#btnsendpedido").html("<span class='ml-25 align-middle'>Enviado</span>");
-              $("#modal-insert").modal("hide");
-              Swal.fire({
-                icon: res.vicon,
-                title: res.vtitle,
-                text: res.vtext + ', se envio un correo de notificacion a: ' + res.v_correo_next,
-                timer: res.itimer,
-                timerProgressBar: res.vprogressbar,
-                showCancelButton: false,
-                showConfirmButton: false,
-              });
-              var id = setInterval(function () {
-                location.reload();
-                clearInterval(id);
-                location.href = "http://localhost/pedidos/pedidos/index";
-              }, res.itimer);
-            } else {
-              $("#btnsendpedido").html("<span class='ml-25 align-middle'>Enviado</span>");
-              $("#modal-insert").modal("hide");
-              Swal.fire({
-                icon: res.vicon,
-                title: res.vtitle,
-                text: res.vtext + ', No se pudo enviar el correo de notificacion',
-                timer: res.itimer,
-                timerProgressBar: res.vprogressbar,
-                showCancelButton: false,
-                showConfirmButton: false,
-              });
-              var id = setInterval(function () {
-                location.reload();
-                clearInterval(id);
-                location.href = "http://localhost/pedidos/pedidos/index";
-              }, res.itimer);
-            }
+            if (Number(res.i_valor) == 1) {
+              $('#namepedido').focus();
+              Swal.fire(
+                res.v_mensaje,
+                '',
+                'warning'
+              )
 
+            } else {
+              $.ajax({
+                type: 'POST',
+                url: '/pedidos/aprobarpedido/ProcesoAprobacionPedido',
+                data: {
+                  post: post,
+                  nu_correla: nu_correla
+                },
+
+                beforeSend: function () {
+                  $("#btnsendpedido").attr("disabled", "disabled");
+                  $("#btnguardar").attr("disabled", "disabled");
+                  $("#cancelar").attr("disabled", "disabled");
+                  $("#btnsendpedido").html(
+                    "<span class='spinner-border spinner-border-sm'></span> \
+                              <span class='ml-25 align-middle'>Enviando...</span>"
+                  );
+                },
+
+                beforeSend: function () {
+                  $("#modal-insert").modal("show");
+                  var n = 0;
+                  var l = document.getElementById("number");
+                  window.setInterval(function () {
+                    l.innerHTML = n;
+                    n++;
+                  }, 2000);
+                },
+
+                success: function (res) {
+
+                  if (Number(res.output) == 1) {
+                    $("#btnsendpedido").html("<span class='ml-25 align-middle'>Enviado</span>");
+                    $("#modal-insert").modal("hide");
+                    Swal.fire({
+                      icon: res.vicon,
+                      title: res.vtitle,
+                      text: res.vtext + ', se envio un correo de notificacion a: ' + res.v_correo_next,
+                      timer: res.itimer,
+                      timerProgressBar: res.vprogressbar,
+                      showCancelButton: false,
+                      showConfirmButton: false,
+                    });
+                    var id = setInterval(function () {
+                      location.reload();
+                      clearInterval(id);
+                      location.href = "http://localhost/pedidos/pedidos/index";
+                    }, res.itimer);
+                  } else {
+                    $("#btnsendpedido").html("<span class='ml-25 align-middle'>Enviado</span>");
+                    $("#modal-insert").modal("hide");
+                    Swal.fire({
+                      icon: res.vicon,
+                      title: res.vtitle,
+                      text: res.vtext + ', No se pudo enviar el correo de notificacion',
+                      timer: res.itimer,
+                      timerProgressBar: res.vprogressbar,
+                      showCancelButton: false,
+                      showConfirmButton: false,
+                    });
+                    var id = setInterval(function () {
+                      location.reload();
+                      clearInterval(id);
+                      location.href = "http://localhost/pedidos/pedidos/index";
+                    }, res.itimer);
+                  }
+
+                }
+              });
+
+            }
           }
         });
       }
     });
+
+
+
   });
   //#endregion
 
@@ -1562,9 +1435,7 @@ $(function () {
                   f_monto +
                   "</td><td class='text-left'>" +
                   v_centrocosto +
-                  "</td><td><a id=" +
-                  v_idlinea +
-                  " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+                  "</td></tr>";
 
                 let btn = document.createElement("tr");
                 btn.innerHTML = fila;
@@ -1578,8 +1449,6 @@ $(function () {
     }
 
   });
-
-
 
 
   $(document).on('change', 'input[type="checkbox"]', function (e) {
@@ -1710,6 +1579,7 @@ $(function () {
   });
 
   $("#idpartida").change(function () {
+
     $("#montolleva").val('');
     var v_codigo = $("#idppto").val();
     var v_idpartida = $("#idpartida").val();
@@ -1728,6 +1598,9 @@ $(function () {
         $("#div-ppto").html("");
         $("#div-mes").html("");
         let myArray = [];
+        let clase_colormes = '';
+        let clase_colormonto = '';
+
         for (const property in res.data) {
           let v_codigo = res.data[property].v_codigo;
           let v_idpartida = res.data[property].v_idpartida;
@@ -1737,14 +1610,23 @@ $(function () {
           let v_namesaldomes = res.data[property].v_namesaldomes;
           let v_disabled = res.data[property].v_disabled;
 
+          if (Number(f_saldo) == 0) {
+            clase_colormes = '';
+            clase_colormonto = '';
+          } else {
+            clase_colormes = 'badge badge-light-danger';
+            clase_colormonto = 'badge-light-success';
+          }
+
+
           $("#div-mes").append(
             " <div class='col-sm-4'>\<div class='business-item'>\
                   <div class='d-flex align-items-center justify-content-between'>\
                     <div class='custom-control custom-checkbox'>\
-                      <input type='checkbox'  onclick='onToggle()' class='custom-control-input' id=" + v_nombremes + " " + v_disabled + " = " + v_disabled + ">\
-                        <label class='custom-control-label badge badge-light-danger' id="+ v_nombremes + " for=" + v_nombremes + ">" + v_nombremes + "</label>\
+                      <input type='checkbox'  class='custom-control-input' id=" + v_nombremes + " " + v_disabled + " = " + v_disabled + ">\
+                        <label class='custom-control-label "+ clase_colormes + "' id=" + v_nombremes + " for=" + v_nombremes + ">" + v_nombremes + "</label>\
                     </div>\
-                    <div class='badge badge-light-success' id="+ v_namesaldomes + ">" + f_saldo + "</div>\
+                    <div class='badge "+ clase_colormonto + "' id=" + v_namesaldomes + ">" + f_saldo + "</div>\
                     <input type='hidden' id="+ v_codmes + " value=" + v_codmes + "  > \
                   </div>\
                 </div>\
@@ -1754,7 +1636,6 @@ $(function () {
       },
     });
   });
-
 
   $("#btnhabilitar").on("click", function () {
     $("#montolleva").val('');
@@ -1775,6 +1656,9 @@ $(function () {
         $("#div-ppto").html("");
         $("#div-mes").html("");
         let myArray = [];
+        let clase_colormes = '';
+        let clase_colormonto = '';
+
         for (const property in res.data) {
           let v_codigo = res.data[property].v_codigo;
           let v_idpartida = res.data[property].v_idpartida;
@@ -1784,14 +1668,22 @@ $(function () {
           let v_namesaldomes = res.data[property].v_namesaldomes;
           let v_disabled = res.data[property].v_disabled;
 
+          if (Number(f_saldo) == 0) {
+            clase_colormes = '';
+            clase_colormonto = '';
+          } else {
+            clase_colormes = 'badge badge-light-danger';
+            clase_colormonto = 'badge-light-success';
+          }
+
           $("#div-mes").append(
             " <div class='col-sm-4'>\<div class='business-item'>\
                   <div class='d-flex align-items-center justify-content-between'>\
                     <div class='custom-control custom-checkbox'>\
-                      <input type='checkbox'  onclick='onToggle()' class='custom-control-input' id=" + v_nombremes + " " + v_disabled + " = " + v_disabled + ">\
-                        <label class='custom-control-label badge badge-light-danger' id="+ v_nombremes + " for=" + v_nombremes + ">" + v_nombremes + "</label>\
+                      <input type='checkbox'  class='custom-control-input' id=" + v_nombremes + " " + v_disabled + " = " + v_disabled + ">\
+                        <label class='custom-control-label "+ clase_colormes + "' id=" + v_nombremes + " for=" + v_nombremes + ">" + v_nombremes + "</label>\
                     </div>\
-                    <div class='badge badge-light-success' id="+ v_namesaldomes + ">" + f_saldo + "</div>\
+                    <div class='badge "+ clase_colormonto + "' id=" + v_namesaldomes + ">" + f_saldo + "</div>\
                     <input type='hidden' id="+ v_codmes + " value=" + v_codmes + "  > \
                   </div>\
                 </div>\
@@ -1810,15 +1702,15 @@ $(function () {
     console.log(Number(cantidadx).toFixed(2));
     console.log(Number(montox).toFixed(2));
 
-    console.log(cantidadx);
-    console.log(montox);
+    // console.log(cantidadx);
+    // console.log(montox);
 
     if (cantidadx > montox) {
       $("#montolleva").focus();
       $('#montolleva').val(monto);
 
       Swal.fire({
-        title: 'MONTO ES MAYOR AL SALDO DEL MES SELECCIONADO',
+        title: 'EL MONTO INGRESADO ES MAYOR AL SALDO DEL MES SELECCIONADO',
         showClass: {
           popup: 'animate__animated animate__fadeInDown'
         },
@@ -1828,7 +1720,6 @@ $(function () {
       })
       return;
     }
-
   });
 
   $("#agregarppto").on("click", function () { //perro
@@ -1979,9 +1870,6 @@ $(function () {
     });
 
   });
-
-
-
 
   $("#tbpptopedido tbody").on("click", "a.delete", function () {
     let v_idlinea = $(this).attr("id");
@@ -2408,7 +2296,6 @@ $(function () {
 
   });
 
-
   $("#btnsubirfile").on("click", function () {
     var formData = new FormData();
     var files = $("#archivo")[0].files[0];
@@ -2429,6 +2316,21 @@ $(function () {
       })
       return;
     }
+
+    if ((files == null)) {
+      Swal.fire({
+        title: 'CARGAR UN ARCHIVO DESDE LA OPCION (SELECCIONAR ARCHIVO)',
+        timer: 3000,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
     formData.append("archivo", files);
     formData.append("nombrefile", nombrefile);
     formData.append("nropedido", nropedido);

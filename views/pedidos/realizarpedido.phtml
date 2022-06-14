@@ -192,7 +192,8 @@
                                         <h6 class="text-center" style="color:rgb(179, 27, 0);height:3px">
                                         </h6>
                                         <div class="form-group">
-                                            <button id="btnsendpedido" type="button" style="height:40px" class="btn btn-relief-primary bg-darken-2 colors-container rounded text-white btn-block btn-sm"><i class="fa-solid fa-paper-plane fa-beat"></i><strong>&nbsp; Enviar para aprobacion</strong></button>
+                                            <button id="btnsendpedido" type="button" style="height:40px" class="btn btn-relief-primary waves-effect waves-float waves-light btn-block btn-sm"><i class="fa-solid fa-paper-plane fa-beat"></i><strong>&nbsp; Enviar para aprobacion</strong></button>
+                                            <!-- <button id="btnguardar" type="button" style="height:40px" class="btn btn-relief-success waves-effect waves-float waves-light btn-block btn-sm" type="button"><i class="fas fa-save fa-beat"></i> <strong> &nbsp; Guardar</strong> </button> -->
                                         </div>
                                     </div>
                                 </div>
@@ -447,75 +448,67 @@
             </div>
 
 
-
             <div class="modal-body">
-                <div class="col-sm-12">
-                    <b style="color:rgb(0,0,0)"><strong>#Codigo &nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</strong> </b> <strong><label id="codprodnote" style="color:rgb(0,0,0);font-weight:bold"></label></strong>
-                    <br>
-                </div>
-
-                <div class="col-sm-12">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-group mb-2">
-                                <label for="notas" class="form-label font-weight-bold" style="color:#B7B730;font-weight:bold"><strong>Ingresar descripcion para el archivo</strong> </label>
-                                <textarea class="form-control" rows="1" placeholder="Ingrese descripcion" id="descripcionfile"></textarea>
-                            </div>
+                <b style="color:rgb(0,0,0)"><strong>#Codigo &nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</strong> </b> <strong><label id="codprodnote" style="color:rgb(0,0,0);font-weight:bold"></label></strong>
+                <br>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group mb-2">
+                            <label for="notas" class="form-label font-weight-bold" style="color:#B7B730;font-weight:bold"><strong>Ingresar descripcion para el archivo</strong> </label>
+                            <textarea class="form-control" rows="1" placeholder="Ingrese descripcion" id="descripcionfile"></textarea>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-sm-12">
-                    <label class="form-label font-weight-bold" style="color:#62BB3E;font-weight:bold"> <strong>Subir Archivos </strong> </label>
+                <label class="form-label font-weight-bold" style="color:#62BB3E;font-weight:bold"> <strong>Seleccionar Archivo </strong> </label>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="form-group">
 
-                    <div class="row">
-                        <div class="col-sm-10">
-                            <div class="form-group">
-
+                            <div class="input-group">
                                 <div class="input-group">
-                                    <div class="input-group">
-                                        <input id="archivo" name="archivo" type="file">
-                                    </div>
+                                    <input id="archivo" name="archivo" type="file">
                                 </div>
-
                             </div>
-                        </div>
 
-                        <div class="col-sm-2">
-                            <div class="form-group">
-                                <button type="button" id="btnsubirfile" name="btnsubirfile" class="btn btn-primary btn-block"><b><i class="fa-solid fa-upload fa-beat"></i></b></button>
-                            </div>
                         </div>
                     </div>
 
-                    <br>
-                    <b style="color:rgb(0,0,0);text-align: center"><strong>Detalle archivos cargados para el producto &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong> </b> <strong></strong>
-                    <hr>
-
-                    <div id="div-01"></div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <table id="tbarchivo" class="table table-sm">
-                                <thead class="thead-dark">
-                                    <tr class="text-left">
-                                        <th>#Orden</th>
-                                        <th class="text-left">Item</th>
-                                        <th class="text-left">Descripcion</th>
-                                        <th class="text-center"><i class="fa-solid fa-eye"></i>&nbsp;</th>
-                                        <th class="text-center"><i class="fa-solid fa-trash-can"></i> &nbsp;</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablita-nota">
-                                </tbody>
-                            </table>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <button type="button" id="btnsubirfile" name="btnsubirfile" class="btn btn-primary btn-block"><b><i class="fa-solid fa-upload fa-beat"></i></b>&nbsp;&nbsp;Subir Archivo</button>
                         </div>
                     </div>
                 </div>
+                <br>
+                <p style="text-align:center;height:5px;color:rgb(0,0,0)"><strong>Detalle archivos cargados para el producto</strong></p>
+                <hr>
+
+                <div id="div-01"></div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <table id="tbarchivo" class="table table-sm">
+                            <thead class="thead-dark">
+                                <tr class="text-left">
+                                    <th>#Orden</th>
+                                    <th class="text-left">Codigo</th>
+                                    <th class="text-left">Descripcion</th>
+                                    <th class="text-center"><i class="fa-solid fa-eye"></i>&nbsp;</th>
+                                    <th class="text-center"><i class="fa-solid fa-trash-can"></i> &nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablita-nota">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 </div>
+
+
 
 <!-- MODAL AGREGAR ARCHIVOS (CUANDO YA GENERA EL PEDIDO Y LO ENVIA)-->
 <div class="modal fade" id="modal-files" data-backdrop="static">
@@ -528,25 +521,19 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="col-sm-12">
-                    <div id="div-files"></div>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <table id="tbarchivos" class="table table-sm">
-                                <thead class="thead-dark">
-                                    <tr class="text-left">
-                                        <th>#Pedido</th>
-                                        <th class="text-left">Item</th>
-                                        <th class="text-left">Descripcion</th>
-                                        <th class="text-center"><i class="fa-solid fa-eye"></i> &nbsp;&nbsp;</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablita-files">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <div id="div-files"></div>
+                <table id="tbarchivos" class="table table-sm">
+                    <thead class="thead-dark">
+                        <tr class="text-left">
+                            <th>#Pedido</th>
+                            <th class="text-left">Codigo</th>
+                            <th class="text-left">Descripcion</th>
+                            <th class="text-center"><i class="fa-solid fa-eye"></i> &nbsp;&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablita-files">
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -565,117 +552,118 @@
             </div>
 
             <div class="modal-body">
-                <div class="col-sm-12">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group mb-2">
-                                <h4 class="invoice-title">
-                                    #Pedido
-                                    <span class="invoice-number">(<b id="nropedidoppto"></b>)</span>
-                                </h4>
-                            </div>
-                        </div>
 
-
-                        <div class="col-sm-6">
-                            <div class="form-group mb-2">
-                                <h4 class="invoice-title">
-                                    Monto S/.
-                                    <span class="invoice-number">(<b id="importepedido"></b>)</span>
-                                </h4>
-                            </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group mb-2">
+                            <h4 class="invoice-title">
+                                #Pedido
+                                <span class="invoice-number">(<b id="nropedidoppto"></b>)</span>
+                            </h4>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group mb-2">
-                                <label class="form-label font-weight-bolder">1. Seleccione nombre del proyecto</label>
-                                <select id="idppto" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
-                                    <?php foreach ($this->ListadoNombrePppto as $ppt) { ?>
-                                        <option value="<?php echo $ppt['v_codigo']; ?>"><?php echo $ppt['v_proyecto']; ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                        </div>
 
-                        <div class="col-sm-6">
-                            <div class="form-group mb-2">
-                                <label class="form-label font-weight-bolder">2. Seleccione nombre de partida</label>
-                                <select id="idpartida" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
-                                    <option value="-- SELECCIONE --">-- SELECCIONE --</option>
-                                </select>
-                            </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group mb-2">
+                            <h4 class="invoice-title">
+                                Monto S/.
+                                <span class="invoice-number">(<b id="importepedido"></b>)</span>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group mb-2">
+                            <label class="form-label">1. Seleccione nombre del proyecto</label>
+                            <select id="idppto" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
+                                <?php foreach ($this->ListadoNombrePppto as $ppt) { ?>
+                                    <option value="<?php echo $ppt['v_codigo']; ?>"><?php echo $ppt['v_proyecto']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group mb-2">
+                            <label class="form-label">2. Seleccione nombre de partida</label>
+                            <select id="idpartida" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
+                                <option value="-- SELECCIONE --">-- SELECCIONE --</option>
+                            </select>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-sm-12">
-                    <div id="div-ppto"></div>
-                    <div class="card business-card ">
-                        <div class="business-items">
-                            <div class="row" id="div-mes">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <div class="row">
-
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="form-label font-weight-bolder badge badge-light-success">Seleccione centro de costo </label>
-                                        <select id="idcentrocosto" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
-                                            <?php foreach ($this->ListadoSubAcct as $acct) { ?>
-                                                <option value="<?php echo $acct['v_sub']; ?>"><?php echo $acct['v_descripcion']; ?></option>
-                                            <?php } ?>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-2">
-                                    <label class="form-label font-weight-bolder badge badge-light-success">Monto &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                    <input type="number" id="montolleva" class="form-control" placeholder="0">
-                                </div>
 
 
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <label class="form-label font-weight-bolder badge badge-light-success">Habilitar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                        <button type="button" id="btnhabilitar" name="btnhabilitar" class="btn btn-danger btn-block"><b><i class="fa-solid fa-lock-open fa-beat"></i></b></button>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <label class="form-label font-weight-bolder badge badge-light-success">Guardar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        </label>
-                                        <button type="button" id="agregarppto" name="agregarppto" class="btn btn-primary btn-block"><b><i class="fa-solid fa-floppy-disk fa-beat"></i></b></button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <p style="text-align:center;height:5px;color:rgb(0,0,0)"><strong>Detalle registrado</strong></p>
-                            <!-- <table id="tbpptopedido" class="table table-bordered"> -->
-                            <table id="tbpptopedido" class="table table-sm">
-                                <thead class="thead-dark">
-                                    <tr class="text-left">
-                                        <th class="text-left">#Pedido</th>
-                                        <th class="text-left">#IdPpto</th>
-                                        <th class="text-left">#Partida</th>
-                                        <th class="text-left">Periodo</th>
-                                        <th class="text-left">Mes</th>
-                                        <th class="text-left">Monto</th>
-                                        <th class="text-left">Centrocosto</th>
-                                        <th class="text-center"><i class="fa-solid fa-trash-can"></i> &nbsp;&nbsp;</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablita-ppto">
-                                </tbody>
-                            </table>
+                <div id="div-ppto"></div>
+                <div class="card business-card ">
+                    <div class="business-items">
+                        <div class="row" id="div-mes">
                         </div>
                     </div>
                 </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="form-label  badge badge-light-success">Seleccione centro de costo </label>
+                                    <select id="idcentrocosto" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
+                                        <?php foreach ($this->ListadoSubAcct as $acct) { ?>
+                                            <option value="<?php echo $acct['v_sub']; ?>"><?php echo $acct['v_descripcion']; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2">
+                                <label class="form-label badge badge-light-success">Monto &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <input type="number" id="montolleva" class="form-control" placeholder="0">
+                            </div>
+
+
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label class="form-label badge badge-light-success">Habilitar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                    <button type="button" id="btnhabilitar" name="btnhabilitar" class="btn btn-danger btn-block"><b><i class="fa-solid fa-lock-open fa-beat"></i></b></button>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label class="form-label badge badge-light-success">Guardar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                    <button type="button" id="agregarppto" name="agregarppto" class="btn btn-primary btn-block"><b><i class="fa-solid fa-floppy-disk fa-beat"></i></b></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p style="text-align:center;height:5px;color:rgb(0,0,0)"><strong>Detalle registrado</strong></p>
+                        <hr>
+                        <!-- <table id="tbpptopedido" class="table table-bordered"> -->
+                        <table id="tbpptopedido" class="table table-sm">
+                            <thead class="thead-dark">
+                                <tr class="text-left">
+                                    <th class="text-left">#Pedido</th>
+                                    <th class="text-left">#IdPpto</th>
+                                    <th class="text-left">#Partida</th>
+                                    <th class="text-left">Periodo</th>
+                                    <th class="text-left">Mes</th>
+                                    <th class="text-left">Monto</th>
+                                    <th class="text-left">Centrocosto</th>
+                                    <th class="text-center"><i class="fa-solid fa-trash-can"></i> &nbsp;&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablita-ppto">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -693,30 +681,30 @@
             </div>
 
             <div class="modal-body">
-                <div class="col-sm-12">
-                    <div id="div-pptos"></div>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <p style="text-align:center;height:5px;color:rgb(0,0,0)"><strong>Detalle registrado</strong></p>
-                            <table id="tbpptopedidos" class="table table-sm">
-                                <thead class="thead-dark">
-                                    <tr class="text-left">
-                                        <th class="text-left">#Pedido</th>
-                                        <th class="text-left">#IdPpto</th>
-                                        <th class="text-left">#Partida</th>
-                                        <th class="text-left">Periodo</th>
-                                        <th class="text-left">Mes</th>
-                                        <th class="text-left">Monto</th>
-                                        <th class="text-left">Centrocosto</th>
-                                        <th class="text-center"><i class="fa-solid fa-trash-can"></i> &nbsp;&nbsp;</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tablita-pptos">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+
+                <div id="div-pptos"></div>
+
+
+                <p style="text-align:center;height:5px;color:rgb(0,0,0)"><strong>Detalle registrado</strong></p>
+                <table id="tbpptopedidos" class="table table-sm">
+                    <thead class="thead-dark">
+                        <tr class="text-left">
+                            <th class="text-left">#Pedido</th>
+                            <th class="text-left">#IdPpto</th>
+                            <th class="text-left">#Partida</th>
+                            <th class="text-left">Periodo</th>
+                            <th class="text-left">Mes</th>
+                            <th class="text-left">Monto</th>
+                            <th class="text-left">Centrocosto</th>
+                            <!-- <th class="text-center"><i class="fa-solid fa-trash-can"></i> &nbsp;&nbsp;</th> -->
+                        </tr>
+                    </thead>
+                    <tbody id="tablita-pptos">
+                    </tbody>
+                </table>
+
+
+
             </div>
         </div>
     </div>

@@ -39,11 +39,8 @@
                                     </div>
                                 </div>
                                 <hr>
-
                                 <input value='<?php echo $_SESSION['idarea'] ?>' type="hidden" id="idarea">
-
                                 <div class="row">
-
                                     <div class="col-xl-6 col-md-6 col-12 mb-1">
                                         <div class="form-group">
                                             <label class="form-label font-weight-bolder">Nombre del pedido </label>
@@ -63,7 +60,7 @@
                                     <div class="col-xl-2 col-md-6 col-12 mb-1">
                                         <label class="form-label font-weight-bolder">Fecha</label>
                                         <div class="input-group date" id="ffin" data-target-input="nearest">
-                                            <input type="text" id="fecha" class="form-control" placeholder="YYYY-MM-DD" readonly="readonly">
+                                            <input type="text" id="fecha" style="color:rgb(0,0,0); background-color:rgb(221,239,245)" class="form-control" placeholder="YYYY-MM-DD" readonly="readonly">
                                         </div>
                                     </div>
 
@@ -73,7 +70,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-coins"></i></span>
                                             </div>
-                                            <input type="number" id="tipocambio" value='<?php echo $this->ListadoTipoCambio[0]['tipocambio']; ?>' class="form-control" aria-describedby="itemquantity" placeholder="0" autocomplete="off" readonly="readonly" />
+                                            <input type="number" style="color:rgb(0,0,0); background-color:rgb(221,239,245)" id="tipocambio" value='<?php echo $this->ListadoTipoCambio[0]['tipocambio']; ?>' class="form-control" aria-describedby="itemquantity" placeholder="0" autocomplete="off" readonly="readonly" />
                                         </div>
                                     </div>
 
@@ -104,7 +101,7 @@
                                     <div class="col-xl-3 col-md-6 col-12 mb-1">
                                         <div class="form-group">
                                             <label class="form-label font-weight-bolder">Encargado </label>
-                                            <input type="text" id="encargadoestado" readonly=" readonly" class="form-control" placeholder="Encargado">
+                                            <input type="text" id="encargadoestado" style="color:rgb(0,0,0); background-color:rgb(221,239,245)" readonly=" readonly" class="form-control" placeholder="Encargado">
                                         </div>
                                     </div>
 
@@ -123,6 +120,7 @@
                                             <th>#</th>
                                             <th class="text-left">Codigo</th>
                                             <th class="text-left">Descripcion</th>
+                                            <th class="text-left">Almacen</th>
                                             <th class="text-left">Unidad</th>
                                             <th class="text-left">Cantidad</th>
                                             <th class="text-left"><i class="fas fa-coins"></i> Precio</th>
@@ -142,13 +140,15 @@
                                 <div class="col-md-6 invoice-col">
                                     <h6 class="mb-0" style="color:rgb(0,0,0)" id="fecharesumen"><strong></strong> </h6>
                                     <hr style="color:rgb(122,182,21)">
-                                    <b style="color:rgb(0,0,0)">Importe total &nbsp; (<b id="monedaimporte"></b>) :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b> <strong><b style="font-weight: bold" id="resumentotal"></b></strong>
+                                    <b style="color:rgb(0,0,0)">Importe total &nbsp; (<b id="monedaimporte"></b>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</b> <strong><b style="font-weight: bold" id="resumentotal"></b></strong>
                                     <hr style="color:rgb(122,182,21)">
-                                    <b style="color:rgb(0,0,0)">Monto Limite del Pedido S/. &nbsp; (<b class="alert-success" id="montolimite"><?php echo $this->ConsultaTopePedido[0]['f_valortope_condicion_uno']; ?></b>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b> <strong><b style="font-weight: bold"></b></strong>
+                                    <b style="color:rgb(0,0,0)">Importe total Presupuesto S/.&nbsp;&nbsp;&nbsp;&nbsp;</b> <strong><b style="font-weight: bold" id="importepresupuesto"></b></strong>
+                                    <hr style="color:rgb(122,182,21)">
+                                    <b style="color:rgb(0,0,0)">Monto Limite del Pedido S/. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b class="alert-success" id="montolimite"><?php echo $this->ConsultaTopePedido[0]['f_valortope_condicion_uno']; ?></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b> <strong><b style="font-weight: bold"></b></strong>
                                 </div>
                             </div>
 
-                            <hr>
+                            <br>
 
                             <div class="col-md-12">
                                 <div class="input-group input-group-merge">
@@ -193,7 +193,6 @@
                                         </h6>
                                         <div class="form-group">
                                             <button id="btnsendpedido" type="button" style="height:40px" class="btn btn-relief-primary waves-effect waves-float waves-light btn-block btn-sm"><i class="fa-solid fa-paper-plane fa-beat"></i><strong>&nbsp; Enviar para aprobacion</strong></button>
-                                            <!-- <button id="btnguardar" type="button" style="height:40px" class="btn btn-relief-success waves-effect waves-float waves-light btn-block btn-sm" type="button"><i class="fas fa-save fa-beat"></i> <strong> &nbsp; Guardar</strong> </button> -->
                                         </div>
                                     </div>
                                 </div>
@@ -285,6 +284,19 @@
                                                                                 <hr>
                                                                             </div>
 
+                                                                            <div class="col-lg-12 col-12 my-lg-0 my-0">
+                                                                                <p class="card-text col-title mb-md-0 mb-0">Almacen</p>
+                                                                                <select id="x2local" class="alert-success select2 form-control form-control-lg">
+                                                                                    <?php foreach ($this->ComboLocal as $und) { ?>
+                                                                                        <option value="<?php echo $und['v_id_local']; ?>"><?php echo $und['v_local']; ?></option>
+                                                                                    <?php } ?>
+                                                                                </select>
+                                                                            </div>
+
+                                                                            <div class="col-lg-12 col-12 my-lg-0 my-0">
+                                                                                <hr>
+                                                                            </div>
+
                                                                             <div class="col-lg-4 col-12 my-lg-0 my-0">
                                                                                 <p class="card-text col-title mb-md-0 mb-0">Cantidad</p>
                                                                                 <input id="cantidaditem" type="number" class="form-control" placeholder="0">
@@ -309,7 +321,6 @@
                                                                                         <option value="<?php echo $und['v_codund']; ?>"><?php echo $und['v_descripcion']; ?></option>
                                                                                     <?php } ?>
                                                                                 </select>
-
                                                                             </div>
 
                                                                             <div class="col-lg-4 col-12 my-lg-0 my-0">
@@ -359,14 +370,14 @@
                                 <div class="col-12">
                                     <div class="form-group row">
                                         <div class="col-sm-3 col-form-label">
-                                            <label for="email-icon">Unidad</label>
+                                            <label for="email-icon"><b>Unidad</b></label>
                                         </div>
                                         <div class="col-sm-9">
                                             <div class="input-group input-group-merge">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-balance-scale-right"></i></span>
                                                 </div>
-                                                <input type="text" id="unidad" class="form-control" name="fname-icon" placeholder="" readonly="readonly">
+                                                <input type="text" id="unidad" style="color:rgb(0,0,0); background-color:rgb(221,239,245)" class="form-control" name="fname-icon" placeholder="" readonly="readonly">
                                             </div>
                                         </div>
                                     </div>
@@ -378,7 +389,7 @@
                                 <div class="col-12">
                                     <div class="form-group row">
                                         <div class="col-sm-3 col-form-label">
-                                            <label for="email-icon">Cantidad</label>
+                                            <label for="email-icon"><b>Cantidad</b> </label>
                                         </div>
                                         <div class="col-sm-9">
                                             <div class="input-group input-group-merge">
@@ -394,7 +405,7 @@
                                 <div class="col-12">
                                     <div class="form-group row">
                                         <div class="col-sm-3 col-form-label">
-                                            <label for="email-icon">Precio</label>
+                                            <label for="email-icon"><b>Precio</b></label>
                                         </div>
                                         <div class="col-sm-9">
                                             <div class="input-group input-group-merge">
@@ -407,21 +418,35 @@
                                     </div>
                                 </div>
 
+
                                 <div class="col-12">
                                     <div class="form-group row">
                                         <div class="col-sm-3 col-form-label">
-                                            <label for="email-icon">Total</label>
+                                            <label for="email-icon"><b>Total</b></label>
                                         </div>
                                         <div class="col-sm-9">
                                             <div class="input-group input-group-merge">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-coins"></i></span>
                                                 </div>
-                                                <input type="number" id="importe" style="color:rgb(0,0,0)" class="form-control" id="itemquantity" aria-describedby="itemquantity" placeholder="0" readonly="readonly" />
+                                                <input type="number" id="importe" style="color:rgb(0,0,0); background-color:rgb(221,239,245)" class="form-control" id="itemquantity" aria-describedby="itemquantity" placeholder="0" readonly="readonly" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="col-12">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 col-form-label">
+                                            <label for="email-icon"><b>Almacen</b></label>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <select id="xlocal" class="select2 form-control form-control-lg">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                                 <div class="col-sm-9 offset-sm-3">
                                     <button id="calcular" type="button" class="btn btn-relief bg-gradient-primary"><i data-feather='percent'></i> Calcular</button>

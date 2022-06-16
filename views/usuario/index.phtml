@@ -123,6 +123,7 @@
                             <label class="form-label font-weight-bolder">Nombres:</label>
                             <input type="text" id="xnombres" tabindex="1" class="form-control" autocomplete="off" readonly="readonly" />
                         </div>
+                        
                         <div class="form-group col-md-12">
                             <label class="form-label font-weight-bolder">Apellidos:</label>
                             <input type="text" id="xapellidos" tabindex="2" class="form-control" autocomplete="off" readonly="readonly" />
@@ -136,15 +137,25 @@
                     </section>
 
 
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-2">
                         <label class="form-label font-weight-bolder">Id Genero:</label>
                         <input type="text" id="xidgenero" class="form-control" autocomplete="off" readonly="readonly" />
                     </div>
 
-                    <div class="form-group col-md-8">
+                    <div class="form-group col-md-4">
                         <label class="form-label font-weight-bolder">Genero:</label>
                         <input type="email" id="xgenero" class="form-control" autocomplete="off" readonly="readonly" />
                     </div>
+
+                    <div class="form-group col-md-6">
+                        <label class="alert-success   form-label font-weight-bolder">Usuario Solomon</label>
+                        <select id="xidusersolomon" class="select2 form-control form-control-lg">
+                            <?php foreach ($this->ComboPerfil as $pf) { ?>
+                                <option value="<?php echo $pf['i_id']; ?>"><?php echo $pf['v_nombre']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
 
 
                     <div class="form-group col-md-6">
@@ -230,117 +241,4 @@
 </div>
 
 
-
-<!-- MODAL CREAR USUARIO-->
-<!-- <div class="modal fade" id="modal-editar" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><b id="titulomodal"></b></h5><b><span id="idtabla"></span></b>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <section class="col-lg-3">
-                        <div class="media">
-                            <a class="mr-25">
-                                <img src="../public/doc/perfil/default.png" class="rounded mr-50" alt="profile image" height="200" width="200" />
-                            </a>
-                        </div>
-                    </section>
-                    <section class="col-lg-9">
-                        <div class="form-group col-md-12">
-                            <label class="form-label font-weight-bolder">Dni:</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="dni" placeholder="Ingrese dni" autocomplete="off" aria-describedby="button-addon2">
-                                <div class="input-group-append" id="button-addon2">
-                                    <button id="btnconsultar" class="btn btn-outline-primary waves-effect" type="button">Validar</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label class="form-label font-weight-bolder">Nombres:</label>
-                            <input type="text" id="xnombres" tabindex="1" class="form-control" autocomplete="off" readonly="readonly" />
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label class="form-label font-weight-bolder">Apellidos:</label>
-                            <input type="text" id="xapellidos" tabindex="2" class="form-control" autocomplete="off" readonly="readonly" />
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label class="form-label font-weight-bolder">Correo:</label>
-                            <input type="email" id="xcorreo" placeholder="Correo" tabindex="3" class="form-control" autocomplete="off" />
-                        </div>
-                    </section>
-
-                    <div class="form-group col-md-6">
-                        <label class="alert-success   form-label font-weight-bolder">Perfil</label>
-                        <select id="xperfil" class="select2 form-control form-control-lg">
-                            <?php foreach ($this->ComboPerfil as $pf) { ?>
-                                <option value="<?php echo $pf['i_id']; ?>"><?php echo $pf['v_nombre']; ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-
-
-                    <div class="form-group col-md-6">
-                        <label class="alert-success   form-label font-weight-bolder">Cargo</label>
-                        <select id="xcargo" class="select2 form-control form-control-lg">
-                            <?php foreach ($this->ComboCargo as $cg) { ?>
-                                <option value="<?php echo $cg['v_carid']; ?>"><?php echo $cg['v_carnombre']; ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label class="alert-success   form-label font-weight-bolder">Area</label>
-                        <select id="xarea" class="select2 form-control form-control-lg">
-                            <?php foreach ($this->ComboArea as $ar) { ?>
-                                <option value="<?php echo $ar['v_areid']; ?>"><?php echo $ar['v_nombre']; ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label class="alert-success   form-label font-weight-bolder">Local</label>
-                        <select id="xlocal" class="select2 form-control form-control-lg">
-                            <?php foreach ($this->ComboLocal as $local) { ?>
-                                <option value="<?php echo $local['v_id_local']; ?>"><?php echo $local['v_local']; ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-
-
-                    <div class="form-group col-md-12">
-                        <label for="register-password" class="form-label font-weight-bolder">Contraseña</label>
-                        <div class="input-group input-group-merge form-password-toggle">
-                            <input type="password" id="xpassword" class="form-control form-control-merge" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" tabindex="4" required />
-                            <div class="input-group-append">
-                                <span class="input-group-text cursor-pointer"><i data-feather="eye"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <button id="xbtnguardar" type="button" class="btn btn-success btn-block">
-                                <i class="fas fa-save"></i>
-                                <b>Guardar</b></button>
-                        </div>
-                        <br>
-                        <br>
-                        <div class="col-sm-6">
-                            <button id="xbtncancelar" type="button" class="btn btn-danger btn-block">
-                                <i class="fas fa-ban"></i>
-                                <b>Cancelar</b></button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div> -->
+ 

@@ -536,8 +536,6 @@ function checkInput(r) {
   if (respuesta == "Rechazar") {
 
     $("#modal-retorno").modal("show");
-
-
     // Swal.fire({
     //   title: "Seguro de Rechazar el pedido?",
     //   text: "Pedido sera Rechazado",
@@ -610,8 +608,6 @@ function checkInput(r) {
 
     //   }
     // });
-
-
   }
 
   if (respuesta == "Retornar") {
@@ -646,6 +642,7 @@ function checkInput(r) {
             );
           },
 
+
           success: function (res) {
             $("#div-01").html("");
             let myArray = [];
@@ -673,7 +670,7 @@ function checkInput(r) {
 
               let btn = document.createElement("tr");
               btn.innerHTML = fila;
-              document.getElementById("tablita-nota").appendChild(btn);
+              document.getElementById("tablita-cotizacion").appendChild(btn);
 
             }
 

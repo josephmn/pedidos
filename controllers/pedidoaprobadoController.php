@@ -87,9 +87,19 @@ class pedidoaprobadoController extends Controller
 				'i_perfil' => $_SESSION['idperfil'],
 				'i_estado' => 1,
 			);
+
+
+			$coti = array(
+				'post' =>		0,
+				'nu_correla' =>		'1000000001',
+				'v_nombre_file' =>	 	 '',
+			);
+
 			$result = $soap->ListadoPedidosAprobacion($lst);
 			$ListadoPedidosAprobacion = json_decode($result->ListadoPedidosAprobacionResult, true);
 
+			$result = $soap->MostrarPedidoCotizacion($coti);
+			$MostrarPedidoCotizacion = json_decode($result->MostrarPedidoCotizacionResult, true);
 
 			$estadopedido = array(
 				'post' =>	3,
@@ -101,6 +111,7 @@ class pedidoaprobadoController extends Controller
 
 			$this->_view->ListadoPedidosAprobacion = $ListadoPedidosAprobacion;
 			$this->_view->PedidoEstado = $PedidoEstado;
+			$this->_view->MostrarPedidoCotizacion = $MostrarPedidoCotizacion;
 
 			$this->_view->setJs(array('index'));
 			$this->_view->renderizar('index');
@@ -142,10 +153,54 @@ class pedidoaprobadoController extends Controller
 			);
 
 
+			$coti = array(
+				'post' =>		0,
+				'nu_correla' =>		$nu_correla,
+				'v_nombre_file' =>	 	 '',
+			);
+
 			$soap = new SoapClient($wsdl, $options);
 			$result = $soap->MostrarTimelinePedido($client);
 			$data = json_decode($result->MostrarTimelinePedidoResult, true);
 			$f_porcentaje  =  intval($data[0]['f_porcentaje']);
+
+			$result = $soap->ComboProveedor();
+			$ComboProveedor = json_decode($result->ComboProveedorResult, true);
+
+			$result = $soap->MostrarPedidoCotizacion($coti);
+			$MostrarPedidoCotizacion = json_decode($result->MostrarPedidoCotizacionResult, true);
+
+			$filascotizacion = [];
+			$i = 0;
+			foreach ($MostrarPedidoCotizacion as $da) {
+				$propiedadescoti = array(
+					"nu_correla" => ($da['nu_correla']),
+					"v_descripcion_file" => $da['v_descripcion_file'],
+					"v_icon" => $da['v_icon'],
+					"v_color" => $da['v_color'],
+					"v_tardwn" => $da['v_tardwn'],
+					"v_tardwnname" => $da['v_tardwnname'],
+					"v_url" => $da['v_url'],
+					"v_nombre_file" => $da['v_nombre_file'],
+				);
+				$filascotizacion += ["$i" => $propiedadescoti];
+				$i++;
+			}
+
+
+
+
+			//Combo perfil
+			$FilascomboProveedor = "";
+			$selcombo = "";
+			foreach ($ComboProveedor as $dp) {
+				if ($dp['v_vendid'] == $data[0]['v_vendId']) {
+					$selcombo = "selected='selected'";
+				} else {
+					$selcombo = "";
+				}
+				$FilascomboProveedor .= "<option " . $selcombo . " value=" . $dp['v_vendid'] . ">" . $dp['v_name'] . "</option>";
+			}
 
 
 			$filas = [];
@@ -172,22 +227,228 @@ class pedidoaprobadoController extends Controller
 					"v_descripcion_aprobador" => $da['v_descripcion_aprobador'],
 					"d_fecha_registrotrk" => $da['d_fecha_registrotrk'],
 					"v_botones_final" => $da['v_botones_final'],
+					"v_botones_cotizacion" => $da['v_botones_cotizacion'],
 				);
 				$filas += ["$i" => $propiedades1];
 				$i++;
 			}
+
 			header('Content-type: application/json; charset=utf-8');
 
 			echo $json->encode(
 				array(
 					'data' => $filas,
-					'f_porcentaje' => $f_porcentaje
+					'f_porcentaje' => $f_porcentaje,
+					'FilascomboProveedor' => $FilascomboProveedor,
+					'filascotizacion' => $filascotizacion
 				)
 			);
 		} else {
 			$this->redireccionar('index/logout');
 		}
 	}
+
+
+	public function MostrarPedidoCotizacion() //1
+	{
+		if (isset($_SESSION['usuario'])) {
+
+			putenv("NLS_LANG=SPANISH_SPAIN.AL32UTF8");
+			putenv("NLS_CHARACTERSET=AL32UTF8");
+
+			$this->getLibrary('json_php/JSON');
+			$json = new Services_JSON();
+
+			$nu_correla = $_POST['nu_correla'];
+
+			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
+
+			$options = array(
+				"uri" => $wsdl,
+				"style" => SOAP_RPC,
+				"use" => SOAP_ENCODED,
+				"soap_version" => SOAP_1_1,
+				"connection_timeout" => 60,
+				"trace" => false,
+				"encoding" => "UTF-8",
+				"exceptions" => false,
+			);
+
+
+
+			$coti = array(
+				'post' =>		0,
+				'nu_correla' =>		$nu_correla,
+				'v_nombre_file' =>	 	 '',
+			);
+
+			$soap = new SoapClient($wsdl, $options);
+
+			$result = $soap->MostrarPedidoCotizacion($coti);
+			$MostrarPedidoCotizacion = json_decode($result->MostrarPedidoCotizacionResult, true);
+
+			$filascotizacion = [];
+			$i = 0;
+			foreach ($MostrarPedidoCotizacion as $da) {
+				$propiedadescoti = array(
+					"nu_correla" => ($da['nu_correla']),
+					"v_descripcion_file" => $da['v_descripcion_file'],
+					"v_icon" => $da['v_icon'],
+					"v_color" => $da['v_color'],
+					"v_tardwn" => $da['v_tardwn'],
+					"v_tardwnname" => $da['v_tardwnname'],
+					"v_url" => $da['v_url'],
+					"v_nombre_file" => $da['v_nombre_file'],
+					"v_vendid" => $da['v_vendid'],
+					
+				);
+				$filascotizacion += ["$i" => $propiedadescoti];
+				$i++;
+			}
+
+			header('Content-type: application/json; charset=utf-8');
+
+			echo $json->encode(
+				array(
+					'filascotizacion' => $filascotizacion
+				)
+			);
+		} else {
+			$this->redireccionar('index/logout');
+		}
+	}
+
+	public function subir_archivos_cotizacion() //2
+	{
+		if (isset($_SESSION['usuario'])) {
+
+			putenv("NLS_LANG=SPANISH_SPAIN.AL32UTF8");
+			putenv("NLS_CHARACTERSET=AL32UTF8");
+
+			$this->getLibrary('json_php/JSON');
+			$json = new Services_JSON();
+
+			$dia = date("Ymd"); //brindar formato
+			$timezone = -5;
+			$dia2 = gmdate("Y-m-d H:i:s", time() + 3600 * ($timezone + date("I")));
+			$fconcat = date("YmdHis", time()); //formato año+hora, indice para registro de archivo
+
+			if (is_array($_FILES) && count($_FILES) > 0) {
+				$nombrefile = $_POST['nombrefile'];
+				$nropedido = $_POST['nropedido'];
+				$v_vendid = $_POST['v_vendid'];
+				$i_proveedor_final = $_POST['i_proveedor_final'];
+
+				$extdoc = explode("/", $_FILES["archivo"]["type"]);
+				$filesize = $_FILES["archivo"]["size"];
+				$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
+
+				$options = array(
+					"uri" => $wsdl,
+					"style" => SOAP_RPC,
+					"use" => SOAP_ENCODED,
+					"soap_version" => SOAP_1_1,
+					"connection_timeout" => 60,
+					"trace" => false,
+					"encoding" => "UTF-8",
+					"exceptions" => false,
+				);
+				$soap = new SoapClient($wsdl, $options);
+
+				$params = array(
+					'modulo'	=> 'subirarchivo', // 
+					'mime'		=> $extdoc[0], // image / application --> mime clasificado por php
+					'type'		=> $extdoc[1], // jpeg / pdf / msword --> tipo de archivo clasificado por php input file
+				);
+
+				$result = $soap->ConsultaTipoArchivo($params);
+				$tipoarchivo = json_decode($result->ConsultaTipoArchivoResult, true);
+
+				if (count($tipoarchivo) > 0) {
+					$destino = "public/doc/Cotizacion/" . rtrim(ltrim($nropedido)) . "_" . rtrim(ltrim($fconcat)) . "." . $tipoarchivo[0]["v_archivo"];
+					$nomfile =  rtrim(ltrim($nropedido)) . "_" . rtrim(ltrim($fconcat));
+
+
+					if (copy($_FILES['archivo']['tmp_name'], $destino)) {
+
+						$param1 = array(
+							"post" => 0,
+							"v_descripcion_file" => $nombrefile,
+							"nu_correla" => $nropedido,
+							"v_nombre_file" => $nomfile,
+							"v_extension" => $tipoarchivo[0]["v_archivo"],
+							"v_url" => $destino,
+							"v_token" => $_SESSION['v_token'],
+							"v_vendid" => $v_vendid,
+							"i_proveedor_final" => $i_proveedor_final,
+						);
+
+						$result1 = $soap->GuardarPedidoCotizacion($param1);
+						$GuardarPedidoCotizacion = json_decode($result1->GuardarPedidoCotizacionResult, true);
+
+						// 0 no se cargo
+						// 1 se cargo correctamente
+						header('Content-type: application/json; charset=utf-8');
+						echo $json->encode(
+							array(
+								"vicon" 		=> $GuardarPedidoCotizacion[0]['v_icon'],
+								"vtitle" 		=> $GuardarPedidoCotizacion[0]['v_title'],
+								"vtext" 		=> $GuardarPedidoCotizacion[0]['v_text'],
+								"itimer" 		=> $GuardarPedidoCotizacion[0]['i_timer'],
+								"icase" 		=> $GuardarPedidoCotizacion[0]['i_case'],
+								"vprogressbar" 	=> $GuardarPedidoCotizacion[0]['v_progressbar'],
+							)
+						);
+					} else {
+						//Error al copiar el archivo a la carpeta temp
+						header('Content-type: application/json; charset=utf-8');
+						echo $json->encode(
+							array(
+								// "dato" => "erro4 - Error al copiar el archivo a la carpeta temp"
+								"vicon" 		=> "error",
+								"vtitle" 		=> "No se encontro carpeta de destino para guardar el archivo a cargar...",
+								"vtext" 		=> "No se pudo cargar el archivo!",
+								"itimer" 		=> 3000,
+								"icase" 		=> 4,
+								"vprogressbar" 	=> true
+							)
+						);
+					}
+				} else {
+					//Archivo no permitidos en el sistema
+					header('Content-type: application/json; charset=utf-8');
+					echo $json->encode(
+						array(
+							// "dato" => "error3 - Archivo no permitidos en el sistema"
+							"vicon" 		=> "error",
+							"vtitle" 		=> "Tipo de archivo no permitido para cargarlo en el sistema...",
+							"vtext" 		=> "No se pudo cargar el archivo!",
+							"itimer" 		=> 3000,
+							"icase" 		=> 5,
+							"vprogressbar" 	=> true
+						)
+					);
+				}
+			} else {
+
+				header('Content-type: application/json; charset=utf-8');
+				echo $json->encode(
+					array(
+						"vicon" 		=> "error",
+						"vtitle" 		=> "Archivo no existe",
+						"vtext" 		=> "Ocurrio un error al cargar el archivo, favor de volver a intentar",
+						"itimer" 		=> 4000,
+						"icase" 		=> 4,
+						"vprogressbar" 	=> "true",
+					)
+				);
+			}
+		} else {
+			$this->redireccionar('index/logout');
+		}
+	}
+
+
 
 
 	public function MostrarFilePedido() //2
@@ -258,8 +519,7 @@ class pedidoaprobadoController extends Controller
 		}
 	}
 
-
-	public function ProcesoAprobacionPedido() //1
+	public function ProcesoPedidoSolomon() //EN PEDIDO A SOLOMON
 	{
 		if (isset($_SESSION['usuario'])) {
 			putenv("NLS_LANG=SPANISH_SPAIN.AL32UTF8");
@@ -271,8 +531,7 @@ class pedidoaprobadoController extends Controller
 			$post = $_POST['post'];
 			$nu_correla = $_POST['nu_correla'];
 			$v_username =  $_SESSION['dni'];
-			$v_idarea =  $_SESSION['idarea'];
-			$v_cargo =  $_SESSION['id_cargo'];
+			$v_ruc = $_POST['v_ruc'];
 
 			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
 
@@ -291,187 +550,34 @@ class pedidoaprobadoController extends Controller
 				'post' => $post,
 				'nu_correla' => $nu_correla,
 				'v_username' => $v_username,
-				'v_idarea' => $v_idarea,
-				'v_cargo' => $v_cargo,
+				'v_ruc' => $v_ruc,
+			);
+
+			$client = array(
+				'nu_correla' =>		$nu_correla,
 			);
 
 			$soap = new SoapClient($wsdl, $options);
-			$result2 = $soap->ProcesoAprobacionPedido($params);
-			$ProcesoAprobacionPedido = json_decode($result2->ProcesoAprobacionPedidoResult, true);
-			if (count($ProcesoAprobacionPedido) > 0) {
-
-				$result2 = $soap->ListadoCorreo();
-				$conficorreo = json_decode($result2->ListadoCorreoResult, true);
-				$this->getLibrary('phpmailer/class.phpmailer');
-				$this->getLibrary('phpmailer/PHPMailerAutoload');
-				$mail = new PHPMailer;
-				$mail->isSMTP();
-				$mail->SMTPDebug = 0;
-				$mail->SMTPAuth = true;
-				$mail->SMTPSecure = 'tls';
-				$mail->Mailer = 'smtp';
-				$mail->Host = $conficorreo[0]['v_servidor_entrante'];
-				$mail->Username  = $conficorreo[0]['v_correo_salida'];
-				$mail->Password = $conficorreo[0]['v_password'];
-				$mail->Port = $conficorreo[0]['i_puerto'];
-
-				$mail->From = ($conficorreo[0]['v_correo_salida']);
-				$mail->FromName = 'VERDUM PERÚ SAC';
-				$mail->addAddress('programador.app03@verdum.com');
-
-				$mail->isHTML(true);
-				$mail->CharSet = "utf-8";
-				$mail->Subject = 'ENVIO DE CORREO RECUPERACION DE CLAVE';
-				$mail->Body = "
-				Hola  
-				<br>
-				<br>
-				Tiene el Siguiente pedido pendiente de Aprobar<br>
-				<br> 
-				<br>
-				<br>
-				Saludo,
-				<br>
-				VERDUM PERU SAC.
-				<br>
-				<br>";
-				if (!$mail->send()) {
-					$output = 0; //	ERROR AL ENVIAR CORREO
-				} else {
-					$output = 1; // SE ENVIO CORRECTAMENTE
-				}
+			$result2 = $soap->ProcesarPedidoSolomon($params);
+			$ProcesarPedidoSolomon = json_decode($result2->ProcesarPedidoSolomonResult, true);
+			if (count($ProcesarPedidoSolomon) > 0) {
 			}
 
 			header('Content-type: application/json; charset=utf-8');
 			echo $json->encode(
 				array(
-					"vicon" 		=> $ProcesoAprobacionPedido[0]['v_icon'],
-					"vtitle" 		=> $ProcesoAprobacionPedido[0]['v_title'],
-					"vtext" 		=> $ProcesoAprobacionPedido[0]['v_text'],
-					"itimer" 		=> $ProcesoAprobacionPedido[0]['i_timer'],
-					"icase" 		=> $ProcesoAprobacionPedido[0]['i_case'],
-					"vprogressbar" 	=> $ProcesoAprobacionPedido[0]['v_progressbar'],
-					"output" 		=> $output,
+					"vicon" 		=> $ProcesarPedidoSolomon[0]['v_icon'],
+					"vtitle" 		=> $ProcesarPedidoSolomon[0]['v_title'],
+					"vtext" 		=> $ProcesarPedidoSolomon[0]['v_text'],
+					"itimer" 		=> $ProcesarPedidoSolomon[0]['i_timer'],
+					"icase" 		=> $ProcesarPedidoSolomon[0]['i_case'],
+					"vprogressbar" 	=> $ProcesarPedidoSolomon[0]['v_progressbar'],
 				)
 			);
 		} else {
 			$this->redireccionar('index/logout');
 		}
 	}
-
-
-	public function documentopedido($nu_correla)
-	{
-		if (isset($_SESSION['usuario'])) {
-
-			function html_caracteres($string)
-			{
-				$string = str_replace(
-					array('&amp;', '&Ntilde;', '&Aacute;', '&Eacute;', '&Iacute;', '&Oacute;', '&Uacute;'),
-					array('&', 'Ñ', 'Á', 'É', 'Í', 'Ó', 'Ú'),
-					$string
-				);
-				return $string;
-			}
-
-			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
-
-			$options = array(
-				"uri" => $wsdl,
-				"style" => SOAP_RPC,
-				"use" => SOAP_ENCODED,
-				"soap_version" => SOAP_1_1,
-				//"cache_wsdl"=> WSDL_CACHE_BOTH,
-				"connection_timeout" => 60,
-				"trace" => false,
-				"encoding" => "UTF-8",
-				"exceptions" => false,
-			);
-
-			$params = array(
-				'nu_correla' =>		$nu_correla,
-			);
-
-
-			$soap = new SoapClient($wsdl, $options);
-			$result = $soap->MostrarPedido($params);
-			$data = json_decode($result->MostrarPedidoResult, true);
-
-			$this->getLibrary('fpdf/fpdf');
-			$pdf = new FPDF('P', 'mm', 'A4');
-			$pdf->AliasNbPages();
-			$pdf = new MYPDF();
-			$pdf = new alphapdf();
-			$pdf->AddPage();
-
-			$pdf->Image('./public/dist/img/logo_verdum.jpg', 10, 8, 125);
-			$pdf->Ln(22);
-
-			$col = array();
-			$col[] = array('text' => utf8_decode("Código del país (Country code)  "), 'width' => '29', 'height' => '5', 'align' => 'R', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$col[] = array('text' => utf8_decode("Departamento  (Deparment)"), 'width' => '29', 'height' => '5', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$col[] = array('text' => utf8_decode("Número        (Number)     "), 'width' => '29', 'height' => '5', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$columns[] = $col;
-
-			$col1 = array();
-			$col1[] = array('text' => utf8_decode("PE"), 'width' => '29', 'height' => '5', 'align' => 'C', 'font_name' => 'CenturyGothic-Bold', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$col1[] = array('text' => utf8_decode("OPE"), 'width' => '29', 'height' => '5', 'align' => 'C', 'font_name' => 'CenturyGothic-Bold', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$col1[] = array('text' => utf8_decode("2022-01"), 'width' => '29', 'height' => '5', 'align' => 'C', 'font_name' => 'CenturyGothic-Bold', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$columns1[] = $col1;
-
-			$pdf->SetXY(112, 30);
-			$pdf->WriteTable($columns);
-			$pdf->SetXY(112, 40);
-			$pdf->WriteTable($columns1);
-
-			$pdf->SetXY(10, 27);
-			$pdf->SetFont('Arial', 'B', 22, 'L');
-			$pdf->Cell(190, 20, utf8_decode("SOLPED: # " . $data[0]['nu_correla']), 10, 8, 'L');
-
-
-			$col2 = array();
-			$col2[] = array('text' => 'Empresa / Company', 'width' => '80', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$col2[] = array('text' => 'Presupuesto / Budget', 'width' => '109', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$columns2[] = $col2;
-
-			$pdf->SetXY(10, 47);
-			$pdf->WriteTable($columns2);
-
-
-			// PARA LA TABLA DEL DETALLE
-			$coltb = array();
-			$coltb[] = array('text' => utf8_decode("Nro"), 'width' => '10', 'height' => '5', 'align' => 'C', 'font_name' => 'CenturyGothic-Bold', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$coltb[] = array('text' => utf8_decode("Codigo"), 'width' => '15', 'height' => '5', 'align' => 'C', 'font_name' => 'CenturyGothic-Bold', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$coltb[] = array('text' => utf8_decode("Descripción del artículo"), 'width' => '90', 'height' => '5', 'align' => 'C', 'font_name' => 'CenturyGothic-Bold', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$coltb[] = array('text' => utf8_decode("Cantidad"), 'width' => '18', 'height' => '5', 'align' => 'C', 'font_name' => 'CenturyGothic-Bold', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$coltb[] = array('text' => utf8_decode("Unidad"), 'width' => '18', 'height' => '5', 'align' => 'C', 'font_name' => 'CenturyGothic-Bold', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$coltb[] = array('text' => utf8_decode("Precio"), 'width' => '18', 'height' => '5', 'align' => 'C', 'font_name' => 'CenturyGothic-Bold', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$coltb[] = array('text' => utf8_decode("nu_total"), 'width' => '20', 'height' => '5', 'align' => 'C', 'font_name' => 'CenturyGothic-Bold', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$columnsrela[] = $coltb;
-
-			$i = 0;
-			foreach ($data as $rl) {
-				$col = array();
-				$col[] = array('text' => utf8_decode($rl['i_item']), 'width' => '10', 'height' => '4', 'align' => 'J', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-				$col[] = array('text' => utf8_decode($rl['v_codprod']), 'width' => '15', 'height' => '4', 'align' => 'J', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-				$col[] = array('text' => utf8_decode($rl['v_descripcion']), 'width' => '90', 'height' => '4', 'align' => 'J', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-				$col[] = array('text' => utf8_decode($rl['nu_cantidad']), 'width' => '18', 'height' => '4', 'align' => 'C', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-				$col[] = array('text' => utf8_decode($rl['nu_cantidad']), 'width' => '18', 'height' => '4', 'align' => 'C', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-				$col[] = array('text' => utf8_decode($rl['nu_precio']), 'width' => '18', 'height' => '4', 'align' => 'C', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-				$col[] = array('text' => utf8_decode($rl['nu_total']), 'width' => '20', 'height' => '4', 'align' => 'C', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-				$columnsrela[] = $col;
-				$i++;
-			}
-			//POSICION
-			$pdf->SetXY(10, 55);
-			$pdf->WriteTable($columnsrela);
-
-			$pdf->Output("SOLPED-$data[0]['nu_correla'].pdf", 'I');
-		} else {
-			$this->redireccionar('index/logout');
-		}
-	}
-
 
 	public function ListadoAprobacionesPedido() //1
 	{
@@ -538,154 +644,6 @@ class pedidoaprobadoController extends Controller
 			);
 		} else {
 			$this->redireccionar('index/logout');
-		}
-	}
-
-
-	public function enviar_correo()
-	{
-		putenv("NLS_LANG=SPANISH_SPAIN.AL32UTF8");
-		putenv("NLS_CHARACTERSET=AL32UTF8");
-
-		$this->getLibrary('json_php/JSON');
-		$json = new Services_JSON();
-
-		// $timezone = -5;
-		// $diastring =  strval(gmdate("YmdHis", time() + 3600 * ($timezone + date("I"))));
-
-		$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
-
-		$options = array(
-			"uri" => $wsdl,
-			"style" => SOAP_RPC,
-			"use" => SOAP_ENCODED,
-			"soap_version" => SOAP_1_1,
-			"connection_timeout" => 60,
-			"trace" => false,
-			"encoding" => "UTF-8",
-			"exceptions" => false,
-		);
-
-		$soap = new SoapClient($wsdl, $options);
-		$result2 = $soap->ListadoCorreo();
-		$conficorreo = json_decode($result2->ListadoCorreoResult, true);
-
-		$this->getLibrary('phpmailer/class.phpmailer');
-		$this->getLibrary('phpmailer/PHPMailerAutoload');
-
-		$mail = new PHPMailer;
-		$mail->isSMTP();
-		$mail->SMTPDebug = 0;
-		$mail->SMTPAuth = true;
-		$mail->SMTPSecure = 'tls';
-		$mail->Mailer = 'smtp';
-		$mail->Host = $conficorreo[0]['v_servidor_entrante']; //'mail.cafealtomayo.com.pe'
-		$mail->Username  = $conficorreo[0]['v_correo_salida']; //'reportes@cafealtomayo.com.pe'  
-		$mail->Password = $conficorreo[0]['v_password']; //'rpt4m2020';
-		$mail->Port = $conficorreo[0]['i_puerto']; //25;
-
-		$mail->From = ($conficorreo[0]['v_correo_salida']); //reportes@cafealtomayo.com.pe
-		$mail->FromName = 'VERDUM PERÚ SAC';   //$conficorreo[0]['v_nombre_salida']; 
-		$mail->addAddress('programador.app03@verdum.com');
-
-		$mail->isHTML(true);
-		$mail->CharSet = "utf-8";
-		$mail->Subject = 'ENVIO DE CORREO RECUPERACION DE CLAVE';
-		$mail->Body = "
-		Hola  
-		<br>
-		<br>
-		Tiene el Siguiente pedido pendiente de Aprobar<br>
-		<br>
-		Clave: <b>'demo'</b>
-		<br>
-		<br>
-		Saludo,
-		<br>
-		VERDUM PERU SAC.
-		<br>
-		<br>";
-
-		if (!$mail->send()) {
-			$output = 0; //	ERROR AL ENVIAR CORREO
-		} else {
-			$output = 1; // SE ENVIO CORRECTAMENTE
-		}
-		header('Content-type: application/json; charset=utf-8');
-		echo $json->encode(
-			array(
-				"correo" => $output
-			)
-		);
-	}
-
-
-
-
-	public  function   send()
-	{
-		$enviado = 'Enviado: ' . date("Y-m-d H:i:s") . "\n";
-		$subject = "Este es el asunto del mensaje - ";
-		$message = 'Este es el mensaje a enviar.';
-
-		// Cargando la librería de PHPMailer
-		$this->getLibrary('phpmailer/class.phpmailer');
-		$this->getLibrary('phpmailer/PHPMailerAutoload');
-
-		// Creando una nueva instancia de PHPMailer
-		$mail = new PHPMailer();
-		// Indicando el uso de SMTP
-		$mail->isSMTP();
-
-		// Habilitando SMTP debugging
-		// 0 = apagado (para producción)
-		// 1 = mensajes del cliente
-		// 2 = mensajes del cliente y servidor
-		$mail->SMTPDebug = 0;
-
-		// Agregando compatibilidad con HTML
-		$mail->Debugoutput = 'html';
-
-		// Estableciendo el nombre del servidor de email
-		$mail->Host = 'smtp.gmail.com';
-
-		// Estableciendo el puerto
-		$mail->Port = 465;
-
-		// Estableciendo el sistema de encriptación
-		$mail->SMTPSecure = 'tls';
-
-		// Para utilizar la autenticación SMTP
-		$mail->SMTPAuth = true;
-
-		// Nombre de usuario para la autenticación SMTP - usar email completo para gmail
-		$mail->Username = "notificaciones.verdum@gmail.com";
-
-		// Password para la autenticación SMTP
-		$mail->Password = '$Verdum2022$';
-
-		// Estableciendo como quién se va a enviar el mail
-		$mail->From = 'notificaciones.verdum@gmail.com';
-
-
-		// Estableciendo a quién se va a enviar el mail
-		$mail->addAddress('programador.app03@verdum.com', 'Otro usuario');
-
-		// El asunto del mail
-		$mail->Subject = $subject . $enviado;
-
-		// Estableciendo el mensaje a enviar
-		$mail->MsgHTML($message);
-
-
-		// Adjuntando una imagen
-		//$mail->addAttachment('images/phpmailer_mini.png');
-
-		// Enviando el mensaje y controlando los errores
-		if (!$mail->send()) {
-			echo "No se pudo enviar el correo. Intentelo más tarde.";
-		} else {
-			echo "Gracias por contactarnos.";
 		}
 	}
 }

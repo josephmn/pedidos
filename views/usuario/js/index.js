@@ -66,6 +66,11 @@ $(function () {
           $("#xlocal").html("");
           $("#xlocal").append(res.FilascomboLocal);
 
+          $("#xidusersolomon").html("");
+          $("#xidusersolomon").append(res.FilascomboUsuarioSolomon);
+
+
+
         } else {
           document.getElementById("titulomodal").innerHTML = "CREAR USUARIO:";
           $('#xdni').val(res.v_dni.replace("&Ntilde;", "Ñ"));
@@ -88,6 +93,9 @@ $(function () {
 
           $("#xlocal").html("");
           $("#xlocal").append(res.FilascomboLocal);
+
+          $("#xidusersolomon").html("");
+          $("#xidusersolomon").append(res.FilascomboUsuarioSolomon);
 
 
           document.getElementById("customSwitch10").disabled = true;
@@ -144,6 +152,9 @@ $(function () {
           $("#xlocal").html("");
           $("#xlocal").append(res.FilascomboLocal);
 
+          $("#xidusersolomon").html("");
+          $("#xidusersolomon").append(res.FilascomboUsuarioSolomon);
+
         } else {
           $.ajax({
             type: 'POST',
@@ -180,6 +191,9 @@ $(function () {
                   $('#xpassword').val("");
                   $('#xidgenero').val("");
                   $('#xgenero').val("");
+
+
+
                   return;
                   break;
               }
@@ -201,6 +215,9 @@ $(function () {
 
           $("#xlocal").html("");
           $("#xlocal").append(res.FilascomboLocal);
+
+          $("#xidusersolomon").html("");
+          $("#xidusersolomon").append(res.FilascomboUsuarioSolomon);
         }
 
       }
@@ -251,6 +268,9 @@ $(function () {
           $("#xlocal").html("");
           $("#xlocal").append(res.FilascomboLocal);
 
+          $("#xidusersolomon").html("");
+          $("#xidusersolomon").append(res.FilascomboUsuarioSolomon);
+
         } else {
           $('#xnombres').val(res.v_nombres.replace("&Ntilde;", "Ñ"));
           $('#xapellidos').val(res.v_apellidos.replace("&Ntilde;", "Ñ"));
@@ -273,6 +293,9 @@ $(function () {
 
           $("#xlocal").html("");
           $("#xlocal").append(res.FilascomboLocal);
+
+          $("#xidusersolomon").html("");
+          $("#xidusersolomon").append(res.FilascomboUsuarioSolomon);
         }
 
       }
@@ -310,7 +333,6 @@ $(function () {
 
           $('#xidgenero').val(res.i_persexo);
           $('#xgenero').val(res.v_persexo_nombre);
-
 
           $("#xperfil").html("");
           $("#xperfil").append(res.FilascomboPerfil);
@@ -412,6 +434,44 @@ $(function () {
     }
     var i_persexo = $('#xidgenero').val();
     var v_persexo_nombre = $('#xgenero').val();
+    var v_usuario_solomon = $('#xidusersolomon  option:selected').val();
+
+
+    if ((v_dni == null || v_dni == '')) {
+      $("#xdni").focus();
+      Swal.fire({
+        title: 'INGRESAR NUMERO DE DNI',
+        timer: 3000,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
+    if ((v_correo == null || v_correo == '')) {
+      $("#xcorreo").focus();
+      Swal.fire({
+        title: 'INGRESAR CORREO',
+        timer: 3000,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
+    
+
+ 
+
+
 
     Swal.fire({
       title: "Estas seguro de guardar en el Sistema?",
@@ -441,6 +501,7 @@ $(function () {
             v_id_area: v_id_area,
             i_persexo: i_persexo,
             v_persexo_nombre: v_persexo_nombre,
+            v_usuario_solomon: v_usuario_solomon
           },
           success: function (res) {
             Swal.fire({

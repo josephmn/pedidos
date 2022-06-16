@@ -1,45 +1,41 @@
 $(function () {
-  creardatatable("#tbarchivo");
+  creardatatable("#tbcotizacion");
+  creardatatable("#tbpedidos");
 
-  var table = $("#tbpedidos").DataTable({
-    lengthChange: true,
-    responsive: true,
-    autoWidth: false,
-    language: {
-      decimal: "",
-      emptyTable: "No hay información",
-      info: "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-      infoEmpty: "Mostrando 0 to 0 of 0 Entradas",
-      infoFiltered: "(Filtrado de _MAX_ total entradas)",
-      infoPostFix: "",
-      thousands: ",",
-      lengthMenu: "Mostrar _MENU_ Entradas",
-      loadingRecords: "Cargando...",
-      processing: "Procesando...",
-      search: "Buscar:",
-      zeroRecords: "Sin resultados encontrados",
-      paginate: {
-        first: "Primero",
-        last: "Ultimo",
-        next: "Siguiente",
-        previous: "Anterior",
-      },
-    },
-    order: [
-      [0, "asc"],
-    ],
-    lengthMenu: [
-      [25, 50, 100, -1],
-      ["25", "50", "100", "Todo"],
-    ],
-  });
+
+
+  $("#carousel-example-generic").append(
+    " <ol class='carousel-indicators'>\
+    <li data-target='#carousel-example-generic' data-slide-to='0' class='active'></li>\
+    <li data-target='#carousel-example-generic' data-slide-to='1'></li>\
+    <li data-target='#carousel-example-generic' data-slide-to='2'></li>\
+      </ol >\
+    <div class='carousel-inner' role='listbox'>\
+      <div class='carousel-item active'>\
+        <img class='img-fluid' src='../public/dist/img/Productosss.jpg' alt='First slide' />\
+      </div>\
+      <div class='carousel-item'>\
+        <img class='img-fluid' src='../public/dist/img/Inicio.jpeg' alt='Second slide' />\
+      </div>\
+      <div class='carousel-item'>\
+        <img class='img-fluid' src='../public/dist/img/Productsssos.jpg' alt='Third slide' />\
+      </div>\
+    </div>\
+    <a class='carousel-control-prev' href='#carousel-example-generic' role='button' data-slide='prev'>\
+      <span class='carousel-control-prev-icon' aria-hidden='true'></span>\
+      <span class='sr-only'>Previous</span>\
+    </a>\
+    <a class='carousel-control-next' href='#carousel-example-generic' role='button' data-slide='next'>\
+      <span class='carousel-control-next-icon' aria-hidden='true'></span>\
+      <span class='sr-only'>Next</span>\
+    </a> "
+  );
+
+  document.getElementById('titulo_avance').innerHTML = "";
+
 
   $("#tbpedidos tbody").on("click", "a.revisar", function () {
-
-
     var i_estado = $("#estado").val();
-
-
     var nu_correla = $(this).attr("id");
     document.getElementById('nropedido').innerHTML = nu_correla;
     document.getElementById("nropedido").style.color = "green";
@@ -58,6 +54,10 @@ $(function () {
         $("#div-load").html("");
         $("#idtimeline").html("");
         $("#idico").html("");
+
+        $("#xproveedor").html("");
+        $("#xproveedor").append(res.FilascomboProveedor);
+
         let myArray = [];
         for (const property in res.data) {
           let nu_correla = res.data[property].nu_correla;
@@ -69,7 +69,7 @@ $(function () {
           let v_descripcion_aprobador = res.data[property].v_descripcion_aprobador;
           let d_fecha_registrotrk = res.data[property].d_fecha_registrotrk;
           let v_botones_final = res.data[property].v_botones_final;
-
+          let v_botones_cotizacion = res.data[property].v_botones_cotizacion;
 
           $("#idtimeline").append(
             "<li class='timeline-item'>\
@@ -85,12 +85,16 @@ $(function () {
                 <p>"+ v_descripcion_aprobador + "</p>\
                 <div class='media align-items-center'>\
                 </div>\ " +
+            v_botones_cotizacion + " \
+            </div>\ " +
             v_botones_final + " \
             </div >\
           </li > "
           );
         }
-
+        $("#carousel-example-generic").html("")
+        document.getElementById('titulo_avance').innerHTML = "<b>APROBACION COMPLETADA(%)</b>";
+        document.getElementById('idpedidocotizacion').innerHTML = nu_correla;
 
         $("#idico").append(
           "<i class='fa-solid fa-hourglass fa-spin'></i>"
@@ -254,8 +258,203 @@ $(function () {
 
   });
 
-});
+  $("#btnsubirfile").on("click", function () {
+    var formData = new FormData();
+    var files = $("#archivo")[0].files[0];
+    var nropedido = document.getElementById("nropedido").innerHTML;
+    var nu_correla = document.getElementById("nropedido").innerHTML;
+    var post = 0;
+    var nombrefile = $('#descripcionfile').val();
+    var v_nombre_file = "";
+    var v_vendid = $('#xproveedor  option:selected').val();
 
+    var i_proveedor_final = document.getElementById("customCheck1").checked;
+
+    if ((nombrefile == "" || nombrefile == null)) {
+      $("#descripcionfile").focus();
+      Swal.fire({
+        icon: "warning",
+        title: "INGRESAR DESCRIPCION PARA EL ARCHIVO",
+        text: "",
+        timer: 2400,
+        timerProgressBar: true,
+      })
+      return;
+    }
+
+    if ((files == null)) {
+      Swal.fire({
+        title: 'CARGAR UN ARCHIVO DESDE LA OPCION (SELECCIONAR ARCHIVO)',
+        timer: 3000,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
+    if ((v_vendid == "XXXXXXX" && i_proveedor_final == true)) {
+      $("#xproveedor").focus();
+      Swal.fire({
+        title: 'SELECCIONAR UN PROVEEDOR',
+        timer: 3000,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
+    if ((v_vendid == "XXXXXXX" || v_vendid == null)) {
+      v_vendid = '';
+    }
+
+ 
+    formData.append("archivo", files);
+    formData.append("nombrefile", nombrefile);
+    formData.append("nropedido", nropedido);
+    formData.append("v_vendid", v_vendid);
+    formData.append("i_proveedor_final", Number(i_proveedor_final));
+
+
+    Swal.fire({
+      title: "Estas seguro de subir el Archivo?",
+      text: "Favor de confirmar!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#61C250",
+      cancelButtonColor: "#ea5455",
+      confirmButtonText: "Si, subir!",
+      cancelButtonText: "No",
+    }).then((result) => {
+      if (result.value) {
+        $.ajax({
+          url: "/pedidos/pedidoaprobado/subir_archivos_cotizacion",
+          type: "POST",
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function (res) {
+            console.log(res.vicon);
+            if (res.icase == 1) {
+              $.ajax({
+                type: 'POST',
+                url: "/pedidos/pedidoaprobado/MostrarPedidoCotizacion",
+                data: { nu_correla: nu_correla },
+                success: function (res) {
+
+                  $("#tbcotizacion").dataTable().fnDestroy();
+                  $("#tablita-coti").children().remove();
+                  for (const property in res.filascotizacion) {
+                    let nu_correla = res.filascotizacion[property].nu_correla;
+                    let descripcion = res.filascotizacion[property].v_descripcion_file;
+                    let icon = res.filascotizacion[property].v_icon;
+                    let color = res.filascotizacion[property].v_color;
+                    let tardwn = res.filascotizacion[property].v_tardwn;
+                    let tardwnname = res.filascotizacion[property].v_tardwnname;
+                    let url = res.filascotizacion[property].v_url;
+                    let nombre_file = res.filascotizacion[property].v_nombre_file;
+                    let v_vendid = res.filascotizacion[property].v_vendid;
+
+                    let fila =
+                      "<tr><td class='text-left'>\
+                      <div class='media'>\
+                          <div class='avatar bg-light-success mr-0'>\
+                              <div class='avatar-content'>\
+                                  <i class='fa-solid fa-truck-fast'></i>\
+                              </div>\
+                          </div>\
+                          <div class='media-body my-auto'>\
+                              <h6 class='font-weight-bolder mb-0'> "+ nu_correla + "</h6>\
+                          </div>\
+                      </div>"
+                      +
+                      "</td><td class='text-left'>\
+                      <div class='media'>\
+                          <div class='avatar bg-light-success mr-0'>\
+                              <div class='avatar-content'>\
+                                  <i class='fa-solid fa-building'></i>\
+                              </div>\
+                          </div>\
+                          <div class='media-body my-auto'>\
+                              <h6 class='font-weight-bolder mb-0'> "+ v_vendid + "</h6>\
+                          </div>\
+                      </div>"
+                      +
+                      "</td><td class='text-left'>\
+                      <div class='media'>\
+                          <div class='avatar bg-light-" +
+                      color + " mr-0'>\
+                              <div class='avatar-content'>\
+                              <i class='fa-solid fa-" +
+                      icon + "'></i>\
+                              </div>\
+                          </div>\
+                          <div class='media-body my-auto'>\
+                              <h6 class='font-weight-bolder mb-0'> &nbsp;"+ descripcion + "</h6>\
+                          </div>\
+                      </div>"+
+                      "</td><td class='text-left'><strong>" +
+                      nombre_file +
+                      "</strong> </td><td class='text-center'><a " + tardwn + "'" + tardwnname + "'  class='btn btn-" +
+                      color + " btn-sm'  style='color:white' href='" + url + "'><span class='fa-solid fa-" +
+                      icon + "'><b></b></span></a></td>" +
+                      "</td><td class='text-center'><a id=" +
+                      nombre_file +
+                      " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+
+                    let btn = document.createElement("tr");
+                    btn.innerHTML = fila;
+                    document.getElementById("tablita-coti").appendChild(btn);
+                  }
+
+                  $('#descripcionfile').val('');
+                  var $el = $("#archivo");
+                  $el.wrap("<form>").closest("form").get(0).reset();
+                  $el.unwrap();
+
+                  creardatatable("#tbcotizacion");
+                }
+              });
+
+
+              Swal.fire({
+                icon: res.vicon,
+                title: res.vtitle,
+                text: res.vtext,
+                timer: res.itimer,
+                timerProgressBar: res.vprogressbar,
+                showCancelButton: false,
+                showConfirmButton: false,
+              });
+
+            } else {
+              Swal.fire({
+                icon: res.vicon,
+                title: res.vtitle,
+                text: res.vtext,
+                timer: res.itimer,
+                timerProgressBar: res.vprogressbar,
+                showCancelButton: false,
+                showConfirmButton: false,
+              });
+            }
+          },
+        });
+      }
+    });
+
+  });
+
+
+
+});
 
 function DibujarGrafico() {
   Highcharts.chart('container', {
@@ -305,78 +504,38 @@ function DibujarGrafico() {
       ]
     }]
   });
-
-
-  // Highcharts.chart('container', {
-  //   chart: {
-  //     plotBackgroundColor: null,
-  //     plotBorderWidth: null,
-  //     plotShadow: false,
-  //     type: 'pie'
-  //   },
-  //   title: {
-  //     text: 'Browser market shares in January, 2018'
-  //   },
-  //   tooltip: {
-  //     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-  //   },
-  //   accessibility: {
-  //     point: {
-  //       valueSuffix: '%'
-  //     }
-  //   },
-  //   plotOptions: {
-  //     pie: {
-  //       allowPointSelect: true,
-  //       cursor: 'pointer',
-  //       dataLabels: {
-  //         enabled: true,
-  //         format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-  //       }
-  //     }
-  //   },
-  //   series: [{
-  //     name: 'Brands',
-  //     colorByPoint: true,
-  //     data: [{
-  //       name: 'Chrome',
-  //       y: 0,
-  //       sliced: true,
-  //       selected: true
-  //     }, {
-  //       name: 'Internet Explorer',
-  //       y: 100
-  //     },
-  //     ]
-  //   }]
-  // });
 }
 
 
 function checkInput(r) {
   var nu_correla = document.getElementById("nropedido").innerHTML;
-  var post = 0;
   var respuesta = r.value;
+  var v_ruc = '';
 
-  if (respuesta == "Aprobar") {
+
+
+
+  if (respuesta == "Generar Orden de Compra") {
+    var post = 0;
 
     Swal.fire({
-      title: "Seguro de enviar para su Aprobacion ?",
-      text: "Se enviara para su Aprobacion de las Jefaturas",
+      title: "Seguro de generar una orden de Compra ?",
+      text: "Se generará la orden con los datos de la SOLPED",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#61C250",
       cancelButtonColor: "#ea5455",
-      confirmButtonText: "Si, Enviar!",
+      confirmButtonText: "Si, Procesar!",
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
         $.ajax({
           type: 'POST',
-          url: '/pedidos/pedidoaprobado/ProcesoAprobacionPedido',
+          url: '/pedidos/pedidoaprobado/ProcesoPedidoSolomon',
           data: {
             post: post,
-            nu_correla: nu_correla
+            nu_correla: nu_correla,
+            v_ruc: v_ruc
           },
 
           beforeSend: function () {
@@ -413,225 +572,318 @@ function checkInput(r) {
     });
   }
 
+  if (respuesta == "Cotizaciones y Proveedor") {
 
 
-  if (respuesta == "Rechazar") {
-    Swal.fire({
-      title: "Seguro de Rechazar el pedido?",
-      text: "Pedido sera Rechazado",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#61C250",
-      cancelButtonColor: "#ea5455",
-      confirmButtonText: "Si, Rechazar!",
-      cancelButtonText: "No",
-    }).then((result) => {
-      if (result.isConfirmed) {
 
-        // $.ajax({
-        //   type: 'POST',
-        //   url: '/pedidos/pedidos/eliminar_fila_ppto',
-        //   data: { nu_correla: nu_correla, v_idlinea: v_idlinea },
-        //   success: function (res) {
-
-        //     if (res.respuesta == 1) {
-        //       $.ajax({
-        //         type: 'POST',
-        //         url: '/pedidos/pedidos/Mostrar_pedido_ppto',
-        //         data: { nu_correla: nu_correla },
-        //         success: function (res) {
-
-        //           $("#tbpptopedido").dataTable().fnDestroy();
-        //           $("#tablita-ppto").children().remove();
-
-        //           let myArray = [];
-        //           for (const property in res.data) {
-        //             let nu_correla = res.data[property].nu_correla;
-        //             let v_idlinea = res.data[property].v_idlinea;
-        //             let v_idppto = res.data[property].v_idppto;
-        //             let v_idpartida = res.data[property].v_idpartida;
-        //             let v_idmes = res.data[property].v_idmes;
-        //             let v_nombremes = res.data[property].v_nombremes;
-        //             let f_monto = res.data[property].f_monto;
-        //             let v_centrocosto = res.data[property].v_centrocosto;
-
-        //             let fila =
-        //               "<tr><td class='text-center'>" +
-        //               nu_correla +
-        //               "</td><td class='text-left'>" +
-        //               v_idppto +
-        //               "</td><td class='text-left'>" +
-        //               v_idpartida +
-        //               "</td><td class='text-left'>" +
-        //               v_idmes +
-        //               "</td><td class='text-left'>" +
-        //               v_nombremes +
-        //               "</td><td class='text-left'>" +
-        //               f_monto +
-        //               "</td><td class='text-left'>" +
-        //               v_centrocosto +
-        //               "</td><td><a id=" +
-        //               v_idlinea +
-        //               " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
-
-        //             let btn = document.createElement("tr");
-        //             btn.innerHTML = fila;
-        //             document.getElementById("tablita-ppto").appendChild(btn);
-        //           }
-        //           creardatatable("#tbpptopedido"); //perro
-        //         }
-        //       });
-        //     }
-
-        //   }
-        // });
-
-      }
-    });
-  }
-
-  if (respuesta == "Retornar") {
-    Swal.fire({
-      title: "Seguro de enviar a  Modificar el pedido?",
-      text: "Regresara un paso Anterior para su modificacion",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#61C250",
-      cancelButtonColor: "#ea5455",
-      confirmButtonText: "Si, Enviar!",
-      cancelButtonText: "No",
-    }).then((result) => {
-      if (result.isConfirmed) {
-
-        // $.ajax({
-        //   type: 'POST',
-        //   url: '/pedidos/pedidos/eliminar_fila_ppto',
-        //   data: { nu_correla: nu_correla, v_idlinea: v_idlinea },
-        //   success: function (res) {
-
-        //     if (res.respuesta == 1) {
-        //       $.ajax({
-        //         type: 'POST',
-        //         url: '/pedidos/pedidos/Mostrar_pedido_ppto',
-        //         data: { nu_correla: nu_correla },
-        //         success: function (res) {
-
-        //           $("#tbpptopedido").dataTable().fnDestroy();
-        //           $("#tablita-ppto").children().remove();
-
-        //           let myArray = [];
-        //           for (const property in res.data) {
-        //             let nu_correla = res.data[property].nu_correla;
-        //             let v_idlinea = res.data[property].v_idlinea;
-        //             let v_idppto = res.data[property].v_idppto;
-        //             let v_idpartida = res.data[property].v_idpartida;
-        //             let v_idmes = res.data[property].v_idmes;
-        //             let v_nombremes = res.data[property].v_nombremes;
-        //             let f_monto = res.data[property].f_monto;
-        //             let v_centrocosto = res.data[property].v_centrocosto;
-
-        //             let fila =
-        //               "<tr><td class='text-center'>" +
-        //               nu_correla +
-        //               "</td><td class='text-left'>" +
-        //               v_idppto +
-        //               "</td><td class='text-left'>" +
-        //               v_idpartida +
-        //               "</td><td class='text-left'>" +
-        //               v_idmes +
-        //               "</td><td class='text-left'>" +
-        //               v_nombremes +
-        //               "</td><td class='text-left'>" +
-        //               f_monto +
-        //               "</td><td class='text-left'>" +
-        //               v_centrocosto +
-        //               "</td><td><a id=" +
-        //               v_idlinea +
-        //               " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
-
-        //             let btn = document.createElement("tr");
-        //             btn.innerHTML = fila;
-        //             document.getElementById("tablita-ppto").appendChild(btn);
-        //           }
-        //           creardatatable("#tbpptopedido"); //perro
-        //         }
-        //       });
-        //     }
-
-        //   }
-        // });
-
-      }
-    });
-  }
-
-  if (respuesta == "Ver Archivos") {
-    $("#modal-file").modal("show");
-
-    var post = 3;
-    var nropedido = document.getElementById("nropedido").innerHTML;
-    var codprodnote = "";
-    var v_nombre_file = "";
-
-
-    $("#tbarchivo").dataTable().fnDestroy();
-    $("#tablita-nota").children().remove();
+    $("#modal-cotizacion").modal("show");
 
     let count = 0;
-    $('#modal-file').on('shown.bs.modal', function () {
+    $('#modal-cotizacion').on('shown.bs.modal', function () {
       count = count + 1;
       if (count == 1) {
+
+        // PARA TABLA DE COTIZACION
+        $("#tbcotizacion").dataTable().fnDestroy();
+        $("#tablita-coti").children().remove();
+
         $.ajax({
-          type: 'POST',
-          url: '/pedidos/pedidoaprobado/MostrarFilePedido',
-          data: { post: post, nropedido: nropedido, codprodnote: codprodnote, v_nombre_file: v_nombre_file },
-
-          beforeSend: function () {
-            $("#div-01").html("");
-            $("#div-01").append(
-              "<div id='div-01'>\<div class='d-flex justify-content-center my-1'>\<div class='spinner-border text-danger' role='status' aria-hidden='true'></div>\</div>\ </div>"
-            );
-          },
-
+          type: "POST",
+          url: "/pedidos/pedidoaprobado/MostrarPedidoCotizacion",
+          data: { nu_correla: nu_correla },
           success: function (res) {
-            $("#div-01").html("");
-            let myArray = [];
-            for (const property in res.data) {
-              let nu_correla = res.data[property].nu_correla;
-              let item = res.data[property].v_codprod;
-              let descripcion = res.data[property].v_descripcion_file;
-              let icon = res.data[property].v_icon;
-              let color = res.data[property].v_color;
-              let tardwn = res.data[property].v_tardwn;
-              let tardwnname = res.data[property].v_tardwnname;
-              let url = res.data[property].v_url;
-              let nombre_file = res.data[property].v_nombre_file;
-              let fila =
-                "<tr><td class='text-left'>" +
-                nu_correla +
-                "</td><td class='text-left'>" +
-                item +
-                "</td><td class='text-left'>" +
-                descripcion +
-                "</td><td class='text-center'><a " + tardwn + "'" + tardwnname + "'  class='btn btn-" +
-                color + " btn-sm'  style='color:white' href='" + url + "'><span class='fa-solid fa-" +
-                icon + "'><b></b></span></a></td></tr>";
 
+            for (const property in res.filascotizacion) {
+              let nu_correla = res.filascotizacion[property].nu_correla;
+              let descripcion = res.filascotizacion[property].v_descripcion_file;
+              let icon = res.filascotizacion[property].v_icon;
+              let color = res.filascotizacion[property].v_color;
+              let tardwn = res.filascotizacion[property].v_tardwn;
+              let tardwnname = res.filascotizacion[property].v_tardwnname;
+              let url = res.filascotizacion[property].v_url;
+              let nombre_file = res.filascotizacion[property].v_nombre_file;
+              let v_vendid = res.filascotizacion[property].v_vendid;
+
+              let fila =
+                "<tr><td class='text-left'>\
+                <div class='media'>\
+                    <div class='avatar bg-light-success mr-0'>\
+                        <div class='avatar-content'>\
+                            <i class='fa-solid fa-truck-fast'></i>\
+                        </div>\
+                    </div>\
+                    <div class='media-body my-auto'>\
+                        <h6 class='font-weight-bolder mb-0'> "+ nu_correla + "</h6>\
+                    </div>\
+                </div>"
+                +
+                "</td><td class='text-left'>\
+                <div class='media'>\
+                    <div class='avatar bg-light-success mr-0'>\
+                        <div class='avatar-content'>\
+                            <i class='fa-solid fa-building'></i>\
+                        </div>\
+                    </div>\
+                    <div class='media-body my-auto'>\
+                        <h6 class='font-weight-bolder mb-0'> "+ v_vendid + "</h6>\
+                    </div>\
+                </div>"
+                +
+                "</td><td class='text-left'>\
+                <div class='media'>\
+                    <div class='avatar bg-light-" +
+                color + " mr-0'>\
+                        <div class='avatar-content'>\
+                        <i class='fa-solid fa-" +
+                icon + "'></i>\
+                        </div>\
+                    </div>\
+                    <div class='media-body my-auto'>\
+                        <h6 class='font-weight-bolder mb-0'> &nbsp;"+ descripcion + "</h6>\
+                    </div>\
+                </div>"+
+                "</td><td class='text-left'><strong>" +
+                nombre_file +
+                "</strong> </td><td class='text-center'><a " + tardwn + "'" + tardwnname + "'  class='btn btn-" +
+                color + " btn-sm'  style='color:white' href='" + url + "'><span class='fa-solid fa-" +
+                icon + "'><b></b></span></a></td>" +
+                "</td><td class='text-center'><a id=" +
+                nombre_file +
+                " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
 
               let btn = document.createElement("tr");
               btn.innerHTML = fila;
-              document.getElementById("tablita-nota").appendChild(btn);
-
+              document.getElementById("tablita-coti").appendChild(btn);
             }
 
-            creardatatable("#tbarchivo");
-          }
+            creardatatable("#tbcotizacion");
+          },
         });
       }
+
     });
+
+
+
+
   }
 
 
+  // if (respuesta == "Rechazar") {
+  //   Swal.fire({
+  //     title: "Seguro de Rechazar el pedido?",
+  //     text: "Pedido sera Rechazado",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#61C250",
+  //     cancelButtonColor: "#ea5455",
+  //     confirmButtonText: "Si, Rechazar!",
+  //     cancelButtonText: "No",
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+
+  //       // $.ajax({
+  //       //   type: 'POST',
+  //       //   url: '/pedidos/pedidos/eliminar_fila_ppto',
+  //       //   data: { nu_correla: nu_correla, v_idlinea: v_idlinea },
+  //       //   success: function (res) {
+
+  //       //     if (res.respuesta == 1) {
+  //       //       $.ajax({
+  //       //         type: 'POST',
+  //       //         url: '/pedidos/pedidos/Mostrar_pedido_ppto',
+  //       //         data: { nu_correla: nu_correla },
+  //       //         success: function (res) {
+
+  //       //           $("#tbpptopedido").dataTable().fnDestroy();
+  //       //           $("#tablita-ppto").children().remove();
+
+  //       //           let myArray = [];
+  //       //           for (const property in res.data) {
+  //       //             let nu_correla = res.data[property].nu_correla;
+  //       //             let v_idlinea = res.data[property].v_idlinea;
+  //       //             let v_idppto = res.data[property].v_idppto;
+  //       //             let v_idpartida = res.data[property].v_idpartida;
+  //       //             let v_idmes = res.data[property].v_idmes;
+  //       //             let v_nombremes = res.data[property].v_nombremes;
+  //       //             let f_monto = res.data[property].f_monto;
+  //       //             let v_centrocosto = res.data[property].v_centrocosto;
+
+  //       //             let fila =
+  //       //               "<tr><td class='text-center'>" +
+  //       //               nu_correla +
+  //       //               "</td><td class='text-left'>" +
+  //       //               v_idppto +
+  //       //               "</td><td class='text-left'>" +
+  //       //               v_idpartida +
+  //       //               "</td><td class='text-left'>" +
+  //       //               v_idmes +
+  //       //               "</td><td class='text-left'>" +
+  //       //               v_nombremes +
+  //       //               "</td><td class='text-left'>" +
+  //       //               f_monto +
+  //       //               "</td><td class='text-left'>" +
+  //       //               v_centrocosto +
+  //       //               "</td><td><a id=" +
+  //       //               v_idlinea +
+  //       //               " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+
+  //       //             let btn = document.createElement("tr");
+  //       //             btn.innerHTML = fila;
+  //       //             document.getElementById("tablita-ppto").appendChild(btn);
+  //       //           }
+  //       //           creardatatable("#tbpptopedido"); //perro
+  //       //         }
+  //       //       });
+  //       //     }
+
+  //       //   }
+  //       // });
+
+  //     }
+  //   });
+  // }
+
+  // if (respuesta == "Retornar") {
+  //   Swal.fire({
+  //     title: "Seguro de enviar a  Modificar el pedido?",
+  //     text: "Regresara un paso Anterior para su modificacion",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#61C250",
+  //     cancelButtonColor: "#ea5455",
+  //     confirmButtonText: "Si, Enviar!",
+  //     cancelButtonText: "No",
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+
+  //       // $.ajax({
+  //       //   type: 'POST',
+  //       //   url: '/pedidos/pedidos/eliminar_fila_ppto',
+  //       //   data: { nu_correla: nu_correla, v_idlinea: v_idlinea },
+  //       //   success: function (res) {
+
+  //       //     if (res.respuesta == 1) {
+  //       //       $.ajax({
+  //       //         type: 'POST',
+  //       //         url: '/pedidos/pedidos/Mostrar_pedido_ppto',
+  //       //         data: { nu_correla: nu_correla },
+  //       //         success: function (res) {
+
+  //       //           $("#tbpptopedido").dataTable().fnDestroy();
+  //       //           $("#tablita-ppto").children().remove();
+
+  //       //           let myArray = [];
+  //       //           for (const property in res.data) {
+  //       //             let nu_correla = res.data[property].nu_correla;
+  //       //             let v_idlinea = res.data[property].v_idlinea;
+  //       //             let v_idppto = res.data[property].v_idppto;
+  //       //             let v_idpartida = res.data[property].v_idpartida;
+  //       //             let v_idmes = res.data[property].v_idmes;
+  //       //             let v_nombremes = res.data[property].v_nombremes;
+  //       //             let f_monto = res.data[property].f_monto;
+  //       //             let v_centrocosto = res.data[property].v_centrocosto;
+
+  //       //             let fila =
+  //       //               "<tr><td class='text-center'>" +
+  //       //               nu_correla +
+  //       //               "</td><td class='text-left'>" +
+  //       //               v_idppto +
+  //       //               "</td><td class='text-left'>" +
+  //       //               v_idpartida +
+  //       //               "</td><td class='text-left'>" +
+  //       //               v_idmes +
+  //       //               "</td><td class='text-left'>" +
+  //       //               v_nombremes +
+  //       //               "</td><td class='text-left'>" +
+  //       //               f_monto +
+  //       //               "</td><td class='text-left'>" +
+  //       //               v_centrocosto +
+  //       //               "</td><td><a id=" +
+  //       //               v_idlinea +
+  //       //               " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+
+  //       //             let btn = document.createElement("tr");
+  //       //             btn.innerHTML = fila;
+  //       //             document.getElementById("tablita-ppto").appendChild(btn);
+  //       //           }
+  //       //           creardatatable("#tbpptopedido"); //perro
+  //       //         }
+  //       //       });
+  //       //     }
+
+  //       //   }
+  //       // });
+
+  //     }
+  //   });
+  // }
+
+  // if (respuesta == "Ver Archivos") {
+  //   $("#modal-file").modal("show");
+
+  //   var post = 3;
+  //   var nropedido = document.getElementById("nropedido").innerHTML;
+  //   var codprodnote = "";
+  //   var v_nombre_file = "";
+
+
+  //   $("#tbarchivo").dataTable().fnDestroy();
+  //   $("#tablita-nota").children().remove();
+
+  //   let count = 0;
+  //   $('#modal-file').on('shown.bs.modal', function () {
+  //     count = count + 1;
+  //     if (count == 1) {
+  //       $.ajax({
+  //         type: 'POST',
+  //         url: '/pedidos/pedidoaprobado/MostrarFilePedido',
+  //         data: { post: post, nropedido: nropedido, codprodnote: codprodnote, v_nombre_file: v_nombre_file },
+
+  //         beforeSend: function () {
+  //           $("#div-01").html("");
+  //           $("#div-01").append(
+  //             "<div id='div-01'>\<div class='d-flex justify-content-center my-1'>\<div class='spinner-border text-danger' role='status' aria-hidden='true'></div>\</div>\ </div>"
+  //           );
+  //         },
+
+  //         success: function (res) {
+  //           $("#div-01").html("");
+  //           let myArray = [];
+  //           for (const property in res.data) {
+  //             let nu_correla = res.data[property].nu_correla;
+  //             let item = res.data[property].v_codprod;
+  //             let descripcion = res.data[property].v_descripcion_file;
+  //             let icon = res.data[property].v_icon;
+  //             let color = res.data[property].v_color;
+  //             let tardwn = res.data[property].v_tardwn;
+  //             let tardwnname = res.data[property].v_tardwnname;
+  //             let url = res.data[property].v_url;
+  //             let nombre_file = res.data[property].v_nombre_file;
+  //             let fila =
+  //               "<tr><td class='text-left'>" +
+  //               nu_correla +
+  //               "</td><td class='text-left'>" +
+  //               item +
+  //               "</td><td class='text-left'>" +
+  //               descripcion +
+  //               "</td><td class='text-center'><a " + tardwn + "'" + tardwnname + "'  class='btn btn-" +
+  //               color + " btn-sm'  style='color:white' href='" + url + "'><span class='fa-solid fa-" +
+  //               icon + "'><b></b></span></a></td></tr>";
+
+
+  //             let btn = document.createElement("tr");
+  //             btn.innerHTML = fila;
+  //             document.getElementById("tablita-nota").appendChild(btn);
+
+  //           }
+
+  //           creardatatable("#tbarchivo");
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
 }
 
 function creardatatable(nombretabla) {

@@ -5,15 +5,13 @@
 
     <div class="content-wrapper">
         <div class="content-body">
-
-
             <section id="dashboard-analytics">
                 <div class="row" id="table-small">
                     <div class="col-lg-7">
                         <div class="card">
                             <div class="card-header card-primary border-bottom p-1">
                                 <div class="head-label">
-                                    <h4 class="card-title"> <strong><i class="fa-solid fa-list"></i></i> &nbsp;LISTA DE PEDIDOS</strong> </h4>
+                                    <h4 class="card-title"> <strong><i class="fa-solid fa-list"></i></i> &nbsp;GENERAR PEDIDO EN SOLOMON</strong> </h4>
                                 </div>
 
                                 <div class="col-xl-6 col-md-12 col-12 mb-0">
@@ -29,13 +27,6 @@
                                                         <option value="<?php echo $st['i_id']; ?>"><?php echo $st['v_nombre']; ?></option>
                                                     <?php } ?>
                                                 </select>
-
-                                                <!-- <select id="estado" class="form-control mb-1" disabled>
-                                                    <option value="1">Option</option>
-                                                    <option value="2">Option2</option>
-                                                </select> -->
-
-
                                             </div>
                                         </div>
                                     </div>
@@ -116,8 +107,40 @@
                                 <ul id="idtimeline" class="timeline">
                                 </ul>
                                 <hr>
-                                <p style="text-align:center;height:5px"><strong>APROBACION COMPLETADA(%)</strong></p>
+                                <!-- <p style="text-align:center;height:5px"><strong>APROBACION COMPLETADA(%)</strong></p> -->
+                                <p style="text-align:center;height:5px" id="titulo_avance"><strong></strong></p>
+                                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                                </div>
                                 <div id="support-tracker-chart"></div>
+
+                                <!-- <div class="form-group row">
+                                    <div class="col-sm-12">
+                                        <table id="tbarchivo" class="table table-sm">
+                                            <thead class="thead-dark">
+                                                <tr class="text-left">
+                                                    <th>#Pedido</th>
+                                                    <th class="text-left">Descripcion</th>
+                                                    <th class="text-center"><i class="fa-solid fa-eye"></i>&nbsp;</th>
+                                                    <th class="text-center"><i class="fa-solid fa-trash-can"></i> &nbsp;</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tablita-coti">
+                                                <tr>
+                                                    <td class="text-left">1000000001</td>
+                                                    <td class="text-left">1000000001_20004_20220613022843</td>
+                                                    <td class="text-center"><a download="1000000001_20004_20220613022843" class="btn btn-info btn-sm" style="color:white" href="http://localhost/pedidos/tutancamon.xls"><span class="fa-solid fa-file-word"><b></b></span></a></td>
+                                                    <td class="text-center"><a id="1000000001_20004_20220613022843" class="btn btn-danger btn-sm text-white delete"><span class="fa-solid fa-trash-can"><b></b></span></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-left">1000000001</td>
+                                                    <td class="text-left">1000000001_20004_20220613022844</td>
+                                                    <td class="text-center"><a download="1000000001_20004_20220613022844" class="btn btn-info btn-sm" style="color:white" href="http://localhost/pedidos/tutancamon.xls"><span class="fa-solid fa-file-word"><b></b></span></a></td>
+                                                    <td class="text-center"><a id="1000000001_20004_20220613022844" class="btn btn-danger btn-sm text-white delete"><span class="fa-solid fa-trash-can"><b></b></span></a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -185,10 +208,95 @@
 </div>
 
 
-<style>
-    #circle-container {
-        width: 150px;
-        height: 150px;
-        margin: 50px auto;
-    }
-</style>
+
+
+<!-- MODAL AGREGAR ARCHIVOS -->
+<div class="modal fade" id="modal-cotizacion" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header  bg-gradient-info" style="height:37px">
+                <h4 class="modal-title col-11 text-center"><b><i class="fa-solid fa-file-lines fa-bounce"></i>&nbsp;&nbsp;COTIZACIONES</b></h4>
+                <button id="close_pedido" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <b style="color:rgb(0,0,0)"><strong>#Pedido &nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;</strong> </b> <strong><label id="idpedidocotizacion" style="color:rgb(0,0,0);font-weight:bold"></label></strong>
+                <hr>
+
+                <div class="row">
+                    <div class="form-group col-md-9">
+                        <label class="form-label font-weight-bolder" style="color:#CCB906;font-weight:bold">Seleccionar Proveedor</label>
+                        <select id="xproveedor" class="select2 form-control form-control-lg">
+                            <?php foreach ($this->ComboLocal as $local) { ?>
+                                <option value="<?php echo $local['v_id_local']; ?>"><?php echo $local['v_local']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <br>
+                            <br>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck1" />
+                                <label class="custom-control-label" for="customCheck1"><b>Proveedor Final</b></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group mb-2">
+                            <label for="notas" class="form-label font-weight-bold" style="color:#CCB906;font-weight:bold"><strong>Descripcion para el archivo</strong> </label>
+                            <input type="text" id="descripcionfile" tabindex="1" placeholder="Ingrese descripcion" class="form-control" autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+
+                <label class="form-label font-weight-bold" style="color:#62BB3E;font-weight:bold"> <strong>Seleccionar Archivo </strong> </label>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group">
+                                    <input id="archivo" name="archivo" type="file">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <button type="button" id="btnsubirfile" name="btnsubirfile" class="btn btn-danger btn-block"><b><i class="fa-solid fa-upload fa-beat"></i></b>&nbsp;&nbsp;Subir Archivo</button>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <p style="text-align:center;height:5px;color:rgb(0,0,0)"><strong>Detalle de archivos cargados</strong></p>
+                <hr>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <table id="tbcotizacion" class="table table-sm">
+                            <thead class="thead-dark">
+                                <tr class="text-left">
+                                    <th>#Pedido</th>
+                                    <th>#Proveedor</th>
+                                    <th class="text-left">Descripcion</th>
+                                    <th class="text-left">Nombre Archivo</th>
+                                    <th class="text-center"><i class="fa-solid fa-eye"></i>&nbsp;</th>
+                                    <th class="text-center"><i class="fa-solid fa-trash-can"></i> &nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablita-coti">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

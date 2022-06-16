@@ -59,7 +59,6 @@ $(function () {
     ],
   });
 
-
   document.getElementById('monedaimporte').innerHTML = $('#moneda option:selected').text();
 
   var datosppto = [];
@@ -72,7 +71,7 @@ $(function () {
   var datosaci = [];
 
 
-  //#region                                                (CARGA CON EL NUMERO DE PEDIDO  QUE SE TRAE COMO PARAMETRO)
+  //#region                                               (CARGA CON EL NUMERO DE PEDIDO  QUE SE TRAE COMO PARAMETRO)
   if (variable1 != null) {
     var nu_correla = variable1;
     $.ajax({
@@ -109,6 +108,9 @@ $(function () {
         $("#moneda").html("");
         $("#moneda").append(res.FilasMoneda);
         document.getElementById('resumentotal').innerHTML = res.f_importotal;
+        document.getElementById('importepresupuesto').innerHTML = res.f_montoppto;
+
+
         $('#note').val(res.v_nota);
         $("#example2").dataTable().fnDestroy();
         $("#tablita-aci").children().remove();
@@ -124,6 +126,8 @@ $(function () {
           let importe = res.data[property].Total;
           let v_disabled = res.data[property].v_disabled;
           let v_note_detalle = res.data[property].v_note_detalle;
+          let v_id_local = res.data[property].v_id_local;
+          let i_opcion = res.data[property].i_opcion;
 
           let fila =
             "<tr><td class='text-center'>" +
@@ -134,6 +138,8 @@ $(function () {
             item +
             "</td><td class='text-left'>" +
             nombre +
+            "</td><td class='text-left'>" +
+            v_id_local +
             "</td><td class='text-left'>" +
             v_unidad +
             "</td><td class='text-left'>" +
@@ -152,7 +158,7 @@ $(function () {
           let btn = document.createElement("tr");
           btn.innerHTML = fila;
           document.getElementById("tablita-aci").appendChild(btn);
-          myArray.push({ id: parseInt(id), Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
+          myArray.push({ id: parseInt(id), Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
         }
         creardatatable("#example2");
         datosaci.splice(0, datosaci.length);
@@ -165,8 +171,7 @@ $(function () {
   }
   //#endregion
 
-
-  //#region                                                (OPCION DE PRODUCTOS)
+  //#region                                               (OPCION DE PRODUCTOS)
   $("#tbproducto tbody").on("click", "a.agregar", function () {
     var chekcontrol = document.getElementById("customRadio1").checked;
     if (chekcontrol == false) {
@@ -205,6 +210,10 @@ $(function () {
           $("#descripcion").html(v_invtid + "-" + res.v_nombreproducto);
           document.getElementById("codproducto").value = v_invtid
           document.getElementById("nombreproduco").value = res.v_nombreproducto;
+
+          $("#xlocal").html("");
+          $("#xlocal").append(res.FilascomboLocal);
+
         }
       });
 
@@ -212,8 +221,6 @@ $(function () {
       $('#myModal').on('shown.bs.modal', function () {
         $("#cantidad").focus();
       });
-
-
     } else {
       Swal.fire({
         title: "PEDIDO YA FUE ENVIADO PARA SU APROBACION",
@@ -253,7 +260,9 @@ $(function () {
     let price = $("#precio").val();
     let importe = $("#importe").val();
     let v_unidad = $("#unidad").val();
+    let v_id_local = $('#xlocal  option:selected').val();
     let v_note_detalle = 'NO';
+    let i_opcion = 1;
 
     if ((qty == 0)) {
       $("#cantidad").focus();
@@ -279,9 +288,23 @@ $(function () {
       return;
     }
 
+
+    if ((v_id_local == null || v_id_local == 'XXXXXXX')) {
+      $("#xlocal").focus();
+      Swal.fire({
+        title: 'SELECCIONAR ALMACEN',
+        timer: 3000,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
     $("#example2").dataTable().fnDestroy();
     // $("#tablita-aci").children().remove();
-
     let fila =
       "<tr><td class='text-center'>" +
       countaci +
@@ -290,6 +313,8 @@ $(function () {
       item +
       "</td><td class='text-left'>" +
       nombre +
+      "</td><td class='text-left'>" +
+      v_id_local +
       "</td><td class='text-left'>" +
       v_unidad +
       "</td><td class='text-left'>" +
@@ -308,7 +333,7 @@ $(function () {
     let btn = document.createElement("tr");
     btn.innerHTML = fila;
     document.getElementById("tablita-aci").appendChild(btn);
-    datosaci.push({ id: countaci, Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
+    datosaci.push({ id: countaci, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
     console.log(datosaci);
     countaci = countaci + 1;
     creardatatable("#example2");
@@ -331,7 +356,6 @@ $(function () {
   });
   //#endregion
 
-
   //#region                                               (OPCION 2 DESCRIPCION OPCIONAL)  
   $("#cantidaditem").change(function () {
     var cantidaditem = $('#cantidaditem').val();
@@ -350,125 +374,162 @@ $(function () {
   });
 
   $("#additem").on("click", function () {
-    $('#resumentotal').val('');
-    let item = countaci.toString()
-    let nombre = document.getElementById("descripcionitem").value;
-    let qty = $("#cantidaditem").val();
-    let price = $("#precioitem").val();
-    let importe = $("#totalitem").val();
-    let v_unidad = $("#unidaditem").val();
-    let v_note_detalle = 'NO';
+    var chekcontrol = document.getElementById("customRadio1").checked;
+    if (chekcontrol == false) {
 
-    if ((nombre == "" || nombre == null)) {
-      $("#descripcionitem").focus();
-      Swal.fire({
-        title: "INGRESAR DESCRIPCION",
-        showClass: {
-          popup: 'animate__animated animate__fadeInDown'
-        },
-        hideClass: {
-          popup: 'animate__animated animate__fadeOutUp'
-        }
-      })
-      return;
-    }
+      $('#resumentotal').val('');
+      let item = countaci.toString()
+      let nombre = document.getElementById("descripcionitem").value;
+      let qty = $("#cantidaditem").val();
+      let price = $("#precioitem").val();
+      let importe = $("#totalitem").val();
+      let v_unidad = $("#unidaditem").val();
+      let v_id_local = $('#x2local  option:selected').val();
+      let v_note_detalle = 'NO';
+      let i_opcion = 2;
 
-    if ((qty == 0)) {
-      $("#cantidaditem").focus();
-      Swal.fire({
-        icon: "warning",
-        title: "INGRESAR CANTIDAD",
-        text: "",
-        timer: 2400,
-        timerProgressBar: true,
-      })
-      return;
-    }
-
-    if ((price == 0)) {
-      $("#precioitem").focus();
-      Swal.fire({
-        icon: "warning",
-        title: "INGRESAR PRECIO",
-        text: "",
-        timer: 2400,
-        timerProgressBar: true,
-      })
-      return;
-    }
-
-    if ((unidad == "XXX" || unidad == null)) {
-      $("#unidaditem").focus();
-      Swal.fire({
-        title: "SELECCIONAR UNIDAD",
-        timer: 2400,
-        timerProgressBar: true,
-        showClass: {
-          popup: 'animate__animated animate__fadeInDown'
-        },
-        hideClass: {
-          popup: 'animate__animated animate__fadeOutUp'
-        }
-      })
-      return;
-    }
-
-    $("#example2").dataTable().fnDestroy();
-    // $("#tablita-aci").children().remove();
-
-    let fila =
-      "<tr><td class='text-center'>" +
-      countaci +
-      "</td><td><span class='fa-solid fa-truck fa-beat'  style='color:rgb(3,164,90)'></span>" +
-
-      "</td><td class='text-left'>" +
-      item +
-      "</td><td class='text-left'>" +
-      nombre +
-      "</td><td class='text-left'>" +
-      v_unidad +
-      "</td><td class='text-left'>" +
-      qty +
-      "</td><td class='text-left'>" +
-      price +
-      "</td><td class='text-left'>" +
-      importe +
-      "</td><td><a id=" +
-      item +
-      " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
-      "</td><td><a id=" +
-      countaci +
-      " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
-
-
-    let btn = document.createElement("tr");
-    btn.innerHTML = fila;
-    document.getElementById("tablita-aci").appendChild(btn);
-    datosaci.push({ id: countaci, Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
-    console.log(datosaci);
-    countaci = countaci + 1;
-    creardatatable("#example2");
-
-    var resumentotal = 0;
-
-    $('#example2 tr').each(function () {
-      var total = $(this).find("td").eq(7).html();
-      if ((parseFloat(total)) > 0) {
-        resumentotal = (parseFloat(resumentotal) + parseFloat(total));
+      if ((nombre == "" || nombre == null)) {
+        $("#descripcionitem").focus();
+        Swal.fire({
+          title: "INGRESAR DESCRIPCION",
+          showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+          }
+        })
+        return;
       }
-    });
-    document.getElementById('resumentotal').innerHTML = resumentotal;
-    document.getElementById("descripcionitem").value = null;
-    document.getElementById("precioitem").value = null;
-    document.getElementById("cantidaditem").value = null;
-    document.getElementById("totalitem").value = null;
+
+      if ((qty == 0)) {
+        $("#cantidaditem").focus();
+        Swal.fire({
+          icon: "warning",
+          title: "INGRESAR CANTIDAD",
+          text: "",
+          timer: 2400,
+          timerProgressBar: true,
+        })
+        return;
+      }
+
+      if ((price == 0)) {
+        $("#precioitem").focus();
+        Swal.fire({
+          icon: "warning",
+          title: "INGRESAR PRECIO",
+          text: "",
+          timer: 2400,
+          timerProgressBar: true,
+        })
+        return;
+      }
+
+      if ((unidad == "XXX" || unidad == null)) {
+        $("#unidaditem").focus();
+        Swal.fire({
+          title: "SELECCIONAR UNIDAD",
+          timer: 2400,
+          timerProgressBar: true,
+          showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+          }
+        })
+        return;
+      }
+
+      if ((v_id_local == null || v_id_local == 'XXXXXXX')) {
+        $("#x2local").focus();
+        Swal.fire({
+          title: 'SELECCIONAR ALMACEN',
+          timer: 3000,
+          showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+          }
+        })
+        return;
+      }
+
+      $("#example2").dataTable().fnDestroy();
+      // $("#tablita-aci").children().remove();
+      let fila =
+        "<tr><td class='text-center'>" +
+        countaci +
+        "</td><td><span class='fa-solid fa-truck fa-beat'  style='color:rgb(3,164,90)'></span>" +
+        "</td><td class='text-left'>" +
+        item +
+        "</td><td class='text-left'>" +
+        nombre +
+        "</td><td class='text-left'>" +
+        v_id_local +
+        "</td><td class='text-left'>" +
+        v_unidad +
+        "</td><td class='text-left'>" +
+        qty +
+        "</td><td class='text-left'>" +
+        price +
+        "</td><td class='text-left'>" +
+        importe +
+        "</td><td><a id=" +
+        item +
+        " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
+        "</td><td><a id=" +
+        countaci +
+        " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+
+      let btn = document.createElement("tr");
+      btn.innerHTML = fila;
+      document.getElementById("tablita-aci").appendChild(btn);
+      datosaci.push({ id: countaci, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
+      console.log(datosaci);
+      countaci = countaci + 1;
+      creardatatable("#example2");
+
+      var resumentotal = 0;
+
+      $('#example2 tr').each(function () {
+        var total = $(this).find("td").eq(7).html();
+        if ((parseFloat(total)) > 0) {
+          resumentotal = (parseFloat(resumentotal) + parseFloat(total));
+        }
+      });
+      document.getElementById('resumentotal').innerHTML = resumentotal;
+      document.getElementById("descripcionitem").value = null;
+      document.getElementById("precioitem").value = null;
+      document.getElementById("cantidaditem").value = null;
+      document.getElementById("totalitem").value = null;
 
 
-    $("#descripcionitem").focus();
+      $("#descripcionitem").focus();
+    } else {
+      Swal.fire({
+        title: "PEDIDO YA FUE ENVIADO PARA SU APROBACION",
+        timer: 2400,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
+
+
 
   });
-  //#endregion
 
+
+
+  //#endregion
 
   //#region                                               (ACCIONES EN LA TABLA DETALLE DEL PEDIDO)
   $("#example2 tbody").on("click", "a.delete", function () {
@@ -514,11 +575,20 @@ $(function () {
                   let price = datosaci[property].Precio;
                   let importe = datosaci[property].Total;
                   let v_note_detalle = datosaci[property].v_note_detalle;
+                  let v_id_local = datosaci[property].v_id_local;
+                  let i_opcion = datosaci[property].i_opcion;
+
 
                   if (v_note_detalle == 'SI') {
                     v_color = 'color:rgb(66,222,10)';
                   } else {
+
+                    if (Number(i_opcion) == 2) {
+                      item = Number(contador);
+                    }
+
                     v_color = 'color:rgb(3,164,90)';
+
                   }
 
                   let fila =
@@ -530,6 +600,8 @@ $(function () {
                     item +
                     "</td><td class='text-left'>" +
                     nombre +
+                    "</td><td class='text-left'>" +
+                    v_id_local +
                     "</td><td class='text-left'>" +
                     v_unidad +
                     "</td><td class='text-left'>" +
@@ -547,7 +619,7 @@ $(function () {
                   let btn = document.createElement("tr");
                   btn.innerHTML = fila;
                   document.getElementById("tablita-aci").appendChild(btn);
-                  myArray.push({ id: parseInt(contador), Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
+                  myArray.push({ id: parseInt(contador), Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
                   contador = contador + 1;
 
                   //CALCULAR
@@ -586,10 +658,15 @@ $(function () {
                   let price = datosaci[property].Precio;
                   let importe = datosaci[property].Total;
                   let v_note_detalle = datosaci[property].v_note_detalle;
+                  let v_id_local = datosaci[property].v_id_local;
+                  let i_opcion = datosaci[property].i_opcion;
 
                   if (v_note_detalle == 'SI') {
                     v_color = 'color:rgb(66,222,10)';
                   } else {
+                    if (Number(i_opcion) == 2) {
+                      item = Number(contador);
+                    }
                     v_color = 'color:rgb(3,164,90)';
                   }
 
@@ -602,6 +679,8 @@ $(function () {
                     item +
                     "</td><td class='text-left'>" +
                     nombre +
+                    "</td><td class='text-left'>" +
+                    v_id_local +
                     "</td><td class='text-left'>" +
                     v_unidad +
                     "</td><td class='text-left'>" +
@@ -619,7 +698,7 @@ $(function () {
                   let btn = document.createElement("tr");
                   btn.innerHTML = fila;
                   document.getElementById("tablita-aci").appendChild(btn);
-                  myArray.push({ id: parseInt(contador), Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
+                  myArray.push({ id: parseInt(contador), Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
                   contador = contador + 1;
 
                   //CALCULAR
@@ -662,10 +741,14 @@ $(function () {
             let price = datosaci[property].Precio;
             let importe = datosaci[property].Total;
             let v_note_detalle = datosaci[property].v_note_detalle;
+            let v_id_local = datosaci[property].v_id_local;
 
             if (v_note_detalle == 'SI') {
               v_color = 'color:rgb(66,222,10)';
             } else {
+              if (Number(i_opcion) == 2) {
+                item = Number(contador);
+              }
               v_color = 'color:rgb(3,164,90)';
             }
 
@@ -678,6 +761,8 @@ $(function () {
               item +
               "</td><td class='text-left'>" +
               nombre +
+              "</td><td class='text-left'>" +
+              v_id_local +
               "</td><td class='text-left'>" +
               v_unidad +
               "</td><td class='text-left'>" +
@@ -695,7 +780,7 @@ $(function () {
             let btn = document.createElement("tr");
             btn.innerHTML = fila;
             document.getElementById("tablita-aci").appendChild(btn);
-            myArray.push({ id: contador, Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
+            myArray.push({ id: contador, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
             contador = contador + 1;
 
             //CALCULAR
@@ -1085,6 +1170,7 @@ $(function () {
                 $("#example2").dataTable().fnDestroy();
                 $("#tablita-aci").children().remove();
 
+                document.getElementById('importepresupuesto').innerHTML = res.f_montoppto;
 
                 let myArray = [];
                 let v_color = '';
@@ -1101,6 +1187,9 @@ $(function () {
                   let importe = res.data[property].Total;
                   let v_disabled = res.data[property].v_disabled;
                   let v_note_detalle = res.data[property].v_note_detalle;
+                  let v_id_local = res.data[property].v_id_local;
+                  let i_opcion = res.data[property].i_opcion;
+
 
                   if (v_note_detalle == 'SI') {
                     v_color = 'color:rgb(66,222,10)';
@@ -1117,6 +1206,8 @@ $(function () {
                     item +
                     "</td><td class='text-left'>" +
                     nombre +
+                    "</td><td class='text-left'>" +
+                    v_id_local +
                     "</td><td class='text-left'>" +
                     v_unidad +
                     "</td><td class='text-left'>" +
@@ -1135,7 +1226,7 @@ $(function () {
                   let btn = document.createElement("tr");
                   btn.innerHTML = fila;
                   document.getElementById("tablita-aci").appendChild(btn);
-                  myArray.push({ id: id, Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
+                  myArray.push({ id: id, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
                 }
                 creardatatable("#example2");
                 datosaci.splice(0, datosaci.length);
@@ -1975,6 +2066,9 @@ $(function () {
           let importe = res.data[property].Total;
           let v_note_detalle = res.data[property].v_note_detalle;
           let v_disabled = res.data[property].v_disabled;
+          let v_id_local = res.data[property].v_id_local;
+          let i_opcion = res.data[property].i_opcion;
+
 
           if (v_note_detalle == 'SI') {
             v_color = 'color:rgb(66,222,10)';
@@ -1993,6 +2087,8 @@ $(function () {
             "</td><td class='text-left'>" +
             nombre +
             "</td><td class='text-left'>" +
+            v_id_local +
+            "</td><td class='text-left'>" +
             v_unidad +
             "</td><td class='text-left'>" +
             qty +
@@ -2009,7 +2105,7 @@ $(function () {
           let btn = document.createElement("tr");
           btn.innerHTML = fila;
           document.getElementById("tablita-aci").appendChild(btn);
-          myArray.push({ id: id, Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
+          myArray.push({ id: id, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
         }
         creardatatable("#example2");
         datosaci.splice(0, datosaci.length);
@@ -2047,6 +2143,9 @@ $(function () {
           let importe = res.data[property].Total;
           let v_note_detalle = res.data[property].v_note_detalle;
           let v_disabled = res.data[property].v_disabled;
+          let v_id_local = res.data[property].v_id_local;
+          let i_opcion = res.data[property].i_opcion;
+
 
           if (v_note_detalle == 'SI') {
             v_color = 'color:rgb(66,222,10)';
@@ -2065,6 +2164,8 @@ $(function () {
             "</td><td class='text-left'>" +
             nombre +
             "</td><td class='text-left'>" +
+            v_id_local +
+            "</td><td class='text-left'>" +
             v_unidad +
             "</td><td class='text-left'>" +
             qty +
@@ -2081,7 +2182,7 @@ $(function () {
           let btn = document.createElement("tr");
           btn.innerHTML = fila;
           document.getElementById("tablita-aci").appendChild(btn);
-          myArray.push({ id: id, Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
+          myArray.push({ id: id, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
         }
         creardatatable("#example2");
         datosaci.splice(0, datosaci.length);
@@ -2111,7 +2212,7 @@ $(function () {
       let price = datosaci[property].Precio;
       let importe = datosaci[property].Total;
       let v_note_detalle = datosaci[property].v_note_detalle;
-
+      let v_id_local = datosaci[property].v_id_local;
 
       if (v_note_detalle == 'SI') {
         v_color = 'color:rgb(66,222,10)';
@@ -2131,6 +2232,8 @@ $(function () {
         "</td><td class='text-left'>" +
         nombre +
         "</td><td class='text-left'>" +
+        v_id_local +
+        "</td><td class='text-left'>" +
         v_unidad +
         "</td><td class='text-left'>" +
         qty +
@@ -2148,7 +2251,7 @@ $(function () {
       let btn = document.createElement("tr");
       btn.innerHTML = fila;
       document.getElementById("tablita-aci").appendChild(btn);
-      myArray.push({ id: contador, Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
+      myArray.push({ id: contador, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
     }
 
     creardatatable("#example2");
@@ -2251,6 +2354,9 @@ $(function () {
           let importe = res.data[property].Total;
           let v_note_detalle = res.data[property].v_note_detalle;
           let v_disabled = res.data[property].v_disabled;
+          let v_id_local = res.data[property].v_id_local;
+          let i_opcion = res.data[property].i_opcion;
+
 
           if (v_note_detalle == 'SI') {
             v_color = 'color:rgb(66,222,10)';
@@ -2269,6 +2375,8 @@ $(function () {
             "</td><td class='text-left'>" +
             nombre +
             "</td><td class='text-left'>" +
+            v_id_local +
+            "</td><td class='text-left'>" +
             v_unidad +
             "</td><td class='text-left'>" +
             qty +
@@ -2285,7 +2393,7 @@ $(function () {
           let btn = document.createElement("tr");
           btn.innerHTML = fila;
           document.getElementById("tablita-aci").appendChild(btn);
-          myArray.push({ id: id, Item: item, Descripcion: nombre, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
+          myArray.push({ id: id, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
         }
         creardatatable("#example2");
         datosaci.splice(0, datosaci.length);

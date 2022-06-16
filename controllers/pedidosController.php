@@ -223,6 +223,10 @@ class pedidosController extends Controller
 			$ConsultaTopePedido = json_decode($result->ConsultaTopePedidoResult, true);
 
 
+			$result = $soap->ComboLocal();
+			$ComboLocal = json_decode($result->ComboLocalResult, true);
+
+
 			$this->_view->proveedores = $proveedores;
 			$this->_view->PedidoEstado  = $PedidoEstado;
 			$this->_view->ListadoProducto  = $ListadoProducto;
@@ -232,6 +236,7 @@ class pedidosController extends Controller
 			$this->_view->ListadoSubAcct  = $ListadoSubAcct;
 			$this->_view->ListadoUnidad  = $ListadoUnidad;
 			$this->_view->ConsultaTopePedido = $ConsultaTopePedido;
+			$this->_view->ComboLocal = $ComboLocal;
 
 			$this->_view->setJs(array('realizarpedido'));
 			$this->_view->renderizar('realizarpedido');
@@ -327,13 +332,23 @@ class pedidosController extends Controller
 			$result = $soap->ConsultaProducto($prod);
 			$data = json_decode($result->ConsultaProductoResult, true);
 
+			$result = $soap->ComboLocal();
+			$ComboLocal = json_decode($result->ComboLocalResult, true);
+
 			if (count($data) > 0) {
 				$v_nombreproducto  = $data[0]['v_nombre'];
 				$v_nombreproducto  = utf8_decode(html_caracteres($v_nombreproducto));
 				$v_undmedida  = $data[0]['v_unidad'];
+				//Combo Local
+				$FilascomboLocal = "";
+				$sellocal = "";
+				foreach ($ComboLocal as $dp) {
+					$FilascomboLocal .= "<option " . $sellocal . " value=" . $dp['v_id_local'] . ">" . $dp['v_local'] . "</option>";
+				}
 			} else {
 				$v_nombreproducto = "";
 				$v_undmedida = "";
+				$FilascomboLocal = "";
 			}
 
 			header('Content-type: application/json; charset=utf-8');
@@ -341,6 +356,7 @@ class pedidosController extends Controller
 				array(
 					"v_nombreproducto" => $v_nombreproducto,
 					"v_undmedida" => $v_undmedida,
+					"FilascomboLocal" => $FilascomboLocal,
 				)
 			);
 		} else {
@@ -436,7 +452,11 @@ class pedidosController extends Controller
 					'nu_precio'			=> $di['Precio'],
 					'nu_total' 		    => $di['Total'],
 					'v_token' 			=> $_SESSION['v_token'],
+					'v_username' 		=> $_SESSION['dni'],
+					'v_id_local' 		=> $di['v_id_local'],
+					'i_opcion' 		    => $di['i_opcion'],
 				);
+
 				$result3 = $soap->GuardarDetallePedido($params[$i]);
 				$GuardarDetallePedido = json_decode($result3->GuardarDetallePedidoResult, true);
 				$i++;
@@ -498,7 +518,6 @@ class pedidosController extends Controller
 			$ListadoMoneda = json_decode($result->ListadoMonedaResult, true);
 
 			if (count($data) > 0) {
-
 				$nu_correla =   $data[0]['nu_correla'];
 				$v_areid =   $data[0]['v_areid'];
 				$v_area =   $data[0]['v_area'];
@@ -514,7 +533,7 @@ class pedidosController extends Controller
 				$i_idestado =   $data[0]['i_idestado'];
 				$i_idorden_aprobacion =   $data[0]['i_idorden_aprobacion'];
 				$i_filas =   $data[0]['i_filas'];
-
+				$f_montoppto =   $data[0]['f_montoppto'];
 
 				//Combo Local
 				$FilasMoneda = "";
@@ -545,6 +564,8 @@ class pedidosController extends Controller
 						"Total" => $da['nu_total'],
 						"v_disabled" => $da['v_disabled'],
 						"v_note_detalle" => $da['v_note_detalle'],
+						"v_id_local" => $da['v_id_local'],
+						"i_opcion" => $da['i_opcion'],
 					);
 					$filas += ["$i" => $propiedades1];
 					$i++;
@@ -569,9 +590,11 @@ class pedidosController extends Controller
 					'i_idestado' => $i_idestado,
 					'i_idorden_aprobacion' => $i_idorden_aprobacion,
 					'i_filas' => $i_filas,
+					'f_montoppto' => $f_montoppto,
 					'FilasMoneda' => $FilasMoneda,
 					'FilasEstado' => $FilasEstado,
 					'data' => $filas
+					
 				)
 			);
 		} else {
@@ -864,6 +887,7 @@ class pedidosController extends Controller
 				$filas += ["$i" => $propiedades1];
 				$i++;
 			}
+
 			header('Content-type: application/json; charset=utf-8');
 
 			echo $json->encode(

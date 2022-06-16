@@ -140,6 +140,9 @@ class usuarioController extends Controller
 			$result = $soap->ComboLocal();
 			$ComboLocal = json_decode($result->ComboLocalResult, true);
 
+			$result = $soap->ComboUsuarioSolomon();
+			$ComboUsuarioSolomon = json_decode($result->ComboUsuarioSolomonResult, true);
+
 			if (count($data) > 0) {
 				//Combo perfil
 				$FilascomboPerfil = "";
@@ -189,6 +192,18 @@ class usuarioController extends Controller
 					$FilascomboLocal .= "<option " . $sellocal . " value=" . $dp['v_id_local'] . ">" . $dp['v_local'] . "</option>";
 				}
 
+				//Combo Usuario Solomon
+				$FilascomboUsuarioSolomon = "";
+				$selsolomon = "";
+				foreach ($ComboUsuarioSolomon as $dp) {
+					if ($dp['v_userid'] == $data[0]['v_usuario_solomon']) {
+						$selsolomon = "selected='selected'";
+					} else {
+						$selsolomon = "";
+					}
+					$FilascomboUsuarioSolomon .= "<option " . $selsolomon . " value=" . $dp['v_userid'] . ">" . $dp['v_username'] . "</option>";
+				}
+
 				$estado  =  1;
 				$v_dni  = $data[0]['v_dni'];
 				$v_nombres  = $data[0]['v_nombres'];
@@ -232,6 +247,14 @@ class usuarioController extends Controller
 				foreach ($ComboLocal as $dp) {
 					$FilascomboLocal .= "<option " . $sellocal . " value=" . $dp['v_id_local'] . ">" . $dp['v_local'] . "</option>";
 				}
+
+
+				//Combo Usuario Solomon
+				$FilascomboUsuarioSolomon = "";
+				$selsolomon = "";
+				foreach ($ComboUsuarioSolomon as $dp) {
+					$FilascomboUsuarioSolomon .= "<option " . $selsolomon . " value=" . $dp['v_userid'] . ">" . $dp['v_username'] . "</option>";
+				}
 			}
 
 
@@ -249,6 +272,7 @@ class usuarioController extends Controller
 					"FilascomboCargo" => $FilascomboCargo,
 					"FilascomboArea" => $FilascomboArea,
 					"FilascomboLocal" => $FilascomboLocal,
+					"FilascomboUsuarioSolomon" => $FilascomboUsuarioSolomon,
 				)
 			);
 		} else {
@@ -345,6 +369,7 @@ class usuarioController extends Controller
 			$v_id_area = $_POST['v_id_area'];
 			$i_persexo = $_POST['i_persexo'];
 			$v_persexo_nombre = $_POST['v_persexo_nombre'];
+			$v_usuario_solomon = $_POST['v_usuario_solomon'];
 
 
 			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
@@ -375,6 +400,7 @@ class usuarioController extends Controller
 				'v_id_area' => $v_id_area,
 				'i_persexo' => $i_persexo,
 				'v_persexo_nombre' => $v_persexo_nombre,
+				'v_usuario_solomon' => $v_usuario_solomon,
 			);
 
 			$result2 = $soap->MantenimientoUsuario($params);

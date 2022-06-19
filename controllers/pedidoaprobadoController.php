@@ -300,7 +300,7 @@ class pedidoaprobadoController extends Controller
 					"v_url" => $da['v_url'],
 					"v_nombre_file" => $da['v_nombre_file'],
 					"v_vendid" => $da['v_vendid'],
-					
+
 				);
 				$filascotizacion += ["$i" => $propiedadescoti];
 				$i++;
@@ -449,6 +449,64 @@ class pedidoaprobadoController extends Controller
 	}
 
 
+	public function agregar_proveedor_solped() //EN PEDIDO A SOLOMON
+	{
+		if (isset($_SESSION['usuario'])) {
+			putenv("NLS_LANG=SPANISH_SPAIN.AL32UTF8");
+			putenv("NLS_CHARACTERSET=AL32UTF8");
+
+			$this->getLibrary('json_php/JSON');
+			$json = new Services_JSON();
+
+			$nropedido = $_POST['nropedido'];
+			$v_vendid = $_POST['v_vendid'];
+
+
+			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
+
+			$options = array(
+				"uri" => $wsdl,
+				"style" => SOAP_RPC,
+				"use" => SOAP_ENCODED,
+				"soap_version" => SOAP_1_1,
+				"connection_timeout" => 60,
+				"trace" => false,
+				"encoding" => "UTF-8",
+				"exceptions" => false,
+			);
+
+
+			$param1 = array(
+				"post" => 1,
+				"v_descripcion_file" => '',
+				"nu_correla" => $nropedido,
+				"v_nombre_file" => '',
+				"v_extension" => '',
+				"v_url" => '',
+				"v_token" => $_SESSION['v_token'],
+				"v_vendid" => $v_vendid,
+				"i_proveedor_final" => 0,
+			);
+			$soap = new SoapClient($wsdl, $options);
+			$result1 = $soap->GuardarPedidoCotizacion($param1);
+			$GuardarPedidoCotizacion = json_decode($result1->GuardarPedidoCotizacionResult, true);
+
+
+			header('Content-type: application/json; charset=utf-8');
+			echo $json->encode(
+				array(
+					"vicon" 		=> $GuardarPedidoCotizacion[0]['v_icon'],
+					"vtitle" 		=> $GuardarPedidoCotizacion[0]['v_title'],
+					"vtext" 		=> $GuardarPedidoCotizacion[0]['v_text'],
+					"itimer" 		=> $GuardarPedidoCotizacion[0]['i_timer'],
+					"icase" 		=> $GuardarPedidoCotizacion[0]['i_case'],
+					"vprogressbar" 	=> $GuardarPedidoCotizacion[0]['v_progressbar'],
+				)
+			);
+		} else {
+			$this->redireccionar('index/logout');
+		}
+	}
 
 
 	public function MostrarFilePedido() //2

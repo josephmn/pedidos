@@ -345,7 +345,7 @@ $(function () {
     var resumentotal = 0;
 
     $('#example2 tr').each(function () {
-      var total = $(this).find("td").eq(7).html();
+      var total = $(this).find("td").eq(8).html();
       if ((parseFloat(total)) > 0) {
         resumentotal = (parseFloat(resumentotal) + parseFloat(total));
       }
@@ -495,11 +495,12 @@ $(function () {
       var resumentotal = 0;
 
       $('#example2 tr').each(function () {
-        var total = $(this).find("td").eq(7).html();
+        var total = $(this).find("td").eq(8).html();
         if ((parseFloat(total)) > 0) {
           resumentotal = (parseFloat(resumentotal) + parseFloat(total));
         }
       });
+
       document.getElementById('resumentotal').innerHTML = resumentotal;
       document.getElementById("descripcionitem").value = null;
       document.getElementById("precioitem").value = null;
@@ -578,17 +579,14 @@ $(function () {
                   let v_id_local = datosaci[property].v_id_local;
                   let i_opcion = datosaci[property].i_opcion;
 
+                  if (Number(i_opcion) == 2) {
+                    item = Number(contador);
+                  }
 
                   if (v_note_detalle == 'SI') {
                     v_color = 'color:rgb(66,222,10)';
                   } else {
-
-                    if (Number(i_opcion) == 2) {
-                      item = Number(contador);
-                    }
-
                     v_color = 'color:rgb(3,164,90)';
-
                   }
 
                   let fila =
@@ -625,7 +623,7 @@ $(function () {
                   //CALCULAR
                   var resumentotal = 0;
                   $('#example2 tr').each(function () {
-                    var total = $(this).find("td").eq(7).html();
+                    var total = $(this).find("td").eq(8).html();
                     if ((parseFloat(total)) > 0) {
                       resumentotal = (parseFloat(resumentotal) + parseFloat(total));
                     }
@@ -661,12 +659,13 @@ $(function () {
                   let v_id_local = datosaci[property].v_id_local;
                   let i_opcion = datosaci[property].i_opcion;
 
+                  if (Number(i_opcion) == 2) {
+                    item = Number(contador);
+                  }
+
                   if (v_note_detalle == 'SI') {
                     v_color = 'color:rgb(66,222,10)';
                   } else {
-                    if (Number(i_opcion) == 2) {
-                      item = Number(contador);
-                    }
                     v_color = 'color:rgb(3,164,90)';
                   }
 
@@ -704,7 +703,7 @@ $(function () {
                   //CALCULAR
                   var resumentotal = 0;
                   $('#example2 tr').each(function () {
-                    var total = $(this).find("td").eq(7).html();
+                    var total = $(this).find("td").eq(8).html();
                     if ((parseFloat(total)) > 0) {
                       resumentotal = (parseFloat(resumentotal) + parseFloat(total));
                     }
@@ -743,12 +742,13 @@ $(function () {
             let v_note_detalle = datosaci[property].v_note_detalle;
             let v_id_local = datosaci[property].v_id_local;
 
+            if (Number(i_opcion) == 2) {
+              item = Number(contador);
+            }
+
             if (v_note_detalle == 'SI') {
               v_color = 'color:rgb(66,222,10)';
             } else {
-              if (Number(i_opcion) == 2) {
-                item = Number(contador);
-              }
               v_color = 'color:rgb(3,164,90)';
             }
 
@@ -786,7 +786,7 @@ $(function () {
             //CALCULAR
             var resumentotal = 0;
             $('#example2 tr').each(function () {
-              var total = $(this).find("td").eq(7).html();
+              var total = $(this).find("td").eq(8).html();
               if ((parseFloat(total)) > 0) {
                 resumentotal = (parseFloat(resumentotal) + parseFloat(total));
               }
@@ -1156,7 +1156,32 @@ $(function () {
               data: { nu_correla: nu_correla },
               success: function (res) {
                 console.log(res.data);
+                // countaci = Number(res.i_filas) + 1;
+                // if (Number(res.i_idorden_aprobacion) != 0) {
+                //   document.getElementById("btnguardar").disabled = true;
+                //   document.getElementById("btnsendpedido").disabled = true;
+                //   $('#customRadio1').prop('checked', true);
+                // } else {
+                //   document.getElementById("btnguardar").disabled = false;
+                //   document.getElementById("btnsendpedido").disabled = false;
+                //   $('#customRadio1').prop('checked', false);
+                // }
+
                 countaci = Number(res.i_filas) + 1;
+                document.getElementById("pptoadd").disabled = false;
+                document.getElementById('nropedido').innerHTML = res.nu_correla;
+                document.getElementById("nropedido").style.color = "#42DE0A";
+                document.getElementById("idarea").innerHTML = res.v_areid;
+                document.getElementById("area").innerHTML = res.v_area;
+                $('#fecha').val(res.d_fecha);
+                $('#fechaentrega').val(res.d_fechaentrega);
+                $('#tipocambio').val(res.f_tipocambio);
+                $('#nrophone').val(res.v_numerophone);
+                $('#namepedido').val(res.v_nombrepedido);
+                $("#encargadoestado").val(res.v_encargado);
+                $("#estado").html("");
+                $("#estado").append(res.FilasEstado);
+                //tutan
                 if (Number(res.i_idorden_aprobacion) != 0) {
                   document.getElementById("btnguardar").disabled = true;
                   document.getElementById("btnsendpedido").disabled = true;
@@ -1167,16 +1192,23 @@ $(function () {
                   $('#customRadio1').prop('checked', false);
                 }
 
-                $("#example2").dataTable().fnDestroy();
-                $("#tablita-aci").children().remove();
+                $("#moneda").html("");
+                $("#moneda").append(res.FilasMoneda);
+                document.getElementById('resumentotal').innerHTML = res.f_importotal;
+                document.getElementById('importepresupuesto').innerHTML = res.f_montoppto;
+
 
                 document.getElementById('importepresupuesto').innerHTML = res.f_montoppto;
 
+
+
+
+                $("#example2").dataTable().fnDestroy();
+                $("#tablita-aci").children().remove();
+
                 let myArray = [];
                 let v_color = '';
-
                 console.log(res.data);
-
                 for (const property in res.data) {
                   let id = parseInt(res.data[property].id);
                   let item = res.data[property].Item;
@@ -1426,7 +1458,23 @@ $(function () {
     }
 
     var resumentotal = document.getElementById("resumentotal").innerHTML;
-    document.getElementById('importepedido').innerHTML = resumentotal;
+    var tipocambio = $('#tipocambio').val();
+
+    //perro
+
+
+    var moneda = $('#moneda option:selected').text();
+
+    if (moneda == 'USD') {
+      document.getElementById('importepedido').innerHTML = (Number(resumentotal) * Number(tipocambio)).toFixed(2);
+    } else {
+      document.getElementById('importepedido').innerHTML = resumentotal;
+    }
+
+
+
+
+
     document.getElementById('nropedidoppto').innerHTML = nu_correla;
 
     var encargadoestado = $('#encargadoestado').val();
@@ -1457,7 +1505,7 @@ $(function () {
                 let v_centrocosto = res.data[property].v_centrocosto;
 
                 let fila =
-                  "<tr><td class='text-center'>" +
+                  "<tr><td class='text-left'>" +
                   nu_correla +
                   "</td><td class='text-left'>" +
                   v_idppto +
@@ -1917,7 +1965,7 @@ $(function () {
                   let v_centrocosto = res.data[property].v_centrocosto;
 
                   let fila =
-                    "<tr><td class='text-center'>" +
+                    "<tr><td class='text-left'>" +
                     nu_correla +
                     "</td><td class='text-left'>" +
                     v_idppto +
@@ -2005,7 +2053,7 @@ $(function () {
                     let v_centrocosto = res.data[property].v_centrocosto;
 
                     let fila =
-                      "<tr><td class='text-center'>" +
+                      "<tr><td class='text-left'>" +
                       nu_correla +
                       "</td><td class='text-left'>" +
                       v_idppto +
@@ -2046,10 +2094,37 @@ $(function () {
       url: '/pedidos/pedidos/MostrarPedido',
       data: { nu_correla: nu_correla },
       success: function (res) {
-
-        // alert('Vuel a revisar');
+        console.log(res.data);
 
         console.log(res.data);
+        countaci = Number(res.i_filas) + 1;
+        document.getElementById("pptoadd").disabled = false;
+        document.getElementById('nropedido').innerHTML = res.nu_correla;
+        document.getElementById("nropedido").style.color = "#42DE0A";
+        document.getElementById("idarea").innerHTML = res.v_areid;
+        document.getElementById("area").innerHTML = res.v_area;
+        $('#fecha').val(res.d_fecha);
+        $('#fechaentrega').val(res.d_fechaentrega);
+        $('#tipocambio').val(res.f_tipocambio);
+        $('#nrophone').val(res.v_numerophone);
+        $('#namepedido').val(res.v_nombrepedido);
+        $("#encargadoestado").val(res.v_encargado);
+        $("#estado").html("");
+        $("#estado").append(res.FilasEstado);
+        //tutan
+        if (Number(res.i_idorden_aprobacion) != 0) {
+          document.getElementById("btnguardar").disabled = true;
+          document.getElementById("btnsendpedido").disabled = true;
+          $('#customRadio1').prop('checked', true);
+        } else {
+          document.getElementById("btnguardar").disabled = false;
+          document.getElementById("btnsendpedido").disabled = false;
+          $('#customRadio1').prop('checked', false);
+        }
+        document.getElementById('resumentotal').innerHTML = res.f_importotal;
+        document.getElementById('importepresupuesto').innerHTML = res.f_montoppto;
+
+
         countaci = Number(res.i_filas) + 1;
         $("#example2").dataTable().fnDestroy();
         $("#tablita-aci").children().remove();
@@ -2260,7 +2335,7 @@ $(function () {
     //CALCULAR
     var resumentotal = 0;
     $('#example2 tr').each(function () {
-      var total = $(this).find("td").eq(7).html();
+      var total = $(this).find("td").eq(8).html();
       if ((parseFloat(total)) > 0) {
         resumentotal = (parseFloat(resumentotal) + parseFloat(total));
       }

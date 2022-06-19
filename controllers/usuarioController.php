@@ -44,7 +44,6 @@ class usuarioController extends Controller
 					'plugins/vendors/js/forms/validation/jquery.validate.min',
 					'dist/js/core/app-menu',
 					'dist/js/core/app',
-					'dist/js/scripts/forms/form-wizard',
 					'plugins/datatables-net/js/jquery.dataTables.min',
 					'plugins/datatables-net/js/dataTables.responsive.min',
 					'plugins/vendors/js/extensions/sweetalert2.all.min',
@@ -69,24 +68,8 @@ class usuarioController extends Controller
 			$result = $soap->ListadoUsuario();
 			$ListadoUsuario = json_decode($result->ListadoUsuarioResult, true);
 
-			// $result = $soap->ComboPerfil();
-			// $ComboPerfil = json_decode($result->ComboPerfilResult, true);
-
-			// $result = $soap->ComboCargo();
-			// $ComboCargo = json_decode($result->ComboCargoResult, true);
-
-			// $result = $soap->ComboArea();
-			// $ComboArea = json_decode($result->ComboAreaResult, true);
-
-			// $result = $soap->ComboLocal();
-			// $ComboLocal = json_decode($result->ComboLocalResult, true);
-
-
 			$this->_view->ListadoUsuario = $ListadoUsuario;
-			// $this->_view->ComboPerfil = $ComboPerfil;
-			// $this->_view->ComboCargo = $ComboCargo;
-			// $this->_view->ComboArea = $ComboArea;
-			// $this->_view->ComboLocal = $ComboLocal;
+
 
 			$this->_view->setJs(array('index'));
 			$this->_view->renderizar('index');

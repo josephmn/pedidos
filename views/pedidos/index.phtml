@@ -4,12 +4,9 @@
     <div class="header-navbar-shadow"></div>
     <div class="content-wrapper">
         <div class="content-body">
-
-
             <section id="dashboard-analytics">
                 <div class="row" id="table-small">
-
-                    <div class="col-12">
+                    <div class="col-md-12 col-12">
                         <div class="card">
                             <div class="card-header border-bottom p-1">
                                 <div class="head-label">
@@ -28,18 +25,19 @@
 
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="tbpedidos" class="table table-sm">
+                                    <table id="tbpedidos" class="table table-sm table-hover">
                                         <thead class="thead-dark">
                                             <tr>
-                                                <th>#Nro Pedido</th>
+                                                <th>#NroPedido</th>
                                                 <th>Descripcion</th>
-                                                <th>Area Solicita</th>
+                                                <th>Solicita</th>
                                                 <th>Realizado por:</th>
                                                 <th>Moneda</th>
-                                                <th>Fecha Pedido</th>
+                                                <th>Fecha</th>
                                                 <th>Estado</th>
                                                 <th>Total</th>
                                                 <th>Observado</th>
+                                                <th>InfoSolomon</th>
                                                 <th>Avance</th>
                                                 <th class='text-center'>Imprimir</th>
                                                 <th>Revisar</th>
@@ -57,13 +55,13 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="media-body my-auto">
-                                                                    <h5 class="font-weight-bolder mb-0"> &nbsp; <?php echo $pd['nu_correla'] ?></h5>
+                                                                    <h5 class="font-weight-bolder mb-0"><?php echo $pd['nu_correla'] ?></h5>
                                                                 </div>
                                                             </div>
                                                         </td>
 
                                                         <td class="text-left"><strong><?php echo $pd['v_nombrepedido'] ?></strong> </td>
-                                                        <td class="text-left"><strong><?php echo $pd['v_nombrearea'] ?></strong> </td>
+                                                        <td class="text-left"><?php echo $pd['v_nombrearea'] ?> </td>
                                                         <td class="text-left"><?php echo $pd['v_nombreusuario'] ?></td>
                                                         <td class="text-left"><?php echo $pd['v_moneda'] ?></td>
                                                         <td class="text-left"><?php echo $pd['d_fecha'] ?></td>
@@ -74,8 +72,9 @@
 
                                                         <td class="text-left"><?php echo $pd['nu_total'] ?></td>
 
-                                                        <td class="text-center"><a id='<?php echo $pd['v_observacion'] ?>' class='<?php echo $pd['v_btn_observacion'] ?>'><span class='<?php echo $pd['v_span_observacion'] ?>'><b></b></span></a></td>                                                    
 
+                                                        <td class="text-center"><a id='<?php echo $pd['v_observacion'] ?>' class='<?php echo $pd['v_btn_observacion'] ?>'><span class='<?php echo $pd['v_span_observacion'] ?>'><b></b></span></a></td>
+                                                        <td class="text-left"><strong><?php echo $pd['v_info_solomon'] ?></strong></td>
                                                         <td class='text-left'>
                                                             <span class="badge badge-glow badge-<?php echo $pd['v_color_porcentaje'] ?> "><?php echo $pd['f_porcentaje'] ?>%</span>
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up text-success font-medium-2">
@@ -102,9 +101,7 @@
                     </div>
                 </div>
             </section>
-
         </div>
-
     </div>
 </div>
 

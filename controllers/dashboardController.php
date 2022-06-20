@@ -84,14 +84,11 @@ class dashboardController extends Controller
 					'plugins/themes/css/bordered-layout',
 					'plugins/themes/css/semi-dark-layout',
 
-
-	 
-
 				)
 			);
 
 
- 
+
 
 
 			$this->_view->setJs_Specific(
@@ -125,13 +122,13 @@ class dashboardController extends Controller
 					'plugins/highcharts9/js/highcharts',
 					// <script src="https://code.highcharts.com/highcharts.js"></script>				 
 					'plugins/highcharts9/modules/variable-pie',
-					'plugins/highcharts9/js/highcharts-more', 
-					'plugins/highcharts9/js/exporting', 
- 
+					'plugins/highcharts9/js/highcharts-more',
+					'plugins/highcharts9/js/exporting',
+
 
 					// <script src="https://code.highcharts.com/highcharts-more.js"></script>
 
- 
+
 
 				)
 			);
@@ -149,79 +146,25 @@ class dashboardController extends Controller
 				"exceptions" => false,
 			);
 
-			$cixpt = array(
-				'Almacen' => "CIXPT",
-			);
 
-			$areqpt = array(
-				'Almacen' => "AREQPT",
-			);
-
-			$huapt = array(
-				'Almacen' => "HUAPT",
-			);
-
+			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
 			$soap = new SoapClient($wsdl, $options);
-			$result = $soap->ConsultaVendedorAlmacen($cixpt);
-			$ConsultaVendedorAlmacen = json_decode($result->ConsultaVendedorAlmacenResult, true);
-			$result = $soap->ConsultaVendedorAlmacen($huapt);
-			$ConsultaVendedorHuapt = json_decode($result->ConsultaVendedorAlmacenResult, true);
-			$result = $soap->ConsultaVendedorAlmacen($areqpt);
-			$ConsultaVendedorAreqpt = json_decode($result->ConsultaVendedorAlmacenResult, true);
 
 
+			$cargo = array(
+				'post' => 1,
+				'v_cargo' => $_SESSION['id_cargo'],
+				'i_perfil' => $_SESSION['idperfil'],
+				'i_estado' => 4,
+			);
 
-			$this->_view->ConsultaVendedorAlmacen = $ConsultaVendedorAlmacen;
-			$this->_view->ConsultaVendedorHuapt = $ConsultaVendedorHuapt;
-			$this->_view->ConsultaVendedorAreqpt = $ConsultaVendedorAreqpt;
+			$result = $soap->ListadoPedidosAprobacion($cargo);
+			$ListadoPedidosAprobacion = json_decode($result->ListadoPedidosAprobacionResult, true);
 
+			$this->_view->ListadoPedidosAprobacion = $ListadoPedidosAprobacion;
 
 			$this->_view->setJs(array('index'));
 			$this->_view->renderizar('index');
-		} else {
-			$this->redireccionar('index/logout');
-		}
-	}
-
-	public function VentasSede()
-	{
-		if (isset($_SESSION['usuario'])) {
-
-			$wsdl = 'http://localhost:81/VMWEB/WSVerdumweb.asmx?WSDL';
-
-			$options = array(
-				"uri" => $wsdl,
-				"style" => SOAP_RPC,
-				"use" => SOAP_ENCODED,
-				"soap_version" => SOAP_1_1,
-				"connection_timeout" => 60,
-				"trace" => false,
-				"encoding" => "UTF-8",
-				"exceptions" => false,
-			);
-
-			$soap = new SoapClient($wsdl, $options);
-			$result = $soap->ListadoVentasSede();
-			$ListadoVentasSede = json_decode($result->ListadoVentasSedeResult, true);
-
-			$this->_view->ListadoVentasSede = $ListadoVentasSede;
-
-			$array1 = [];
-			$i = 0;
-			foreach ($ListadoVentasSede as $da) {
-				$estado = $da['Sede'];
-				$porentaje = $da['nu_total'];
-				
-			  $pie = array("name" => $estado, 'y' => floatval($porentaje), 'z' => floatval($porentaje));
-
-				//   $pie = array("name" => $estado, 'y' => 505370, 'z' =>  92.9);
-
-				// $pie = array("Peru" => $estado,  '505370',  '92.9');
-
-				$array1 += ["$i" => $pie];
-				$i++;
-			}
-			echo json_encode($array1);
 		} else {
 			$this->redireccionar('index/logout');
 		}

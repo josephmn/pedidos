@@ -195,6 +195,7 @@ class usuarioController extends Controller
 
 				$i_persexo  = $data[0]['i_persexo'];
 				$v_persexo_nombre  = $data[0]['v_persexo_nombre'];
+				$v_foto  = $data[0]['v_foto'];
 			} else {
 				$estado  =  0;
 				$v_dni  =  "";
@@ -203,6 +204,8 @@ class usuarioController extends Controller
 				$v_correo  =  "";
 				$i_persexo   =  "";
 				$v_persexo_nombre   =  "";
+				$v_foto  =   "public/doc/perfil/default.png";
+
 				// Combo perfil
 				$FilascomboPerfil = "";
 				$selcombo = "";
@@ -256,6 +259,7 @@ class usuarioController extends Controller
 					"FilascomboArea" => $FilascomboArea,
 					"FilascomboLocal" => $FilascomboLocal,
 					"FilascomboUsuarioSolomon" => $FilascomboUsuarioSolomon,
+					"v_foto" => $v_foto,
 				)
 			);
 		} else {

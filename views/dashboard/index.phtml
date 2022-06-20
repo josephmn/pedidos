@@ -3,118 +3,159 @@
     <div class="content-overlay"></div>
     <div class="header-navbar-shadow"></div>
     <div class="content-wrapper">
-        <!-- <div class="content-header row">
-                <div class="content-header-left col-md-9 col-12 mb-2">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">
-                                <b><?php foreach ($_SESSION['submenus'] as $menu) { ?>
-                                        <?php if ($this->_controlador == $menu['v_link']) {
-                                            echo $menu['v_descripcion'];
-                                        } else {
-                                            '';
-                                        } ?>
-                                    <?php } ?>
-                                </b>
-                            </h2>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-
-
+ 
         <div class="content-body">
-
-                    <!-- Dashboard Ecommerce Starts -->
-                    <section id="dashboard-ecommerce">
-                    <div class="row match-height">
-                
-                        <!-- Statistics Card -->
-                        <div class="col-xl-8 col-md-6 col-12">
-                            <div class="card card-statistics">
-                                <div class="card-header">
-                                    <h4 class="card-title">Statistics</h4>
-                                    <div class="d-flex align-items-center">
-                                        <p class="card-text font-small-2 mr-25 mb-0">Updated 1 month ago</p>
-                                    </div>
+            <section id="dashboard-ecommerce">
+                  <div class="row match-height">
+                    <div class="col-xl-12 col-md-12 col-12">
+                        <div class="card card-statistics">
+                            <div class="card-header">
+                                <h4 class="card-title">Statistics</h4>
+                                <div class="d-flex align-items-center">
+                                    <p class="card-text font-small-2 mr-25 mb-0">Updated 1 month ago</p>
                                 </div>
-                                <div class="card-body statistics-body">
-                                    <div class="row">
-                                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
-                                            <div class="media">
-                                                <div class="avatar bg-light-primary mr-2">
-                                                    <div class="avatar-content">
-                                                        <i data-feather="trending-up" class="avatar-icon"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="media-body my-auto">
-                                                    <h4 class="font-weight-bolder mb-0">230k</h4>
-                                                    <p class="card-text font-small-3 mb-0">Sales</p>
+                            </div>
+                            <div class="card-body statistics-body">
+                                <div class="row">
+                                    <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
+                                        <div class="media">
+                                            <div class="avatar bg-light-primary mr-2">
+                                                <div class="avatar-content">
+                                                    <i data-feather="trending-up" class="avatar-icon"></i>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
-                                            <div class="media">
-                                                <div class="avatar bg-light-info mr-2">
-                                                    <div class="avatar-content">
-                                                        <i data-feather="user" class="avatar-icon"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="media-body my-auto">
-                                                    <h4 class="font-weight-bolder mb-0">8.549k</h4>
-                                                    <p class="card-text font-small-3 mb-0">Customers</p>
-                                                </div>
+                                            <div class="media-body my-auto">
+                                                <h4 class="font-weight-bolder mb-0">230k</h4>
+                                                <p class="card-text font-small-3 mb-0">Sales</p>
                                             </div>
                                         </div>
-                                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-sm-0">
-                                            <div class="media">
-                                                <div class="avatar bg-light-danger mr-2">
-                                                    <div class="avatar-content">
-                                                        <i data-feather="box" class="avatar-icon"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="media-body my-auto">
-                                                    <h4 class="font-weight-bolder mb-0">1.423k</h4>
-                                                    <p class="card-text font-small-3 mb-0">Products</p>
+                                    </div>
+                                    <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
+                                        <div class="media">
+                                            <div class="avatar bg-light-info mr-2">
+                                                <div class="avatar-content">
+                                                    <i data-feather="user" class="avatar-icon"></i>
                                                 </div>
                                             </div>
+                                            <div class="media-body my-auto">
+                                                <h4 class="font-weight-bolder mb-0">8.549k</h4>
+                                                <p class="card-text font-small-3 mb-0">Customers</p>
+                                            </div>
                                         </div>
-                                        <div class="col-xl-3 col-sm-6 col-12">
-                                            <div class="media">
-                                                <div class="avatar bg-light-success mr-2">
-                                                    <div class="avatar-content">
-                                                        <i data-feather="dollar-sign" class="avatar-icon"></i>
-                                                    </div>
+                                    </div>
+                                    <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-sm-0">
+                                        <div class="media">
+                                            <div class="avatar bg-light-danger mr-2">
+                                                <div class="avatar-content">
+                                                    <i data-feather="box" class="avatar-icon"></i>
                                                 </div>
-                                                <div class="media-body my-auto">
-                                                    <h4 class="font-weight-bolder mb-0">$9745</h4>
-                                                    <p class="card-text font-small-3 mb-0">Revenue</p>
+                                            </div>
+                                            <div class="media-body my-auto">
+                                                <h4 class="font-weight-bolder mb-0">1.423k</h4>
+                                                <p class="card-text font-small-3 mb-0">Products</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-3 col-sm-6 col-12">
+                                        <div class="media">
+                                            <div class="avatar bg-light-success mr-2">
+                                                <div class="avatar-content">
+                                                    <i data-feather="dollar-sign" class="avatar-icon"></i>
                                                 </div>
+                                            </div>
+                                            <div class="media-body my-auto">
+                                                <h4 class="font-weight-bolder mb-0">$9745</h4>
+                                                <p class="card-text font-small-3 mb-0">Revenue</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!--/ Statistics Card -->
                     </div>
 
-              
-                </section>
-                <!-- Dashboard Ecommerce ends -->
-                
-            <!-- <section id="dashboard-analytics">
+                </div>
 
-              
+                <div class="row">
+                    <div class="col-md-6">
+                        <figure class="highcharts-figure">
+                            <div id="container"></div>
+                            <p class="highcharts-description">
+                                Chart showing browser market shares. Clicking on individual columns
+                                brings up more detailed data. This chart makes use of the drilldown
+                                feature in Highcharts to easily switch between datasets.
+                            </p>
+                        </figure>
+                    </div>
 
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbpedidos" class="table table-sm">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>#Pedido</th>
+                                        <th>Descripcion</th>
+                                        <th>Area Solicita</th>
+                                        <th>Moneda</th>
+                                        <th>Fecha Pedido</th>
+                                        <th>Total</th>
+                                        <th><i class="fa-solid fa-percent"></i> &nbsp;Avance</th>
+                                        <th class="text-center"><i class="fa-solid fa-print"> &nbsp;&nbsp; </i></th>                       
+                                    </tr>
+                                </thead>
+                                <tbody id="tablita-apro">
+                                    <?php if (isset($this->ListadoPedidosAprobacion)) { ?>
+                                        <?php foreach ($this->ListadoPedidosAprobacion as $pd) { ?>
+                                            <tr>
+                                                <td class="text-left">
+                                                    <div class="media">
+                                                        <div class="avatar bg-light-success mr-0">
+                                                            <div class="avatar-content">
+                                                                <i class="fa-solid fa-truck-fast"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media-body my-auto">
+                                                            <h5 class="font-weight-bolder mb-0"> &nbsp; <?php echo $pd['nu_correla'] ?></h5>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-left"><strong><?php echo $pd['v_nombrepedido'] ?></strong> </td>
+                                                <td class="text-left"><strong><?php echo $pd['v_nombrearea'] ?></strong> </td>
+                                                <td class="text-left"><?php echo $pd['v_moneda'] ?></td>
+                                                <td class="text-left"><?php echo $pd['d_fecha'] ?></td>
+                                                <td class="text-left"><?php echo $pd['nu_total'] ?></td>
+                                                <td class='text-left'>
+                                                    <span class="badge badge-glow badge-<?php echo $pd['v_color_porcentaje'] ?> "><?php echo $pd['f_porcentaje'] ?>%</span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trending-up text-success font-medium-2">
+                                                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                                        <polyline points="17 6 23 6 23 12"></polyline>
+                                                    </svg>
+                                                </td>
+                                                <td class='text-center'>
+                                                    <a href="<?php echo BASE_URL ?>aprobarpedido/documentopedido/<?php echo  $pd['nu_correla'] ?>" class="btn btn-danger btn-sm bol" target="_blank" style="color:white"><i class="fas fa-file-pdf fa-beat"></i></a>
+                                                </td>                                                
+                                            </tr>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+
+            <!-- Dashboard Ecommerce ends -->
+
+            <!-- <section id="dashboard-analytics">            
                 <div class="row" id="table-small">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title"> <i class="fas fa-chart-pie"></i> Pedidos de Compra</h4>
                             </div> 
-
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table id="example2" class="table table-sm">
@@ -128,9 +169,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-
-
-
                                         </tbody>
                                     </table>
                                 </div>

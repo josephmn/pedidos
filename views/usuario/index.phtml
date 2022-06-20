@@ -98,12 +98,12 @@
             <div class="modal-body">
                 <div id="div-load"></div>
                 <div class="row">
-
-
                     <section class="col-lg-3">
                         <div class="media">
                             <a class="mr-25">
-                                <img src="../public/doc/perfil/default.png" class="rounded mr-50" alt="profile image" height="200" width="200" />
+                                <!-- <img src="../public/doc/perfil/default.png" class="rounded mr-50" alt="profile image" height="200" width="200" /> -->
+                                <!-- <img src="<?php echo BASE_URL . $_SESSION['foto'] ?>" class="rounded mr-50" alt="profile image" height="200" width="200" />                                 -->
+                                <img id="img1" class="rounded mr-50" alt="profile image" class="rounded mr-50" height="210" width="200" />
                             </a>
                         </div>
                     </section>
@@ -123,7 +123,7 @@
                             <label class="form-label font-weight-bolder">Nombres:</label>
                             <input type="text" id="xnombres" tabindex="1" class="form-control" autocomplete="off" readonly="readonly" />
                         </div>
-                        
+
                         <div class="form-group col-md-12">
                             <label class="form-label font-weight-bolder">Apellidos:</label>
                             <input type="text" id="xapellidos" tabindex="2" class="form-control" autocomplete="off" readonly="readonly" />
@@ -156,8 +156,6 @@
                         </select>
                     </div>
 
-
-
                     <div class="form-group col-md-6">
                         <label class="alert-success   form-label font-weight-bolder">Perfil</label>
                         <select id="xperfil" class="select2 form-control form-control-lg">
@@ -166,7 +164,6 @@
                             <?php } ?>
                         </select>
                     </div>
-
 
                     <div class="form-group col-md-6">
                         <label class="alert-success   form-label font-weight-bolder">Cargo</label>
@@ -239,6 +236,3 @@
         </div>
     </div>
 </div>
-
-
- 

@@ -251,7 +251,10 @@ $(function () {
           $('#xapellidos').val(res.v_apellidos.replace("&Ntilde;", "Ñ"));
           $('#xcorreo').val(res.v_correo.replace("&Ntilde;", "Ñ"));
           $('#xpassword').val(v_dni);
+          // document.getElementById("img1").src = "../public/doc/perfil/default.png";
+          document.getElementById("img1").src = res.v_foto;
 
+          console.log(res.v_foto);
 
           $('#xidgenero').val(res.i_persexo);
           $('#xgenero').val(res.v_persexo_nombre);
@@ -467,9 +470,9 @@ $(function () {
       return;
     }
 
-    
 
- 
+
+
 
 
 

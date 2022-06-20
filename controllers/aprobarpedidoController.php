@@ -2,7 +2,6 @@
 
 class aprobarpedidoController extends Controller
 {
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -378,7 +377,6 @@ class aprobarpedidoController extends Controller
 					</tr>
 					";
 
-
 				$mail->isHTML(true);
 				$mail->CharSet = "utf-8";
 				$mail->Subject = $mensaje_final_solped;
@@ -585,7 +583,7 @@ class aprobarpedidoController extends Controller
 	}
 
 
-	public function documentopedido($nu_correla)
+	public function documentopedido($nu_correla)  //PARA IMPRIMIR EL DOCUMENTO DE AL SOPED
 	{
 		if (isset($_SESSION['usuario'])) {
 
@@ -616,26 +614,25 @@ class aprobarpedidoController extends Controller
 			$params = array(
 				'nu_correla' =>		$nu_correla,
 			);
-
-
 			$soap = new SoapClient($wsdl, $options);
 			$result = $soap->MostrarPedido($params);
 			$data = json_decode($result->MostrarPedidoResult, true);
 
 			$this->getLibrary('fpdf/fpdf');
 			$pdf = new FPDF('P', 'mm', 'A4');
+
+
+
 			$pdf->AliasNbPages();
 			$pdf = new MYPDF();
 			$pdf = new alphapdf();
 			$pdf->AddPage();
-
 			$pdf->Image('./public/dist/img/logo_verdum.jpg', 10, 8, 120);
 
-
 			$col = array();
-			$col[] = array('text' => utf8_decode("Código del país (Country code)  "), 'width' => '29', 'height' => '5', 'align' => 'R', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$col[] = array('text' => utf8_decode("Departamento  (Deparment)"), 'width' => '29', 'height' => '5', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$col[] = array('text' => utf8_decode("Número        (Number)     "), 'width' => '29', 'height' => '5', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col[] = array('text' => utf8_decode("Código del país (Country code)  "), 'width' => '29', 'height' => '4', 'align' => 'R', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col[] = array('text' => utf8_decode("Departamento  (Deparment)"), 'width' => '29', 'height' => '4', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col[] = array('text' => utf8_decode("Número        (Number)     "), 'width' => '29', 'height' => '4', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
 			$columns[] = $col;
 
 			$col1 = array();
@@ -644,9 +641,9 @@ class aprobarpedidoController extends Controller
 			$col1[] = array('text' => utf8_decode("2022-01"), 'width' => '29', 'height' => '5', 'align' => 'C', 'font_name' => 'CenturyGothic-Bold', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
 			$columns1[] = $col1;
 
-			$pdf->SetXY(112, 30);
+			$pdf->SetXY(115, 30);
 			$pdf->WriteTable($columns);
-			$pdf->SetXY(112, 40);
+			$pdf->SetXY(115, 38);
 			$pdf->WriteTable($columns1);
 
 			$pdf->SetXY(10, 25);
@@ -654,13 +651,79 @@ class aprobarpedidoController extends Controller
 			$pdf->Cell(190, 20, utf8_decode("SOLPED: # " . $data[0]['nu_correla']), 10, 8, 'L');
 
 			$col2 = array();
-			$col2[] = array('text' => 'Empresa / Company', 'width' => '80', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-			$col2[] = array('text' => 'Presupuesto / Budget', 'width' => '109', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col2[] = array('text' => 'Empresa / Company', 'width' => '105', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'font_style' => 'B', 'linearea' => 'LTBR');
+			$col2[] = array('text' => 'Presupuesto / Budget', 'width' => '84', 'height' => '5', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
 			$columns2[] = $col2;
-
 			$pdf->SetXY(10, 47);
 			$pdf->WriteTable($columns2);
 
+
+			$col3 = array();
+			$col3[] = array('text' => utf8_decode($data[0]['v_empresa']), 'width' => '105', 'height' => '5', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col3[] = array('text' => 'Cuenta/Account: ', 'width' => '40', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col3[] = array('text' => '121301', 'width' => '44', 'height' => '5', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columns3[] = $col3;
+			$pdf->SetXY(10, 52);
+			$pdf->WriteTable($columns3);
+
+
+			$col4 = array();
+			$col4[] = array('text' => utf8_decode('Nombre y dirección completa de entrega / Name & full delivery address'), 'width' => '105', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col4[] = array('text' => 'Departamento / Department :', 'width' => '40', 'height' => '10', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col4[] = array('text' => 'Operaciones', 'width' => '44', 'height' => '10', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columns4[] = $col4;
+			$pdf->SetXY(10, 57);
+			$pdf->WriteTable($columns4);
+
+			$col5 = array();
+			$col5[] = array('text' => 'Nombre del contacto para la entrega: MAX ARGOMEDO ARTEGA', 'width' => '105', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			// $col5[] = array('text' => 'Presupuesto / Budget', 'width' => '84', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columns5[] = $col5;
+			$pdf->SetXY(10, 62);
+			$pdf->WriteTable($columns5);
+
+
+			$col6 = array();
+			$col6[] = array('text' => 'Area Solitante: ' . utf8_decode($data[0]['v_area']), 'width' => '52', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col6[] = array('text' => 'Telefono: ' . utf8_decode($data[0]['v_numerophone']), 'width' => '53', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col6[] = array('text' => 'Presupuesto / Budget', 'width' => '40', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col6[] = array('text' => 'SI (X)', 'width' => '22', 'height' => '5', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col6[] = array('text' => 'NO ( )', 'width' => '22', 'height' => '5', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columns6[] = $col6;
+			$pdf->SetXY(10, 67);
+			$pdf->WriteTable($columns6);
+
+
+			$col7 = array();
+			$col7[] = array('text' => 'Direccion de entrega: Av. Elmer Faucett 4805, Callao 07031', 'width' => '105', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col7[] = array('text' => utf8_decode('Límite presupuesto en PEN / Budget limit PEN:  50000'), 'width' => '84', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columns7[] = $col7;
+			$pdf->SetXY(10, 72);
+			$pdf->WriteTable($columns7);
+
+
+			$col8 = array();
+			$col8[] = array('text' => utf8_decode('Fecha de entrega deseada / Desired delivery date :'), 'width' => '40', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col8[] = array('text' => '                                       ' . utf8_decode($data[0]['d_fechaentrega']), 'width' => '44', 'height' => '5', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columns8[] = $col8;
+			$pdf->SetXY(115, 77);
+			$pdf->WriteTable($columns8);
+
+			$pdf->Ln(4);
+			$col9 = array();
+			$col9[] = array('text' => 'Nombre del contacto solicitante (Contac name):', 'width' => '35', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.1', 'linearea' => 'LTBR');
+			$col9[] = array('text' => '                    ' . 'Brenda Marcilla', 'width' => '25', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.1', 'linearea' => 'TBR');
+			$col9[] = array('text' => 'Nro. de Telefono (Phone Number):', 'width' => '27', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.1', 'linearea' => 'TBR');
+			$col9[] = array('text' => '                 ' . '945 228 290', 'width' => '18', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.1', 'linearea' => 'LTBR');
+			$col9[] = array('text' => utf8_decode('Medio de transporte / Transport means :'), 'width' => '35', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col9[] = array('text' => utf8_decode('Aire / Air       (X)'), 'width' => '15', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'TBR');
+			$col9[] = array('text' => utf8_decode('Tierra / Road       (X)'), 'width' => '19', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col9[] = array('text' => utf8_decode('Mar / Sea       (X)'), 'width' => '15', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columns9[] = $col9;
+			$pdf->SetXY(10, 87);
+			$pdf->WriteTable($columns9);
+
+			$pdf->Ln(4);
 			// PARA LA TABLA DEL DETALLE
 			$coltb = array();
 			$coltb[] = array('text' => utf8_decode("Nro"), 'width' => '10', 'height' => '5', 'align' => 'C', 'font_name' => 'CenturyGothic-Bold', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
@@ -671,12 +734,11 @@ class aprobarpedidoController extends Controller
 			$coltb[] = array('text' => utf8_decode("Precio"), 'width' => '18', 'height' => '5', 'align' => 'C', 'font_name' => 'CenturyGothic-Bold', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
 			$coltb[] = array('text' => utf8_decode("nu_total"), 'width' => '20', 'height' => '5', 'align' => 'C', 'font_name' => 'CenturyGothic-Bold', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
 			$columnsrela[] = $coltb;
-
 			$i = 0;
 			foreach ($data as $rl) {
 				$col = array();
-				$col[] = array('text' => utf8_decode($rl['i_item']), 'width' => '10', 'height' => '4', 'align' => 'J', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
-				$col[] = array('text' => utf8_decode($rl['v_codprod']), 'width' => '15', 'height' => '4', 'align' => 'J', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+				$col[] = array('text' => utf8_decode($rl['i_item']), 'width' => '10', 'height' => '4', 'align' => 'C', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+				$col[] = array('text' => utf8_decode($rl['v_codprod']), 'width' => '15', 'height' => '4', 'align' => 'C', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
 				$col[] = array('text' => utf8_decode($rl['v_descripcion']), 'width' => '90', 'height' => '4', 'align' => 'J', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
 				$col[] = array('text' => utf8_decode($rl['nu_cantidad']), 'width' => '18', 'height' => '4', 'align' => 'C', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
 				$col[] = array('text' => utf8_decode($rl['nu_cantidad']), 'width' => '18', 'height' => '4', 'align' => 'C', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
@@ -685,9 +747,117 @@ class aprobarpedidoController extends Controller
 				$columnsrela[] = $col;
 				$i++;
 			}
+
 			//POSICION
-			$pdf->SetXY(10, 55);
+			// $pdf->SetXY(10, 102);
 			$pdf->WriteTable($columnsrela);
+
+			$pdf->Ln(0);
+			$col10 = array();
+			$col10[] = array('text' => utf8_decode('Para acción (For action)'), 'width' => '20', 'height' => '4', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col10[] = array('text' => utf8_decode(''), 'width' => '113', 'height' => '4', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col10[] = array('text' => utf8_decode(''), 'width' => '18', 'height' => '4', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LT');
+
+			$col10[] = array('text' => utf8_decode('Moneda (Currency)'), 'width' => '18', 'height' => '4', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col10[] = array('text' => utf8_decode('Valor total (Total value)'), 'width' => '20', 'height' => '4', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columns10[] = $col10;
+			$pdf->WriteTable($columns10);
+
+			$pdf->SetX(161);
+			$col12 = array();
+			$col12[] = array('text' => utf8_decode($data[0]['v_moneda']), 'width' => '18', 'height' => '5', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '9', 'font_style' => 'B', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col12[] = array('text' => utf8_decode($data[0]['f_importotal']), 'width' => '20', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '9', 'font_style' => 'B', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columns12[] = $col12;
+			$pdf->WriteTable($columns12);
+
+			$pdf->Ln(4);
+ 
+			$col13 = array();
+			$col13[] = array('text' => utf8_decode('Observaciones (Agente aduanero, Instrucciones de empaque, etc.) / Remarks (clearing agent, packing instructions, etc.) '), 'width' => '189', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '9', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columns13[] = $col13;
+			$pdf->WriteTable($columns13);
+
+
+			$pdf->Ln(4);
+			$col14 = array();
+			$col14[] = array('text' => utf8_decode('Registro de aprobación / Field approval'), 'width' => '190', 'height' => '5', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '9', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columns14[] = $col14;
+			// $pdf->SetXY(10, 170);
+			$pdf->WriteTable($columns14);
+
+
+
+
+			// header col
+			$colxa = array();
+			$colxa[] = array('text' => utf8_decode(''), 'width' => '47', 'height' => '6', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '9', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$colxa[] = array('text' => utf8_decode('Nombre / Name'), 'width' => '47', 'height' => '6', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '9', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$colxa[] = array('text' => utf8_decode('Firma / Signature'), 'width' => '48', 'height' => '6', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '9', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$colxa[] = array('text' => utf8_decode('Fecha / Date'), 'width' => '48', 'height' => '6', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '9', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columnsrela1[] = $colxa;
+
+			$colxa = array();
+			$colxa[] = array('text' => 'Solicitante / Requester', 'width' => '47', 'height' => '6', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$colxa[] = array('text' => 'Max Argomedo / Brenda Marcilla' . '        ', 'width' => '47', 'height' => '6', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$colxa[] = array('text' => '', 'width' => '48', 'height' => '6', 'align' => 'R', 'font_name' => 'Arial', 'font_size' => '12', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$colxa[] = array('text' => '25-abr.-22', 'width' => '48', 'height' => '6', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,255', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columnsrela1[] = $colxa;
+
+			$colxa = array();
+			$colxa[] = array('text' => 'Jefe de Area /  Team Leader', 'width' => '47', 'height' => '6', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$colxa[] = array('text' => 'Roger Ruiz', 'width' => '47', 'height' => '6', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$colxa[] = array('text' => 'Gerente de Adm y Finanzas / Adm and Finance Manager', 'width' => '48', 'height' => '6', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$colxa[] = array('text' => '', 'width' => '48', 'height' => '6', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,255', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columnsrela1[] = $colxa;
+
+			$colxa = array();
+			$colxa[] = array('text' => 'Gerente de Adm y Finanzas / Adm and Finance Manager', 'width' => '47', 'height' => '6', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$colxa[] = array('text' => 'Victor Mantilla', 'width' => '47', 'height' => '6', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$colxa[] = array('text' => 'Gerente de Adm y Finanzas / Adm and Finance Manager', 'width' => '48', 'height' => '6', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$colxa[] = array('text' => '', 'width' => '48', 'height' => '6', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,255', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columnsrela1[] = $colxa;
+
+			$colxa = array();
+			$colxa[] = array('text' => 'Gerente General / General Manager', 'width' => '47', 'height' => '6', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$colxa[] = array('text' => 'Juan Grandez', 'width' => '47', 'height' => '6', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$colxa[] = array('text' => 'Gerente de Adm y Finanzas / Adm and Finance Manager', 'width' => '48', 'height' => '6', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$colxa[] = array('text' => '', 'width' => '48', 'height' => '6', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => 'B', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,255', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columnsrela1[] = $colxa;
+			$pdf->Ln(0);
+			$pdf->WriteTable($columnsrela1);
+
+
+			// PARA LA TABLA DEL DETALLE
+
+			// $pdf->Ln(4);
+
+			// $coltb1 = array();
+			// $coltb1[] = array('text' => utf8_decode(''), 'width' => '47', 'height' => '6', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '9', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			// $coltb1[] = array('text' => utf8_decode('Nombre / Name'), 'width' => '47', 'height' => '6', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '9', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			// $coltb1[] = array('text' => utf8_decode('Firma / Signature'), 'width' => '48', 'height' => '6', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '9', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			// $coltb1[] = array('text' => utf8_decode('Fecha / Date'), 'width' => '48', 'height' => '6', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '9', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			// $columnsrela1[] = $coltb1;
+			// $i = 0;
+
+			// foreach ($data as $rl) {
+			// 	$col1 = array();
+			// 	$col1[] = array('text' => utf8_decode($rl['i_item']), 'width' => '47', 'height' => '4', 'align' => 'C', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			// 	$col1[] = array('text' => utf8_decode($rl['v_codprod']), 'width' => '47', 'height' => '4', 'align' => 'C', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			// 	$col1[] = array('text' => utf8_decode($rl['v_descripcion']), 'width' => '48', 'height' => '4', 'align' => 'J', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			// 	$col1[] = array('text' => utf8_decode($rl['nu_cantidad']), 'width' => '48', 'height' => '4', 'align' => 'C', 'font_name' => 'CenturyGothic', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			// 	$columnsrela1[] = $col1;
+			// 	$i++;
+			// }
+
+			// $pdf->WriteTable($columnsrela1);
+
+			$pdf->Ln(0);
+			$col16 = array();
+			$col16[] = array('text' => utf8_decode(''), 'width' => '190', 'height' => '5', 'align' => 'C', 'font_name' => 'Arial', 'font_size' => '9', 'font_style' => 'B', 'fillcolor' => '212,216,216', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$columns16[] = $col16;
+			// $pdf->SetXY(10, 225);
+			$pdf->WriteTable($columns16);
+
 
 			$pdf->Output("SOLPED-$data[0]['nu_correla'].pdf", 'I');
 		} else {

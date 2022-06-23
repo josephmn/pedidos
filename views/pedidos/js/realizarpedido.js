@@ -107,6 +107,12 @@ $(function () {
 
         $("#moneda").html("");
         $("#moneda").append(res.FilasMoneda);
+
+        $('#contactoentrega').val(res.v_persona_recepciona);
+        $("#iddireccion").html("");
+        $("#iddireccion").append(res.FilasDireccion);
+
+
         document.getElementById('resumentotal').innerHTML = res.f_importotal;
         document.getElementById('importepresupuesto').innerHTML = res.f_montoppto;
 
@@ -205,6 +211,14 @@ $(function () {
         type: 'POST',
         url: '/pedidos/pedidos/buscar_producto',
         data: { v_invtid: v_invtid },
+
+        beforeSend: function () {
+          $("#losdatoproductos").html("");
+          $("#losdatoproductos").append(
+            "<div id='div-01'>\<div class='d-flex justify-content-center my-1'>\<div class='spinner-border text-danger' role='status' aria-hidden='true'></div>\</div>\ </div>"
+          );
+        },
+
         success: function (res) {
           $('#unidad').val(res.v_undmedida);
           $("#descripcion").html(v_invtid + "-" + res.v_nombreproducto);
@@ -213,7 +227,7 @@ $(function () {
 
           $("#xlocal").html("");
           $("#xlocal").append(res.FilascomboLocal);
-
+          $("#losdatoproductos").html("");
         }
       });
 
@@ -221,6 +235,8 @@ $(function () {
       $('#myModal').on('shown.bs.modal', function () {
         $("#cantidad").focus();
       });
+
+
     } else {
       Swal.fire({
         title: "PEDIDO YA FUE ENVIADO PARA SU APROBACION",
@@ -1042,6 +1058,20 @@ $(function () {
 
     var montolimite = document.getElementById("montolimite").innerHTML;
 
+
+
+    var v_persona_recepciona = $('#contactoentrega').val();
+    var v_id_direccion_entrega = $('#iddireccion option:selected').val();
+    var v_direccion_entrega = $('#iddireccion option:selected').text();
+
+    // alert(v_persona_recepciona);
+    // alert(v_id_direccion_entrega);
+    // alert(v_direccion_entrega);
+
+
+    // return
+
+
     console.log(datosaci);
     if (Number(resumentotalsol) > Number(montolimite)) {
       Swal.fire({
@@ -1078,6 +1108,37 @@ $(function () {
       Swal.fire({
         icon: 'warning',
         title: 'INGRESE  FECHA DE ENTREGA',
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
+
+    if (v_persona_recepciona == '' || v_persona_recepciona == null) {
+      $('#contactoentrega').focus();
+      Swal.fire({
+        icon: 'warning',
+        title: 'INGRESE CONTACTO DE ENTREGA',
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
+    if (v_id_direccion_entrega == 'XXXXXXX' || v_id_direccion_entrega == null) {
+      $('#iddireccion').focus();
+      Swal.fire({
+        icon: 'warning',
+        title: 'SELECCIONE DIRECCION DE ENTREGA',
         showClass: {
           popup: 'animate__animated animate__fadeInDown'
         },
@@ -1132,6 +1193,9 @@ $(function () {
             d_fechaentrega: d_fechaentrega,
             v_numerophone: v_numerophone,
             v_nombrepedido: v_nombrepedido,
+            v_persona_recepciona: v_persona_recepciona,
+            v_id_direccion_entrega: v_id_direccion_entrega,
+            v_direccion_entrega: v_direccion_entrega,
             datosaci: datosaci
           },
 
@@ -1201,7 +1265,9 @@ $(function () {
                 document.getElementById('importepresupuesto').innerHTML = res.f_montoppto;
 
 
-
+                $('#contactoentrega').val(res.v_persona_recepciona);
+                $("#iddireccion").html("");
+                $("#iddireccion").append(res.FilasDireccion);
 
                 $("#example2").dataTable().fnDestroy();
                 $("#tablita-aci").children().remove();
@@ -1400,7 +1466,7 @@ $(function () {
                     var id = setInterval(function () {
                       location.reload();
                       clearInterval(id);
-                      location.href = "http://localhost/pedidos/pedidos/index";
+                      location.href = "https://verdum.com/pedidos/pedidos/index";
                     }, res.itimer);
                   } else {
                     $("#btnsendpedido").html("<span class='ml-25 align-middle'>Enviado</span>");
@@ -1417,7 +1483,7 @@ $(function () {
                     var id = setInterval(function () {
                       location.reload();
                       clearInterval(id);
-                      location.href = "http://localhost/pedidos/pedidos/index";
+                      location.href = "https://verdum.com/pedidos/pedidos/index";
                     }, res.itimer);
                   }
 
@@ -1462,18 +1528,16 @@ $(function () {
 
     //perro
 
-
+ 
     var moneda = $('#moneda option:selected').text();
 
     if (moneda == 'USD') {
       document.getElementById('importepedido').innerHTML = (Number(resumentotal) * Number(tipocambio)).toFixed(2);
+      document.getElementById('montosolped').innerHTML = (Number(resumentotal) * Number(tipocambio)).toFixed(2);
     } else {
       document.getElementById('importepedido').innerHTML = resumentotal;
+      document.getElementById('montosolped').innerHTML = resumentotal;
     }
-
-
-
-
 
     document.getElementById('nropedidoppto').innerHTML = nu_correla;
 
@@ -1489,6 +1553,18 @@ $(function () {
             url: '/pedidos/pedidos/Mostrar_pedido_ppto',
             data: { nu_correla: nu_correla },
             success: function (res) {
+
+
+              document.getElementById('resumenppto').innerHTML = res.f_montoppto;
+              document.getElementById('diferenciappto').innerHTML = res.f_diferencia;
+
+              if (Number(res.f_diferencia) == 0) {
+                document.getElementById("diferenciappto").style.color = "green";
+              } else {
+                document.getElementById("diferenciappto").style.color = "red";
+              }
+
+
 
               $("#tbpptopedido").dataTable().fnDestroy();
               $("#tablita-ppto").children().remove();
@@ -1544,6 +1620,15 @@ $(function () {
             url: '/pedidos/pedidos/Mostrar_pedido_ppto',
             data: { nu_correla: nu_correla },
             success: function (res) {
+
+              document.getElementById('resumenppto').innerHTML = res.f_montoppto;
+              document.getElementById('diferenciappto').innerHTML = res.f_diferencia;
+              if (Number(res.f_diferencia) == 0) {
+                document.getElementById("diferenciappto").style.color = "green";
+              } else {
+                document.getElementById("diferenciappto").style.color = "red";
+              }
+
 
               $("#tbpptopedidos").dataTable().fnDestroy();
               $("#tablita-pptos").children().remove();
@@ -1950,6 +2035,15 @@ $(function () {
               data: { nu_correla: nu_correla },
               success: function (res) {
 
+                document.getElementById('resumenppto').innerHTML = res.f_montoppto;
+                document.getElementById('diferenciappto').innerHTML = res.f_diferencia;
+                if (Number(res.f_diferencia) == 0) {
+                  document.getElementById("diferenciappto").style.color = "green";
+                } else {
+                  document.getElementById("diferenciappto").style.color = "red";
+                }
+
+
                 $("#tbpptopedido").dataTable().fnDestroy();
                 $("#tablita-ppto").children().remove();
 
@@ -2038,6 +2132,14 @@ $(function () {
                 data: { nu_correla: nu_correla },
                 success: function (res) {
 
+                  document.getElementById('resumenppto').innerHTML = res.f_montoppto;
+                  document.getElementById('diferenciappto').innerHTML = res.f_diferencia;
+                  if (Number(res.f_diferencia) == 0) {
+                    document.getElementById("diferenciappto").style.color = "green";
+                  } else {
+                    document.getElementById("diferenciappto").style.color = "red";
+                  }
+
                   $("#tbpptopedido").dataTable().fnDestroy();
                   $("#tablita-ppto").children().remove();
 
@@ -2124,6 +2226,10 @@ $(function () {
         document.getElementById('resumentotal').innerHTML = res.f_importotal;
         document.getElementById('importepresupuesto').innerHTML = res.f_montoppto;
 
+
+        $('#contactoentrega').val(res.v_persona_recepciona);
+        $("#iddireccion").html("");
+        $("#iddireccion").append(res.FilasDireccion);
 
         countaci = Number(res.i_filas) + 1;
         $("#example2").dataTable().fnDestroy();
@@ -2737,7 +2843,7 @@ $(function () {
 
 
 $('#cancelar').on('click', function () {
-  location.href = "http://localhost/pedidos/pedidos/realizarpedido/index";
+  location.href = "https://verdum.com/pedidos/pedidos/realizarpedido/index";
 });
 
 

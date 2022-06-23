@@ -1,0 +1,139 @@
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+        <div class="content-body">
+            <section id="dashboard-analytics">
+                <div class="row" id="table-small">
+                    <div class="col-md-8 col-12">
+                        <div class="card">
+                            <div class="card-header border-bottom p-1">
+                                <div class="head-label">
+                                    <h6 class="mb-0"></h6>
+                                </div>
+                                <div class="dt-action-buttons text-right">
+                                    <div class="dt-buttons d-inline-flex">
+                                        <button id="btnagregar" type="button" class="dt-button create-new btn btn-primary"><i class="fa-solid fa-user-plus fa-beat"></i>&nbsp; NUEVO PERFIL </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header">
+                                <h4 class="card-title"> <i class="fa-solid fa-list"></i></i> Lista de Perfiles</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="tbperfil" class="table table-sm">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>#IDPerfil</th>
+                                                <th>Nombre</th>
+                                                <th>Descripcion</th>
+                                                <th class="text-center">IDEstado</th>
+                                                <th class="text-center">Estado</th>
+                                                <th class="text-center">#Editar</th>
+                                                <th class="text-center">#Acceso</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if (isset($this->ListadoPerfil)) { ?>
+                                                <?php foreach ($this->ListadoPerfil as $user) { ?>
+                                                    <tr>
+                                                        <td class="text-left">
+                                                            <div class="media">
+                                                                <div class="avatar bg-light-success mr-0">
+                                                                    <div class="avatar-content">
+                                                                        <i data-feather="user" stroke-width="3" class="avatar-icon"></i>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="media-body my-auto">
+                                                                    <h5 class="font-weight-bolder mb-0">&nbsp;<?php echo $user['i_id'] ?></h5>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-left"><strong><?php echo $user['v_nombre'] ?></strong> </td>
+                                                        <td class="text-left"><strong><?php echo $user['v_descripcion'] ?></strong> </td>
+                                                        <td class="text-center"><?php echo $user['i_estado'] ?></td>
+                                                        <td class="text-center"><?php echo $user['v_estado'] ?></td>
+                                                        <td class="text-center"><a id='<?php echo $user['i_id'] ?>' class="btn btn-info btn-sm text-white editar"><span class="fa-solid fa-marker fa-beat"><b></b></span></a></td>
+
+                                                        <td class='text-center'>
+                                                            <a id='<?php echo $user['i_id'] ?>' <?php $perfil =  $user['i_id'];
+                                                                                                $nombreperfil =  $user['v_nombre'] ?> href="<?php echo BASE_URL ?><?php echo $user['v_url'] ?>=<?php echo urlencode($perfil); ?>&nombreperfil=<?php echo utf8_decode(urlencode($nombreperfil)) ?>" class="btn btn-<?php echo $user['v_btn1'] ?>"><i class="fas solid fa-<?php echo $user['v_btn1Imagen'] ?>"></i></a>
+                                                        </td>
+
+                                                    </tr>
+                                                <?php } ?>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL MANT PERFIL-->
+<div class="modal fade" id="modal-perfil" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header  bg-gradient-success">
+                <h5 class="modal-title"><i class="fa-solid fa-layer-group"></i> &nbsp;<b id="titulomodal"></b></h5><b><span id="idtabla"></span></b>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div id="div-load"></div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label font-weight-bolder">Codigo :</label>
+                        <input type="text" id="xid" tabindex="1" class="form-control" readonly="readonly" autocomplete="off" />
+                    </div>
+
+
+                    <div class="form-group col-md-12">
+                        <label class="form-label font-weight-bolder">Nombre de Perfil:</label>
+                        <input type="text" id="xnombre" tabindex="1" class="form-control" placeholder="Ingrese nombre del perfil" autocomplete="off" />
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="form-label font-weight-bolder">Descripcion:</label>
+                        <input type="text" id="xdescripcion" tabindex="1" class="form-control" placeholder="Ingrese descripcion de perfil" autocomplete="off" />
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="alert-success form-label font-weight-bolder">Estado</label>
+                        <select id="xestado" class="select2 form-control form-control-lg">
+                        </select>
+                    </div>
+                </div>
+
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button id="xbtnguardar" type="button" class="btn btn-success btn-block">
+                            <i class="fas fa-save"></i>
+                            <b>Guardar</b></button>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="col-sm-6">
+                        <button id="xbtncancelar" type="button" class="btn btn-danger btn-block">
+                            <i class="fas fa-ban"></i>
+                            <b>Cancelar</b></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

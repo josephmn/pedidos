@@ -2,7 +2,7 @@ $(function () {
 
 
   $('#btnagregar').on('click', function () {
-    location.href = "http://localhost/pedidos/pedidos/realizarpedido/index";
+    location.href = "https://verdum.com/pedidos/pedidos/realizarpedido/index";
   });
 
   var table = $("#tbpedidos").DataTable({

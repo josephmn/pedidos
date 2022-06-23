@@ -9,7 +9,7 @@
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
                         <h4 class="content-header-title float-left mb-0">
-                            <a href="http://localhost/pedidos/pedidos/index"><strong><i class="fa-solid fa-caret-left fa-beat"></i> Regresar</strong></a>
+                            <a href=" https://verdum.com/pedidos/pedidos/index"><strong><i class="fa-solid fa-caret-left fa-beat"></i> Regresar</strong></a>
                         </h4>
                     </div>
                 </div>
@@ -34,21 +34,22 @@
                                     <div class="col-md-4 invoice-col">
                                         <b style="color:rgb(0,0,0)"><strong>#Pedido &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</strong> </b> <strong><label id="nropedido"></label></strong>
                                         <br>
-                                        <b style="color:rgb(0,0,0)">Area Solicita &nbsp;:&nbsp;</b> <strong><label id="area"><?php echo $_SESSION['area'] ?></label></strong> <br>
+                                        <b style="color:rgb(0,0,0)">Area Solícita &nbsp;:&nbsp;</b> <strong><label id="area"><?php echo $_SESSION['area'] ?></label></strong> <br>
                                         <b style="color:rgb(0,0,0)">Usuario &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; :&nbsp;</b> <strong><label id="usuario"><?php echo $_SESSION['dni'] ?></label></strong> <br>
                                     </div>
                                 </div>
                                 <hr>
                                 <input value='<?php echo $_SESSION['idarea'] ?>' type="hidden" id="idarea">
+
                                 <div class="row">
-                                    <div class="col-xl-6 col-md-6 col-12 mb-1">
+                                    <div class="col-xl-6 col-md-6 col-12 mb-1" style="height:60px">
                                         <div class="form-group">
                                             <label class="form-label font-weight-bolder">Nombre del pedido </label>
                                             <input type="text" id="namepedido" style="text-transform:uppercase" autocomplete="of" class="form-control" placeholder="Ingrese nombre del pedido">
                                         </div>
                                     </div>
 
-                                    <div class="col-xl-2 col-md-6 col-12 mb-1">
+                                    <div class="col-xl-2 col-md-6 col-12 mb-1" style="height:60px">
                                         <label class="alert-success   form-label font-weight-bolder">Moneda</label>
                                         <select id="moneda" class="select2 form-control form-control-lg">
                                             <?php foreach ($this->ListadoMoneda as $mn) { ?>
@@ -57,39 +58,35 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-xl-2 col-md-6 col-12 mb-1">
+                                    <div class="col-xl-2 col-md-6 col-12 mb-1" style="height:60px">
                                         <label class="form-label font-weight-bolder">Fecha</label>
                                         <div class="input-group date" id="ffin" data-target-input="nearest">
-                                            <input type="text" id="fecha" style="color:rgb(0,0,0); background-color:rgb(221,239,245)" class="form-control" placeholder="YYYY-MM-DD" readonly="readonly">
+                                            <input type="text" id="fecha" style="color:rgb(0,0,0); background-color:rgb(188,229,175)" class="form-control" placeholder="YYYY-MM-DD" readonly="readonly">
                                         </div>
                                     </div>
 
-                                    <div class="col-xl-2 col-md-6 col-12 mb-1">
-                                        <label class="form-label font-weight-bolder">Tipo cambio</label>
+                                    <div class="col-xl-2 col-md-6 col-12 mb-1" style="height:60px">
+                                        <label class="form-label font-weight-bolder">Tipo de cambio</label>
                                         <div class="input-group input-group-merge">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-coins"></i></span>
                                             </div>
-                                            <input type="number" style="color:rgb(0,0,0); background-color:rgb(221,239,245)" id="tipocambio" value='<?php echo $this->ListadoTipoCambio[0]['tipocambio']; ?>' class="form-control" aria-describedby="itemquantity" placeholder="0" autocomplete="off" readonly="readonly" />
+                                            <input type="number" style="color:rgb(0,0,0); background-color:rgb(188,229,175)" id="tipocambio" value='<?php echo $this->ListadoTipoCambio[0]['tipocambio']; ?>' class="form-control" aria-describedby="itemquantity" placeholder="0" autocomplete="off" readonly="readonly" />
                                         </div>
                                     </div>
 
-                                    <div class="col-xl-3 col-md-6 col-12 mb-1">
-                                        <label class="form-label font-weight-bolder">Numero de teléfono </label>
+                                    <div class="col-xl-4 col-md-6 col-12 mb-1" style="height:60px">
+                                        <label class="form-label font-weight-bolder">Número de teléfono </label>
                                         <div class="input-group input-group-merge">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">PE (+51)</span>
                                             </div>
-                                            <input type="text" id="nrophone" class="form-control" autocomplete="of" placeholder="1 234 567 8900">
+                                            <input type="text" id="nrophone" class="form-control" autocomplete="of" placeholder="000 000 000">
                                         </div>
                                     </div>
 
-                                    <div class="col-xl-2 col-md-6 col-12 mb-1">
-                                        <label class="form-label font-weight-bolder">Fecha de entrega </label>
-                                        <input type="text" id="fechaentrega" class="form-control flatpickr-disabled-range" placeholder="YYYY-MM-DD" />
-                                    </div>
 
-                                    <div class="col-xl-2 col-md-6 col-12 mb-1">
+                                    <div class="col-xl-3 col-md-6 col-12 mb-1" style="height:60px">
                                         <label class="form-label font-weight-bolder">Estado</label>
                                         <select id="estado" class="alert-success select2 form-control form-control-lg">
                                             <?php foreach ($this->PedidoEstado as $st) { ?>
@@ -98,29 +95,53 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-xl-3 col-md-6 col-12 mb-1">
+                                    <div class="col-xl-3 col-md-6 col-12 mb-1" style="height:60px">
                                         <div class="form-group">
                                             <label class="form-label font-weight-bolder">Encargado </label>
-                                            <input type="text" id="encargadoestado" style="color:rgb(0,0,0); background-color:rgb(221,239,245)" readonly=" readonly" class="form-control" placeholder="Encargado">
+                                            <input type="text" id="encargadoestado" style="color:rgb(0,0,0); background-color:rgb(188,229,175)" readonly=" readonly" class="form-control" placeholder="Encargado">
                                         </div>
                                     </div>
 
-                                    <div class="col-xl-2 col-md-6 col-12 mb-1">
+                                    <div class="col-xl-2 col-md-6 col-12 mb-1" style="height:60px">
                                         <br>
                                         <button id="pptoadd" type="button" style="height:40px" class="btn btn-relief-primary bg-darken-2 colors-container rounded text-white btn-block btn-sm"><i class="fa-solid fa-coins fa-beat"></i><strong>&nbsp; Presupuesto</strong></button>
                                     </div>
+
+
+                                    <div class="col-xl-2 col-md-6 col-12 mb-1" style="height:60px">
+                                        <label class="form-label font-weight-bolder">Fec. de entrega </label>
+                                        <input type="text" id="fechaentrega" class="form-control flatpickr-disabled-range" placeholder="YYYY-MM-DD" />
+                                    </div>
+
+
+                                    <div class="col-xl-4 col-md-6 col-12 mb-1" style="height:60px">
+                                        <div class="form-group">
+                                            <label class="form-label font-weight-bolder">Contacto de entrega </label>
+                                            <input type="text" id="contactoentrega" autocomplete="of" class="form-control" placeholder="Nombre contacto de entrega">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6 col-md-6 col-12 mb-1" style="height:60px">
+                                        <label class="form-label font-weight-bolder">Direccion de entrega</label>
+                                        <select id="iddireccion" class="alert-success select2 form-control form-control-lg">
+                                            <?php foreach ($this->ListadoDirecciones as $st) { ?>
+                                                <option value="<?php echo $st['v_id_local']; ?>"><?php echo $st['v_direccion']; ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
                                 </div>
 
-                                <p style="text-align:center;height:5px"><strong>Detalle del Pedido</strong></p>
+                                <p style="text-align:center;height:5px;color:rgb(22,142,53)"><strong>Detalle del Pedido</strong></p>
                                 <hr>
+
                                 <table id="example2" class="table table-sm table-hover">
                                     <thead class="thead-dark">
                                         <tr class="text-center">
                                             <th>#</th>
                                             <th>#</th>
-                                            <th class="text-left">Codigo</th>
-                                            <th class="text-left">Descripcion</th>
-                                            <th class="text-left">Almacen</th>
+                                            <th class="text-left">Código</th>
+                                            <th class="text-left">Descripción</th>
+                                            <th class="text-left">Almacén</th>
                                             <th class="text-left">Unidad</th>
                                             <th class="text-left">Cantidad</th>
                                             <th class="text-left"><i class="fas fa-coins"></i> Precio</th>
@@ -142,9 +163,9 @@
                                     <hr style="color:rgb(122,182,21)">
                                     <b style="color:rgb(0,0,0)">Importe total &nbsp; (<b id="monedaimporte"></b>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b> <strong><b style="font-weight: bold" id="resumentotal"></b></strong>
                                     <hr style="color:rgb(122,182,21)">
-                                    <b style="color:rgb(0,0,0)">Importe presupuesto Ingresado S/.&nbsp;&nbsp;: </b> <strong><b style="font-weight: bold" id="importepresupuesto"></b></strong>
+                                    <b style="color:rgb(0,0,0)">Importe presupuesto Ingresado S/&nbsp;&nbsp;: </b> <strong><b class="alert-success" style="font-weight: bold" id="importepresupuesto"></b></strong>
                                     <hr style="color:rgb(122,182,21)">
-                                    <b style="color:rgb(0,0,0)">Monto Limite del Pedido S/. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <b class="alert-success" id="montolimite"><?php echo $this->ConsultaTopePedido[0]['f_valortope_condicion_uno']; ?></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b> <strong><b style="font-weight: bold"></b></strong>
+                                    <b style="color:rgb(0,0,0)">Monto Límite del Pedido S/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <b class="alert-success" id="montolimite"><?php echo $this->ConsultaTopePedido[0]['f_valortope_condicion_uno']; ?></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b> <strong><b style="font-weight: bold"></b></strong>
                                 </div>
                             </div>
 
@@ -251,7 +272,6 @@
                                                             <?php } ?>
                                                         </tbody>
                                                     </table>
-
                                                 </div>
                                             </form>
                                         </div>
@@ -259,7 +279,7 @@
 
                                     <div class="tab-pane" id="profileIcon" aria-labelledby="profileIcon-tab" role="tabpanel">
                                         <div class="card-header">
-                                            <h4 class="card-title"><i class="fa-solid fa-pen-to-square"></i> Agregar Item sin codigo de producto </h4>
+                                            <h4 class="card-title"><i class="fa-solid fa-pen-to-square"></i> Agregar item sin código de producto </h4>
                                         </div>
                                         <div class="card-body">
                                             <form class="form form-horizontal">
@@ -307,7 +327,7 @@
                                                                             </div>
                                                                             <div class="col-lg-4 col-12 my-lg-0 my-0">
                                                                                 <p class="card-text col-title mb-md-0 mb-0">Total</p>
-                                                                                <input id="totalitem" type="number" class="alert-success form-control" placeholder="0" readonly="readonly">
+                                                                                <input id="totalitem" type="number" class="form-control" style="color:rgb(0,0,0); background-color:rgb(188,229,175)" placeholder="0" readonly="readonly">
                                                                             </div>
 
                                                                             <div class="col-lg-12 col-12 my-lg-0 my-0">
@@ -365,19 +385,30 @@
 
                 <div class="col-md-12 col-12">
                     <div class="card-body">
+
+                        <div id="losdatoproductos"></div>
+
                         <form class="form form-horizontal">
                             <div class="row">
+
+
+
+
                                 <div class="col-12">
                                     <div class="form-group row">
+
+
                                         <div class="col-sm-3 col-form-label">
                                             <label for="email-icon"><b>Unidad</b></label>
                                         </div>
+
+
                                         <div class="col-sm-9">
                                             <div class="input-group input-group-merge">
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-balance-scale-right"></i></span>
                                                 </div>
-                                                <input type="text" id="unidad" style="color:rgb(0,0,0); background-color:rgb(221,239,245)" class="form-control" name="fname-icon" placeholder="" readonly="readonly">
+                                                <input type="text" id="unidad" style="color:rgb(0,0,0); background-color:rgb(188,229,175)" class="form-control" name="fname-icon" placeholder="" readonly="readonly">
                                             </div>
                                         </div>
                                     </div>
@@ -429,7 +460,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text"><i class="fas fa-coins"></i></span>
                                                 </div>
-                                                <input type="number" id="importe" style="color:rgb(0,0,0); background-color:rgb(221,239,245)" class="form-control" id="itemquantity" aria-describedby="itemquantity" placeholder="0" readonly="readonly" />
+                                                <input type="number" id="importe" style="color:rgb(0,0,0); background-color:rgb(188,229,175)" class="form-control" id="itemquantity" aria-describedby="itemquantity" placeholder="0" readonly="readonly" />
                                             </div>
                                         </div>
                                     </div>
@@ -479,7 +510,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="form-group mb-2">
-                            <label for="notas" class="form-label font-weight-bold" style="color:#B7B730;font-weight:bold"><strong>Ingresar descripcion para el archivo</strong> </label>
+                            <label for="notas" class="form-label font-weight-bold" style="color:#B7B730;font-weight:bold"><strong>Ingresar descripción para el archivo</strong> </label>
                             <textarea class="form-control" rows="1" placeholder="Ingrese descripcion" id="descripcionfile"></textarea>
                         </div>
                     </div>
@@ -577,7 +608,6 @@
             </div>
 
             <div class="modal-body">
-
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group mb-2">
@@ -587,8 +617,6 @@
                             </h4>
                         </div>
                     </div>
-
-
                     <div class="col-sm-6">
                         <div class="form-group mb-2">
                             <h4 class="invoice-title">
@@ -620,8 +648,6 @@
                     </div>
                 </div>
 
-
-
                 <div id="div-ppto"></div>
                 <div class="card business-card ">
                     <div class="business-items">
@@ -633,7 +659,6 @@
                 <div class="form-group row">
                     <div class="col-sm-12">
                         <div class="row">
-
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="form-label  badge badge-light-success">Seleccione centro de costo </label>
@@ -686,6 +711,17 @@
                             <tbody id="tablita-ppto">
                             </tbody>
                         </table>
+
+                        <br>
+
+                        <div class="col-md-6 invoice-col">
+                            <b style="text-align:center;height:5px;color:rgb(0,0,0)">Monto de SOLPED&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b> <strong><b class="alert-success" id="montosolped"></b></strong>
+                            <br>
+                            <b style="text-align:center;height:5px;color:rgb(0,0,0)">Presupuesto Ingresado &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b> <strong><b class="alert-success" id="resumenppto"></b></strong>
+                            <!-- <hr> -->
+                            <b style="text-align:center;height:5px;color:rgb(0,0,0)">Diferencia&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b> <strong><b id="diferenciappto"></b></strong>
+                        </div>
+
                     </div>
                 </div>
 
@@ -706,10 +742,7 @@
             </div>
 
             <div class="modal-body">
-
                 <div id="div-pptos"></div>
-
-
                 <p style="text-align:center;height:5px;color:rgb(0,0,0)"><strong>Detalle registrado</strong></p>
                 <table id="tbpptopedidos" class="table table-sm">
                     <thead class="thead-dark">
@@ -727,13 +760,11 @@
                     <tbody id="tablita-pptos">
                     </tbody>
                 </table>
-
-
-
             </div>
         </div>
     </div>
 </div>
+
 
 <!-- MODAL PROGRESO -->
 <div class="modal fade" id="modal-insert" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">

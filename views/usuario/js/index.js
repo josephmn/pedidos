@@ -68,7 +68,7 @@ $(function () {
 
           $("#xidusersolomon").html("");
           $("#xidusersolomon").append(res.FilascomboUsuarioSolomon);
-
+          document.getElementById("img1").src = res.v_foto;
 
 
         } else {
@@ -96,7 +96,7 @@ $(function () {
 
           $("#xidusersolomon").html("");
           $("#xidusersolomon").append(res.FilascomboUsuarioSolomon);
-
+          document.getElementById("img1").src = res.v_foto;
 
           document.getElementById("customSwitch10").disabled = true;
         }
@@ -137,7 +137,7 @@ $(function () {
           $('#xpassword').val(v_dni);
           $('#xidgenero').val(res.i_persexo);
           $('#xgenero').val(res.v_persexo_nombre);
-
+          document.getElementById("img1").src = res.v_foto;
 
 
           $("#xperfil").html("");
@@ -203,6 +203,7 @@ $(function () {
           $('#xnombres').val(res.v_nombres.replace("&Ntilde;", "Ñ"));
           $('#xapellidos').val(res.v_apellidos.replace("&Ntilde;", "Ñ"));
           $('#xcorreo').val(res.v_correo.replace("&Ntilde;", "Ñ"));
+          document.getElementById("img1").src = res.v_foto;
 
           $("#xperfil").html("");
           $("#xperfil").append(res.FilascomboPerfil);
@@ -273,6 +274,9 @@ $(function () {
 
           $("#xidusersolomon").html("");
           $("#xidusersolomon").append(res.FilascomboUsuarioSolomon);
+
+
+          console.log(res.FilascomboUsuarioSolomon);
 
         } else {
           $('#xnombres').val(res.v_nombres.replace("&Ntilde;", "Ñ"));
@@ -348,7 +352,7 @@ $(function () {
 
           $("#xlocal").html("");
           $("#xlocal").append(res.FilascomboLocal);
-
+          document.getElementById("img1").src = res.v_foto;
         } else {
           $.ajax({
             type: 'POST',
@@ -406,6 +410,7 @@ $(function () {
 
           $("#xlocal").html("");
           $("#xlocal").append(res.FilascomboLocal);
+          document.getElementById("img1").src = res.v_foto;
         }
 
       }
@@ -455,6 +460,25 @@ $(function () {
       return;
     }
 
+
+
+    if ((i_perfil == null || Number(i_perfil) == 0)) {
+      $("#xperfil").focus();
+      Swal.fire({
+        title: 'SELECCIONE PERFIL',
+        timer: 3000,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
+
+
     if ((v_correo == null || v_correo == '')) {
       $("#xcorreo").focus();
       Swal.fire({
@@ -470,9 +494,50 @@ $(function () {
       return;
     }
 
+    if ((v_id_cargo == null || v_id_cargo == 'XXX')) {
+      $("#xcargo").focus();
+      Swal.fire({
+        title: 'SELECCIONE CARGO',
+        timer: 3000,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
 
+    if ((v_id_area == null || v_id_area == 'XXX')) {
+      $("#xarea").focus();
+      Swal.fire({
+        title: 'SELECCIONE AREA',
+        timer: 3000,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
 
-
+    if ((v_id_local == null || v_id_local == 'XXXXXXX')) {
+      $("#xlocal").focus();
+      Swal.fire({
+        title: 'SELECCIONE LOCAL',
+        timer: 3000,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
 
 
 
@@ -520,8 +585,6 @@ $(function () {
               location.reload();
               clearInterval(id);
             }, res.itimer);
-
-
           }
         });
       }
@@ -529,9 +592,7 @@ $(function () {
 
   });
 
-
   $('#xbtncancelar').on('click', function () {
-
     $("#modal-agregar").modal('hide');
   });
 

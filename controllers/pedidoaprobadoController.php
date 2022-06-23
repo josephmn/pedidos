@@ -14,19 +14,37 @@ class pedidoaprobadoController extends Controller
 
 			$this->_view->setCss_Specific(
 				array(
+
+					// 'dist/css/fontawesome/css/all',
+					// 'dist/css/forms/wizard/bs-stepper.min',
+					// 'plugins/vendors/css/extensions/sweetalert2.min',
+					// 'plugins/vendors/css/charts/vendors.min',
+					// 'plugins/vendors/css/charts/apexcharts',
+					// 'plugins/vendors/css/extensions/toastr.min',
+					// 'dist/css/bootstrap-extended',
+					// 'dist/css/themes/bordered-layout',
+					// 'plugins/plugins/charts/chart-apex',
+					// 'dist/css/forms/select/select2.min',
+					// 'dist/css/bootstrap',
+					// 'dist/css/colors',
+					// 'dist/css/components',
+					// 'dist/css/core/menu/menu-types/vertical-menu',
+					// 'dist/css/plugins/forms/form-validation',
+					// 'dist/css/plugins/forms/form-wizard',
+					// 'dist/css/custom',
+					// 'dist/css/style',
+					// 'dist/css/plugins/forms/wizard/form-wizard',
+					// 'plugins/vendors/css/extensions/ext-component-sweet-alerts',
+					// 'plugins/datatables-net/css/jquery.dataTables.min',
+					// 'plugins/datatables-net/css/responsive.dataTables.min',
+
 					'dist/css/fontawesome/css/all',
 					'dist/css/forms/wizard/bs-stepper.min',
 					'plugins/vendors/css/extensions/sweetalert2.min',
-
-					'plugins/vendors/css/charts/vendors.min',
-					'plugins/vendors/css/charts/apexcharts',
-					'plugins/vendors/css/extensions/toastr.min',
-					'dist/css/bootstrap-extended',
-					'dist/css/themes/bordered-layout',
-					'plugins/plugins/charts/chart-apex',
-
+					'plugins/vendors/css/animate/animate.min',
 					'dist/css/forms/select/select2.min',
 					'dist/css/bootstrap',
+					'dist/css/bootstrap-extended',
 					'dist/css/colors',
 					'dist/css/components',
 					'dist/css/core/menu/menu-types/vertical-menu',
@@ -38,33 +56,56 @@ class pedidoaprobadoController extends Controller
 					'plugins/vendors/css/extensions/ext-component-sweet-alerts',
 					'plugins/datatables-net/css/jquery.dataTables.min',
 					'plugins/datatables-net/css/responsive.dataTables.min',
+					'plugins/vendors/css/charts/apexcharts',
+					'plugins/vendors/css/charts/vendors.min',
+					'plugins/plugins/charts/chart-apex',
+
 				)
 			);
 
 			$this->_view->setJs_Specific(
 				array(
+
+					// 'plugins/vendors/js/vendors.min',
+					// 'plugins/vendors/js/forms/wizard/bs-stepper.min',
+					// 'plugins/vendors/js/charts/apexcharts',
+					// 'plugins/vendors/js/charts/chart.min',
+					// 'plugins/vendors/js/charts/apexcharts.min',
+					// 'plugins/vendors/js/extensions/toastr.min',
+					// 'plugins/vendors/js/extensions/moment.min',
+					// 'plugins/vendors/js/forms/select/select2.full.min',
+					// 'plugins/vendors/js/forms/validation/jquery.validate.min',
+					// 'dist/js/core/app-menu',
+					// 'dist/js/core/app',
+					// 'dist/js/scripts/forms/form-wizard',
+					// 'plugins/datatables-net/js/jquery.dataTables.min',
+					// 'plugins/datatables-net/js/dataTables.responsive.min',
+					// 'plugins/vendors/js/extensions/sweetalert2.all.min',
+					// 'dist/js/scripts/forms/form-input-mask',
+					// 'plugins/vendors/js/forms/cleave/cleave.min',
+					// 'dist/js/scripts/forms/form-wizard',
+					// 'dist/js/scripts/progressbar/progressbar',
+					// 'dist/js/scripts/progressbar/progressbar.min',
+
 					'plugins/vendors/js/vendors.min',
-					'plugins/vendors/js/forms/wizard/bs-stepper.min',
-
-					'plugins/vendors/js/charts/apexcharts',
-					'plugins/vendors/js/charts/chart.min',
-					'plugins/vendors/js/charts/apexcharts.min',
 					'plugins/vendors/js/extensions/toastr.min',
-					'plugins/vendors/js/extensions/moment.min',
-
+					'plugins/vendors/js/forms/wizard/bs-stepper.min',
 					'plugins/vendors/js/forms/select/select2.full.min',
 					'plugins/vendors/js/forms/validation/jquery.validate.min',
 					'dist/js/core/app-menu',
 					'dist/js/core/app',
-					'dist/js/scripts/forms/form-wizard',
 					'plugins/datatables-net/js/jquery.dataTables.min',
 					'plugins/datatables-net/js/dataTables.responsive.min',
 					'plugins/vendors/js/extensions/sweetalert2.all.min',
 					'dist/js/scripts/forms/form-input-mask',
 					'plugins/vendors/js/forms/cleave/cleave.min',
 					'dist/js/scripts/forms/form-wizard',
-					'dist/js/scripts/progressbar/progressbar',
-					'dist/js/scripts/progressbar/progressbar.min',
+
+					'plugins/vendors/js/charts/apexcharts',
+					'plugins/vendors/js/charts/chart.min',
+					'plugins/vendors/js/charts/apexcharts.min',
+
+
 				)
 			);
 			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
@@ -94,6 +135,7 @@ class pedidoaprobadoController extends Controller
 				'nu_correla' =>		'1000000001',
 				'v_nombre_file' =>	 	 '',
 			);
+			
 
 			$result = $soap->ListadoPedidosAprobacion($lst);
 			$ListadoPedidosAprobacion = json_decode($result->ListadoPedidosAprobacionResult, true);
@@ -150,6 +192,7 @@ class pedidoaprobadoController extends Controller
 			$client = array(
 				'nu_correla' =>		$nu_correla,
 				'i_estado' =>		$i_estado,
+				'v_username' =>		$_SESSION['dni'],
 			);
 
 

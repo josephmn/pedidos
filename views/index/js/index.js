@@ -4,8 +4,6 @@ $("#btnlogin").on("click", function () {
   var dni = $("#dni").val();
   var clave = $("#clave").val();
 
-
-
   if (dni == null || dni == "") {
     Swal.fire({
       icon: "warning",

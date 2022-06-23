@@ -6,7 +6,7 @@
  * -------------------------------------
  */
 
-define('BASE_URL', 'http://localhost/pedidos/');
+define('BASE_URL', 'https://verdum.com/pedidos/');
 define('BASE_ROOT',$_SERVER['DOCUMENT_ROOT'].'/pedidos/');
 // define('BASE_ROOT',$_SERVER['DOCUMENT_ROOT']);
 define('DEFAULT_CONTROLLER', 'index');

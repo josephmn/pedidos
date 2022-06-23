@@ -187,6 +187,7 @@ class usuarioController extends Controller
 					$FilascomboUsuarioSolomon .= "<option " . $selsolomon . " value=" . $dp['v_userid'] . ">" . $dp['v_username'] . "</option>";
 				}
 
+				
 				$estado  =  1;
 				$v_dni  = $data[0]['v_dni'];
 				$v_nombres  = $data[0]['v_nombres'];
@@ -204,7 +205,7 @@ class usuarioController extends Controller
 				$v_correo  =  "";
 				$i_persexo   =  "";
 				$v_persexo_nombre   =  "";
-				$v_foto  =   "public/doc/perfil/default.png";
+				$v_foto  =   "../public/doc/perfil/default.png";
 
 				// Combo perfil
 				$FilascomboPerfil = "";

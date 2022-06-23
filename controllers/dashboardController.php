@@ -61,6 +61,8 @@ class dashboardController extends Controller
 			// <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/vendors.min.css">
 			// <link rel="stylesheet" type="text/css" href="../../../app-assets/css/components.css">
 			// <link rel="stylesheet" type="text/css" href="../../../assets/css/style.css">
+			$this->_view->conctructor_menu('dashboard', 'dashboard');
+
 
 			$this->_view->setCss_Specific(
 				array(
@@ -113,22 +115,10 @@ class dashboardController extends Controller
 					'plugins/vendors/js/forms/cleave/cleave.min',
 					'plugins/vendors/js/tables/datatable/datatables.buttons.min',
 					'plugins/vendors/js/tables/datatable/jszip.min',
-					'plugins/vendors/js/tables/datatable/pdfmake.min',
-					'plugins/vendors/js/tables/datatable/vfs_fonts',
-					'plugins/vendors/js/tables/datatable/buttons.html5.min',
-					'plugins/vendors/js/tables/datatable/buttons.print.min',
-					'plugins/vendors/js/tables/datatable/dataTables.rowGroup.min',
-					'plugins/vendors/js/pickers/flatpickr/flatpickr.min',
+
 					'plugins/highcharts9/js/highcharts',
-					// <script src="https://code.highcharts.com/highcharts.js"></script>				 
 					'plugins/highcharts9/modules/variable-pie',
 					'plugins/highcharts9/js/highcharts-more',
-					'plugins/highcharts9/js/exporting',
-
-
-					// <script src="https://code.highcharts.com/highcharts-more.js"></script>
-
-
 
 				)
 			);
@@ -165,6 +155,101 @@ class dashboardController extends Controller
 
 			$this->_view->setJs(array('index'));
 			$this->_view->renderizar('index');
+		} else {
+			$this->redireccionar('index/logout');
+		}
+	}
+
+
+	public function NumeroPedidos()
+	{
+		if (isset($_SESSION['usuario'])) {
+
+			putenv("NLS_LANG=SPANISH_SPAIN.AL32UTF8");
+			putenv("NLS_CHARACTERSET=AL32UTF8");
+			$this->getLibrary('json_php/JSON');
+			$json = new Services_JSON();
+
+			$post = $_POST['post'];
+			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
+
+			$options = array(
+				"uri" => $wsdl,
+				"style" => SOAP_RPC,
+				"use" => SOAP_ENCODED,
+				"soap_version" => SOAP_1_1,
+				"connection_timeout" => 60,
+				"trace" => false,
+				"encoding" => "UTF-8",
+				"exceptions" => false,
+			);
+			$grafico1 = array(
+				'post' => 0,
+			);
+
+			$soap = new SoapClient($wsdl, $options);
+			$result = $soap->ListadoNumeroPedidos($grafico1);
+			$ListadoNumeroPedidos = json_decode($result->ListadoNumeroPedidosResult, true);
+
+			$array1 = [];
+			$i = 0;
+			foreach ($ListadoNumeroPedidos as $da) {
+				$v_nombre = $da['v_nombre'];
+				$i_nro_pedidos = $da['i_nro_pedidos'];
+
+				$pie = array("name" => $v_nombre, 'y' => floatval($i_nro_pedidos), 'drilldown' => $v_nombre);
+
+				$array1 += ["$i" => $pie];
+				$i++;
+			}
+			echo json_encode($array1);
+		} else {
+			$this->redireccionar('index/logout');
+		}
+	}
+
+	public function SolesPedidos()
+	{
+		if (isset($_SESSION['usuario'])) {
+
+			putenv("NLS_LANG=SPANISH_SPAIN.AL32UTF8");
+			putenv("NLS_CHARACTERSET=AL32UTF8");
+			$this->getLibrary('json_php/JSON');
+			$json = new Services_JSON();
+
+			$post = $_POST['post'];
+			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
+
+			$options = array(
+				"uri" => $wsdl,
+				"style" => SOAP_RPC,
+				"use" => SOAP_ENCODED,
+				"soap_version" => SOAP_1_1,
+				"connection_timeout" => 60,
+				"trace" => false,
+				"encoding" => "UTF-8",
+				"exceptions" => false,
+			);
+			$grafico1 = array(
+				'post' => 1,
+			);
+
+			$soap = new SoapClient($wsdl, $options);
+			$result = $soap->ListadoNumeroPedidos($grafico1);
+			$ListadoNumeroPedidos = json_decode($result->ListadoNumeroPedidosResult, true);
+
+			$array1 = [];
+			$i = 0;
+			foreach ($ListadoNumeroPedidos as $da) {
+				$v_nombre = $da['v_nombre'];
+				$i_nro_pedidos = $da['i_nro_pedidos'];
+
+				$pie = array("name" => $v_nombre, 'y' => floatval($i_nro_pedidos), 'sliced' => '1', 'selected' => '1');
+
+				$array1 += ["$i" => $pie];
+				$i++;
+			}
+			echo json_encode($array1);
 		} else {
 			$this->redireccionar('index/logout');
 		}

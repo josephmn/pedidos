@@ -71,13 +71,14 @@ class pedidosController extends Controller
 			);
 
 
-
 			$soap = new SoapClient($wsdl, $options);
 			$result = $soap->ListadoPedidosUsuario($dni);
 			$ListadoPedidosUsuario = json_decode($result->ListadoPedidosUsuarioResult, true);
 
 
+
 			$this->_view->ListadoPedidosUsuario = $ListadoPedidosUsuario;
+
 
 
 			$this->_view->setJs(array('index'));
@@ -226,6 +227,9 @@ class pedidosController extends Controller
 			$result = $soap->ComboLocal();
 			$ComboLocal = json_decode($result->ComboLocalResult, true);
 
+			$result = $soap->ListadoDirecciones();
+			$ListadoDirecciones = json_decode($result->ListadoDireccionesResult, true);
+
 
 			$this->_view->proveedores = $proveedores;
 			$this->_view->PedidoEstado  = $PedidoEstado;
@@ -237,6 +241,7 @@ class pedidosController extends Controller
 			$this->_view->ListadoUnidad  = $ListadoUnidad;
 			$this->_view->ConsultaTopePedido = $ConsultaTopePedido;
 			$this->_view->ComboLocal = $ComboLocal;
+			$this->_view->ListadoDirecciones = $ListadoDirecciones;
 
 			$this->_view->setJs(array('realizarpedido'));
 			$this->_view->renderizar('realizarpedido');
@@ -393,6 +398,11 @@ class pedidosController extends Controller
 			$v_numerophone = $_POST['v_numerophone'];
 			$v_nombrepedido = $_POST['v_nombrepedido'];
 			$v_cargo  = $_SESSION['id_cargo'];
+
+			$v_persona_recepciona  = $_POST['v_persona_recepciona'];
+			$v_id_direccion_entrega  = $_POST['v_id_direccion_entrega'];
+			$v_direccion_entrega  = $_POST['v_direccion_entrega'];
+
 			$datosaci = $_POST['datosaci']; //Array del detalle
 
 
@@ -431,6 +441,9 @@ class pedidosController extends Controller
 				'v_numerophone' => $v_numerophone,
 				'v_nombrepedido' => $v_nombrepedido,
 				'v_cargo' => $v_cargo,
+				'v_persona_recepciona' => $v_persona_recepciona,
+				'v_id_direccion_entrega' => $v_id_direccion_entrega,
+				'v_direccion_entrega' => $v_direccion_entrega,
 			);
 
 			$result2 = $soap->GuardarPedido($params);
@@ -517,6 +530,9 @@ class pedidosController extends Controller
 			$result = $soap->ListadoMoneda();
 			$ListadoMoneda = json_decode($result->ListadoMonedaResult, true);
 
+			$result = $soap->ListadoDirecciones();
+			$ListadoDirecciones = json_decode($result->ListadoDireccionesResult, true);
+
 			if (count($data) > 0) {
 				$nu_correla =   $data[0]['nu_correla'];
 				$v_areid =   $data[0]['v_areid'];
@@ -535,6 +551,9 @@ class pedidosController extends Controller
 				$i_filas =   $data[0]['i_filas'];
 				$f_montoppto =   $data[0]['f_montoppto'];
 
+				$v_persona_recepciona =   $data[0]['v_persona_recepciona'];
+
+
 				//Combo Local
 				$FilasMoneda = "";
 				$selMoneda = "";
@@ -546,6 +565,20 @@ class pedidosController extends Controller
 					}
 					$FilasMoneda .= "<option " . $selMoneda . " value=" . $dp['i_id'] . ">" . $dp['v_nombre'] . "</option>";
 				}
+
+
+				//Combo Direcciones
+				$FilasDireccion = "";
+				$selDireccion = "";
+				foreach ($ListadoDirecciones as $dp) {
+					if ($dp['v_id_local'] == $data[0]['v_id_direccion_entrega']) {
+						$selDireccion = "selected='selected'";
+					} else {
+						$selDireccion = "";
+					}
+					$FilasDireccion .= "<option " . $selDireccion . " value=" . $dp['v_id_local'] . ">" . $dp['v_direccion'] . "</option>";
+				}
+
 
 				//Combo estado
 				$FilasEstado = "";
@@ -590,11 +623,15 @@ class pedidosController extends Controller
 					'i_idestado' => $i_idestado,
 					'i_idorden_aprobacion' => $i_idorden_aprobacion,
 					'i_filas' => $i_filas,
+
+					'v_persona_recepciona' => $v_persona_recepciona,
+
 					'f_montoppto' => $f_montoppto,
 					'FilasMoneda' => $FilasMoneda,
 					'FilasEstado' => $FilasEstado,
+					'FilasDireccion' => $FilasDireccion,
 					'data' => $filas
-					
+
 				)
 			);
 		} else {
@@ -977,7 +1014,6 @@ class pedidosController extends Controller
 
 			$v_codigo = $_POST['idppto'];
 
-
 			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
 
 			$options = array(
@@ -1153,7 +1189,7 @@ class pedidosController extends Controller
 		}
 	}
 
-	public function Mostrar_pedido_ppto() //3
+	public function Mostrar_pedido_ppto() //3 REE
 	{
 		if (isset($_SESSION['usuario'])) {
 
@@ -1187,6 +1223,10 @@ class pedidosController extends Controller
 			$result = $soap->MostrarPedidoPpto($partida);
 			$data = json_decode($result->MostrarPedidoPptoResult, true);
 
+
+			$f_montoppto =   $data[0]['f_montoppto'];
+			$f_diferencia =   $data[0]['f_diferencia'];
+
 			$filas = [];
 			$i = 0;
 			foreach ($data as $da) {
@@ -1207,6 +1247,8 @@ class pedidosController extends Controller
 
 			echo $json->encode(
 				array(
+					'f_montoppto' => $f_montoppto,
+					'f_diferencia' => $f_diferencia,
 					'data' => $filas
 				)
 			);

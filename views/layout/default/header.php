@@ -255,7 +255,7 @@
     <div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
         <div class="navbar-header">
             <ul class="nav navbar-nav flex-row">
-                <li class="nav-item mr-auto"><a class="navbar-brand" href="../../../html/rtl/vertical-menu-template/index.html">
+                <li class="nav-item mr-auto"><a class="navbar-brand">
                         <span class="brand-logo">
                             <img class="brand-image" src="<?php echo BASE_URL ?>public/dist/img/favicon.png" alt="avatar" height="32" width="40">
                         </span>
@@ -276,16 +276,16 @@
                                         echo "active";
                                     }
                                 } ?> nav-item <?php if ($_SESSION['selmenu'] == $menu['v_link']) {
-                                                                                                                                                            echo $_SESSION['despliegue'];
-                                                                                                                                                        } ?>">
+                                                    echo $_SESSION['despliegue'];
+                                                } ?>">
                         <a onclick="navegacionmenu('<?php echo $menu['v_link'] ?>')" class="nav-link" href="<?php echo BASE_URL . $menu['v_link'] ?>/index">
                             <i data-feather="<?php echo $menu['v_icono'] ?>"></i>
                             <span class="menu-title text-truncate"><?php echo str_replace("&otilde;", "ó", $menu['v_nombre']) ?></span>
                         </a>
+
                         <?php if (isset($_SESSION['submenus'])) { ?>
                             <?php foreach ($_SESSION['submenus'] as $submenu) { ?>
                                 <?php if ($submenu['i_idmenu'] == $menu['i_id']) { ?>
-
                                     <ul class="nav-treeview">
                                         <li class="<?php if ($_SESSION['selsubmenu'] == $submenu['v_link']) {
                                                         echo "active";

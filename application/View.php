@@ -83,7 +83,7 @@ class View
 	{
 		if (is_array($js) && count($js)) {
 			for ($i = 0; $i < count($js); $i++) {
-				$this->_js[] = BASE_URL . 'views/' . $this->_controlador . '/js/' . $js[$i] . '.js?v='.LAST_VERSION_SOURCE;
+				$this->_js[] = BASE_URL . 'views/' . $this->_controlador . '/js/' . $js[$i] . '.js?v=' . LAST_VERSION_SOURCE;
 			}
 		} else {
 			throw new Exception('Error de js');
@@ -99,7 +99,7 @@ class View
 	{
 		if (is_array($js) && count($js)) {
 			for ($i = 0; $i < count($js); $i++) {
-				$this->_jsSp[] = BASE_URL . 'public/' . $js[$i] . '.js?v='.LAST_VERSION_SOURCE;
+				$this->_jsSp[] = BASE_URL . 'public/' . $js[$i] . '.js?v=' . LAST_VERSION_SOURCE;
 			}
 		} else {
 			throw new Exception('Error de js');
@@ -121,5 +121,47 @@ class View
 			throw new Exception('Error de css');
 		}
 	}
+
+	// menu
+	public function conctructor_menu($menu, $submenu)
+	{
+		$filasmenu = "";
+		$filassub = "";
+		$menu1 = $menu;
+		$submenu1 = $submenu;
+		$active = "";
+
+		foreach ($_SESSION['menus'] as $m) {
+			$fechita = $m['i_submenu'] == 1 ? "<i class='right fas fa-angle-left'></i>" : "";
+			foreach ($_SESSION['submenus'] as $sm) {
+				$active = $sm['v_link'] == $submenu1 ? " active" : "";
+				if ($sm['i_idmenu'] == $m['i_id']) {
+					$filassub .= "
+						<ul class='nav nav-treeview'>
+							<li class='nav-item'>
+								<a href='" . BASE_URL . $sm['v_link'] . "/index' class='" . $sm['v_link'] . " nav-link" . $active . "'>
+									<i class='nav-icon " . $sm['v_icono'] . "'></i>
+									<p>" . $sm['v_nombre'] . "</p>
+									" . $sm['v_span'] . "
+								</a>
+							</li>
+						</ul>";
+				}
+				$active = "";
+			}
+			// menu-open
+			$mopen = $menu1 == $m['v_link'] ? ' menu-open' : "";
+			$filasmenu .= "
+					<li class='nav-item" . $mopen . "'>
+						<a href=" . BASE_URL . $m['v_link'] . " class='" . $m['v_link'] . " nav-link'>
+							<i class='nav-icon " . $m['v_icono'] . "'></i>
+							<p>" . $m['v_nombre'] . "</p>" . $fechita . "
+						</a>
+						" . $filassub . "
+					</li>";
+			$filassub = "";
+		}
+
+		$_SESSION['menuinicial'] = $filasmenu;
+	}
 }
-?>

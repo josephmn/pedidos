@@ -12,6 +12,27 @@ $(function () {
 
   $("#encargadoestado").val('USUARIO');
   document.getElementById("pptoadd").disabled = true;
+
+  $("#tabs").append(
+    " <li class= 'nav-item' >\
+    <a class='nav-link active' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
+      <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
+      <polyline points='9 22 9 12 15 12 15 22'></polyline>\
+    </svg> Opcion1</a>\
+  </li >\
+    <li class='nav-item'>\
+      <a class='nav-link' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+        <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+      </svg> Opcion2</a>\
+    </li>\
+    ");
+
+  document.getElementById('homeIcon').className += " active";
+  document.getElementById("profileIcon-tab").disabled = true;
+  document.getElementById("profileIcon-tab").style.color = "red";
+
+
+
   document.getElementById("btnsendpedido").disabled = true;
   document.getElementById("customRadio1").disabled = true;
 
@@ -61,6 +82,164 @@ $(function () {
 
   document.getElementById('monedaimporte').innerHTML = $('#moneda option:selected').text();
 
+
+  $("#tipoorden").change(function () {
+    var tipoorden = $("#tipoorden").val();
+    var xi_tipo = $("#tipoorden").val();
+    var post = 2;
+    var nu_correla = document.getElementById("nropedido").innerHTML;
+
+    if (nu_correla != 'NUEVO') {
+      $.ajax({
+        type: 'POST',
+        url: '/pedidos/aprobarpedido/ValidacionPedido',
+        data: {
+          post: post,
+          nu_correla: nu_correla,
+          xi_tipo: xi_tipo
+        },
+        success: function (res) {
+          if (Number(res.i_valor) == 1) {
+
+            Swal.fire(
+              res.v_mensaje,
+              '',
+              'warning'
+            )
+            $("#tipoorden").html("");
+            $("#tipoorden").append(res.FilasTipo);
+
+            console.log(res.FilasTipo);
+
+            return;
+          } else {
+
+            $("#tabs").html("");
+
+            if (Number(tipoorden) == 1) {
+
+              $("#tabs").append(
+                " <li class= 'nav-item' >\
+                <a class='nav-link active' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
+                  <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
+                  <polyline points='9 22 9 12 15 12 15 22'></polyline>\
+                </svg> Opcion1</a>\
+              </li >\
+                <li class='nav-item'>\
+                  <a class='nav-link' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+                    <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+                  </svg> Opcion2</a>\
+                </li>\
+                ");
+
+              document.getElementById("homeIcon-tab").disabled = false;
+              document.getElementById("homeIcon-tab").style.color = "green";
+
+              document.getElementById('profileIcon').className = "";
+              document.getElementById('profileIcon').className += "tab-pane";
+              document.getElementById('homeIcon').className = "";
+              document.getElementById('homeIcon').className += "tab-pane active";
+
+              document.getElementById("profileIcon-tab").disabled = true;
+              document.getElementById("profileIcon-tab").style.color = "red";
+            } else {
+
+              $("#tabs").append(
+                " <li class= 'nav-item' >\
+                <a class='nav-link ' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
+                  <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
+                  <polyline points='9 22 9 12 15 12 15 22'></polyline>\
+                </svg> Opcion1</a>\
+              </li >\
+                <li class='nav-item'>\
+                  <a class='nav-link active' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+                    <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+                  </svg> Opcion2</a>\
+                </li>\
+                ");
+
+              document.getElementById('homeIcon').className = "";
+              document.getElementById('homeIcon').className += "tab-pane";
+              document.getElementById('profileIcon').className = "";
+              document.getElementById('profileIcon').className += "tab-pane active";
+
+
+              document.getElementById("homeIcon-tab").disabled = true;
+              document.getElementById("homeIcon-tab").style.color = "red";
+
+              document.getElementById("profileIcon-tab").disabled = false;
+              document.getElementById("profileIcon-tab").style.color = "green";
+            }
+          }
+        }
+      });
+    } else {
+
+      $("#tabs").html("");
+      if (Number(tipoorden) == 1) {
+
+        $("#tabs").append(
+          " <li class= 'nav-item' >\
+          <a class='nav-link active' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
+            <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
+            <polyline points='9 22 9 12 15 12 15 22'></polyline>\
+          </svg> Opcion1</a>\
+        </li >\
+          <li class='nav-item'>\
+            <a class='nav-link' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+              <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+            </svg> Opcion2</a>\
+          </li>\
+          ");
+
+        document.getElementById("homeIcon-tab").disabled = false;
+        document.getElementById("homeIcon-tab").style.color = "green";
+
+        document.getElementById('profileIcon').className = "";
+        document.getElementById('profileIcon').className += "tab-pane";
+        document.getElementById('homeIcon').className = "";
+        document.getElementById('homeIcon').className += "tab-pane active";
+
+        document.getElementById("profileIcon-tab").disabled = true;
+        document.getElementById("profileIcon-tab").style.color = "red";
+      } else {
+
+        $("#tabs").append(
+          " <li class= 'nav-item' >\
+          <a class='nav-link ' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
+            <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
+            <polyline points='9 22 9 12 15 12 15 22'></polyline>\
+          </svg> Opcion1</a>\
+        </li >\
+          <li class='nav-item'>\
+            <a class='nav-link active' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+              <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+            </svg> Opcion2</a>\
+          </li>\
+          ");
+
+        document.getElementById('homeIcon').className = "";
+        document.getElementById('homeIcon').className += "tab-pane";
+        document.getElementById('profileIcon').className = "";
+        document.getElementById('profileIcon').className += "tab-pane active";
+
+
+        document.getElementById("homeIcon-tab").disabled = true;
+        document.getElementById("homeIcon-tab").style.color = "red";
+
+        document.getElementById("profileIcon-tab").disabled = false;
+        document.getElementById("profileIcon-tab").style.color = "green";
+      }
+    }
+
+
+
+
+
+
+  });
+
+
   var datosppto = [];
   var codmes = "";
   var nombremes = "";
@@ -69,6 +248,8 @@ $(function () {
   //Array general par manejos de datos
   var countaci = 1;
   var datosaci = [];
+
+
 
 
   //#region                                               (CARGA CON EL NUMERO DE PEDIDO  QUE SE TRAE COMO PARAMETRO)
@@ -105,8 +286,70 @@ $(function () {
           $('#customRadio1').prop('checked', false);
         }
 
+
         $("#moneda").html("");
         $("#moneda").append(res.FilasMoneda);
+
+        $("#tipoorden").html("");
+        $("#tipoorden").append(res.FilasTipo);
+
+
+        $("#tabs").html("");
+        if (Number(res.i_tipo_pedido) == 1) {
+
+          $("#tabs").append(
+            " <li class= 'nav-item' >\
+          <a class='nav-link active' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
+            <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
+            <polyline points='9 22 9 12 15 12 15 22'></polyline>\
+          </svg> Opcion1</a>\
+        </li >\
+          <li class='nav-item'>\
+            <a class='nav-link' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+              <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+            </svg> Opcion2</a>\
+          </li>\
+          ");
+
+          document.getElementById("homeIcon-tab").disabled = false;
+          document.getElementById("homeIcon-tab").style.color = "green";
+
+          document.getElementById('profileIcon').className = "";
+          document.getElementById('profileIcon').className += "tab-pane";
+          document.getElementById('homeIcon').className = "";
+          document.getElementById('homeIcon').className += "tab-pane active";
+
+          document.getElementById("profileIcon-tab").disabled = true;
+          document.getElementById("profileIcon-tab").style.color = "red";
+        } else {
+
+          $("#tabs").append(
+            " <li class= 'nav-item' >\
+          <a class='nav-link ' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
+            <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
+            <polyline points='9 22 9 12 15 12 15 22'></polyline>\
+          </svg> Opcion1</a>\
+        </li >\
+          <li class='nav-item'>\
+            <a class='nav-link active' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+              <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+            </svg> Opcion2</a>\
+          </li>\
+          ");
+
+          document.getElementById('homeIcon').className = "";
+          document.getElementById('homeIcon').className += "tab-pane";
+          document.getElementById('profileIcon').className = "";
+          document.getElementById('profileIcon').className += "tab-pane active";
+
+
+          document.getElementById("homeIcon-tab").disabled = true;
+          document.getElementById("homeIcon-tab").style.color = "red";
+
+          document.getElementById("profileIcon-tab").disabled = false;
+          document.getElementById("profileIcon-tab").style.color = "green";
+        }
+
 
         $('#contactoentrega').val(res.v_persona_recepciona);
         $("#iddireccion").html("");
@@ -177,6 +420,10 @@ $(function () {
   }
   //#endregion
 
+
+
+
+
   //#region                                               (OPCION DE PRODUCTOS)
   $("#tbproducto tbody").on("click", "a.agregar", function () {
     var chekcontrol = document.getElementById("customRadio1").checked;
@@ -221,9 +468,9 @@ $(function () {
 
         success: function (res) {
           $('#unidad').val(res.v_undmedida);
-          $("#descripcion").html(v_invtid + "-" + res.v_nombreproducto);
+          $("#descripcion").html(v_invtid + "-" + (res.v_nombreproducto));
           document.getElementById("codproducto").value = v_invtid
-          document.getElementById("nombreproduco").value = res.v_nombreproducto;
+          document.getElementById("nombreproduco").value = (res.v_nombreproducto);
 
           $("#xlocal").html("");
           $("#xlocal").append(res.FilascomboLocal);
@@ -572,7 +819,11 @@ $(function () {
             url: '/pedidos/pedidos/eliminar_fila',
             data: { post: post, nu_correla: nu_correla, i_item: i_item },
             success: function (res) {
+
+
+
               if (res.v_mensaje == '' && Number(res.respuesta) == 1) {
+
                 let valor = parseInt(id);
                 $('#resumentotal').val('');
                 $("#example2").dataTable().fnDestroy();
@@ -651,8 +902,15 @@ $(function () {
                 datosaci = myArray;
                 countaci = contador;
                 console.log(datosaci);
-              } else {
+              } else if (res.v_mensaje != '' && Number(res.respuesta) == 2) {
+                Swal.fire(
+                  res.v_mensaje,
+                  '',
+                  'warning'
+                )
+                return
 
+              } else {
                 let valor = parseInt(id);
                 $('#resumentotal').val('');
                 $("#example2").dataTable().fnDestroy();
@@ -892,6 +1150,8 @@ $(function () {
                   },
 
                   success: function (res) {
+                 
+
                     $("#div-01").html("");
                     let myArray = [];
                     for (const property in res.data) {
@@ -1054,7 +1314,7 @@ $(function () {
     var nota = $('#note').val();
     var d_fechaentrega = $('#fechaentrega').val();
     var v_numerophone = $('#nrophone').val();
-    var v_nombrepedido = $('#namepedido').val();
+    var v_nombrepedido = $('#namepedido').val().toUpperCase();
 
     var montolimite = document.getElementById("montolimite").innerHTML;
 
@@ -1064,12 +1324,11 @@ $(function () {
     var v_id_direccion_entrega = $('#iddireccion option:selected').val();
     var v_direccion_entrega = $('#iddireccion option:selected').text();
 
-    // alert(v_persona_recepciona);
-    // alert(v_id_direccion_entrega);
-    // alert(v_direccion_entrega);
+    var i_tipo_pedido = $('#tipoorden option:selected').val();
+    var v_tipo_pedido = $('#tipoorden option:selected').text();
 
 
-    // return
+
 
 
     console.log(datosaci);
@@ -1170,7 +1429,7 @@ $(function () {
       showCancelButton: true,
       confirmButtonColor: "#61C250",
       cancelButtonColor: "#ea5455",
-      confirmButtonText: "Si, Procesar!",
+      confirmButtonText: "Si, Guardar!",
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
@@ -1196,6 +1455,8 @@ $(function () {
             v_persona_recepciona: v_persona_recepciona,
             v_id_direccion_entrega: v_id_direccion_entrega,
             v_direccion_entrega: v_direccion_entrega,
+            i_tipo_pedido: i_tipo_pedido,
+            v_tipo_pedido: v_tipo_pedido,
             datosaci: datosaci
           },
 
@@ -1230,7 +1491,6 @@ $(function () {
                 //   document.getElementById("btnsendpedido").disabled = false;
                 //   $('#customRadio1').prop('checked', false);
                 // }
-
                 countaci = Number(res.i_filas) + 1;
                 document.getElementById("pptoadd").disabled = false;
                 document.getElementById('nropedido').innerHTML = res.nu_correla;
@@ -1365,9 +1625,12 @@ $(function () {
   });
 
 
-  $('#btnsendpedido').on('click', function () {  //ENVIAR CORREO
+  $('#btnsendpedido').on('click', function () {  //ENVIAR CORREO raaa
     var post = 0;
     var nu_correla = document.getElementById("nropedido").innerHTML;
+    var nombre = document.getElementById("montolimite").innerHTML;
+    var xi_tipo = 0;
+
     if (nu_correla == 'NUEVO' || nu_correla == null) {
       $('#namepedido').focus();
       Swal.fire({
@@ -1385,7 +1648,19 @@ $(function () {
     }
 
 
-
+    if (nombre == 0 || nombre == null) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'EL AREA QUE ESTA ASGINADO, NO TIENE FORMULA DE APROBACIONES, COORDINAR CON EL AREA DE COMPRAS',
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
 
 
 
@@ -1402,16 +1677,15 @@ $(function () {
       if (result.isConfirmed) {
 
 
-
         $.ajax({
           type: 'POST',
           url: '/pedidos/aprobarpedido/ValidacionPedido',
           data: {
             post: post,
-            nu_correla: nu_correla
+            nu_correla: nu_correla,
+            xi_tipo: xi_tipo
           },
           success: function (res) {
-
             if (Number(res.i_valor) == 1) {
               $('#namepedido').focus();
               Swal.fire(
@@ -1419,7 +1693,6 @@ $(function () {
                 '',
                 'warning'
               )
-
             } else {
               $.ajax({
                 type: 'POST',
@@ -1522,14 +1795,16 @@ $(function () {
       })
       return;
     }
-
     var resumentotal = document.getElementById("resumentotal").innerHTML;
     var tipocambio = $('#tipocambio').val();
 
     //perro
-
- 
     var moneda = $('#moneda option:selected').text();
+
+
+    $("#idpartida").html("");
+    $("#div-mes").html("");
+
 
     if (moneda == 'USD') {
       document.getElementById('importepedido').innerHTML = (Number(resumentotal) * Number(tipocambio)).toFixed(2);
@@ -1540,8 +1815,8 @@ $(function () {
     }
 
     document.getElementById('nropedidoppto').innerHTML = nu_correla;
-
     var encargadoestado = $('#encargadoestado').val();
+
     if (chekcontrol == false) {
       $("#modal-ppto").modal("show");
       let count = 0;
@@ -1554,7 +1829,6 @@ $(function () {
             data: { nu_correla: nu_correla },
             success: function (res) {
 
-
               document.getElementById('resumenppto').innerHTML = res.f_montoppto;
               document.getElementById('diferenciappto').innerHTML = res.f_diferencia;
 
@@ -1564,6 +1838,12 @@ $(function () {
                 document.getElementById("diferenciappto").style.color = "red";
               }
 
+              $("#lineapedido").html("");
+              $("#lineapedido").append(res.FilasDetPedido);
+
+              $("#idppto").html("");
+              $("#idppto").append(res.FilasPresupuesto);
+
 
 
               $("#tbpptopedido").dataTable().fnDestroy();
@@ -1572,6 +1852,7 @@ $(function () {
               let myArray = [];
               for (const property in res.data) {
                 let nu_correla = res.data[property].nu_correla;
+                let v_item_pedido = res.data[property].v_item_pedido;
                 let v_idlinea = res.data[property].v_idlinea;
                 let v_idppto = res.data[property].v_idppto;
                 let v_idpartida = res.data[property].v_idpartida;
@@ -1582,7 +1863,7 @@ $(function () {
 
                 let fila =
                   "<tr><td class='text-left'>" +
-                  nu_correla +
+                  v_item_pedido +
                   "</td><td class='text-left'>" +
                   v_idppto +
                   "</td><td class='text-left'>" +
@@ -1592,9 +1873,9 @@ $(function () {
                   "</td><td class='text-left'>" +
                   v_nombremes +
                   "</td><td class='text-left'>" +
-                  f_monto +
-                  "</td><td class='text-left'>" +
                   v_centrocosto +
+                  "</td><td class='text-left'>" +
+                  f_monto +
                   "</td><td><a id=" +
                   v_idlinea +
                   " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
@@ -1629,6 +1910,12 @@ $(function () {
                 document.getElementById("diferenciappto").style.color = "red";
               }
 
+              $("#lineapedido").html("");
+              $("#lineapedido").append(res.FilasDetPedido);
+
+              $("#idppto").html("");
+              $("#idppto").append(res.FilasPresupuesto);
+
 
               $("#tbpptopedidos").dataTable().fnDestroy();
               $("#tablita-pptos").children().remove();
@@ -1636,6 +1923,7 @@ $(function () {
               let myArray = [];
               for (const property in res.data) {
                 let nu_correla = res.data[property].nu_correla;
+                let v_item_pedido = res.data[property].v_item_pedido;
                 let v_idlinea = res.data[property].v_idlinea;
                 let v_idppto = res.data[property].v_idppto;
                 let v_idpartida = res.data[property].v_idpartida;
@@ -1646,7 +1934,7 @@ $(function () {
 
                 let fila =
                   "<tr><td class='text-center'>" +
-                  nu_correla +
+                  v_item_pedido +
                   "</td><td class='text-left'>" +
                   v_idppto +
                   "</td><td class='text-left'>" +
@@ -1656,9 +1944,9 @@ $(function () {
                   "</td><td class='text-left'>" +
                   v_nombremes +
                   "</td><td class='text-left'>" +
-                  f_monto +
-                  "</td><td class='text-left'>" +
                   v_centrocosto +
+                  "</td><td class='text-left'>" +
+                  f_monto +
                   "</td></tr>";
 
                 let btn = document.createElement("tr");
@@ -1673,7 +1961,6 @@ $(function () {
     }
 
   });
-
 
   $(document).on('change', 'input[type="checkbox"]', function (e) {
     $("#montolleva").val('');
@@ -1952,11 +2239,26 @@ $(function () {
     var v_idppto = $('#idppto  option:selected').val();
     var v_idpartida = $('#idpartida  option:selected').val();
     var v_centrocosto = $('#idcentrocosto  option:selected').val();
+    var linedetalle = $('#lineapedido option:selected').val();
 
     var cantidad = $('#montolleva').val();
     var cantidadx = parseFloat(cantidad);
     var montox = parseFloat(monto);
 
+
+    if (linedetalle == "XXX" || linedetalle == null) {
+      $("#lineapedido").focus();
+      Swal.fire({
+        title: 'SELECCIONE UN ITEM DEL PEDIDO',
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
 
     if (montox == 0) {
       $("#montolleva").focus();
@@ -2002,15 +2304,14 @@ $(function () {
       return;
     }
 
-
     Swal.fire({
-      title: "Estas seguro de procesar en el Sistema?",
+      title: "Estas seguro de guardar en el Sistema?",
       text: "",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#61C250",
       cancelButtonColor: "#ea5455",
-      confirmButtonText: "Si, Procesar!",
+      confirmButtonText: "Si, Guardar!",
       cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
@@ -2020,6 +2321,7 @@ $(function () {
           data: {
             post: post,
             nu_correla: nu_correla,
+            linedetalle: linedetalle,
             v_idppto: v_idppto,
             v_idpartida: v_idpartida,
             codmes: codmes,
@@ -2027,8 +2329,8 @@ $(function () {
             cantidadx: cantidadx,
             v_centrocosto: v_centrocosto,
           },
-          success: function (res) {
 
+          success: function (res) {
             $.ajax({
               type: 'POST',
               url: '/pedidos/pedidos/Mostrar_pedido_ppto',
@@ -2043,6 +2345,9 @@ $(function () {
                   document.getElementById("diferenciappto").style.color = "red";
                 }
 
+                // $("#idppto").html("");
+                // $("#idppto").append(res.FilasPresupuesto);
+
 
                 $("#tbpptopedido").dataTable().fnDestroy();
                 $("#tablita-ppto").children().remove();
@@ -2050,6 +2355,7 @@ $(function () {
                 let myArray = [];
                 for (const property in res.data) {
                   let nu_correla = res.data[property].nu_correla;
+                  let v_item_pedido = res.data[property].v_item_pedido;
                   let v_idlinea = res.data[property].v_idlinea;
                   let v_idppto = res.data[property].v_idppto;
                   let v_idpartida = res.data[property].v_idpartida;
@@ -2060,7 +2366,7 @@ $(function () {
 
                   let fila =
                     "<tr><td class='text-left'>" +
-                    nu_correla +
+                    v_item_pedido +
                     "</td><td class='text-left'>" +
                     v_idppto +
                     "</td><td class='text-left'>" +
@@ -2070,9 +2376,9 @@ $(function () {
                     "</td><td class='text-left'>" +
                     v_nombremes +
                     "</td><td class='text-left'>" +
-                    f_monto +
-                    "</td><td class='text-left'>" +
                     v_centrocosto +
+                    "</td><td class='text-left'>" +
+                    f_monto +
                     "</td><td><a id=" +
                     v_idlinea +
                     " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
@@ -2140,6 +2446,10 @@ $(function () {
                     document.getElementById("diferenciappto").style.color = "red";
                   }
 
+                  $("#idppto").html("");
+                  $("#idppto").append(res.FilasPresupuesto);
+
+
                   $("#tbpptopedido").dataTable().fnDestroy();
                   $("#tablita-ppto").children().remove();
 
@@ -2166,9 +2476,9 @@ $(function () {
                       "</td><td class='text-left'>" +
                       v_nombremes +
                       "</td><td class='text-left'>" +
-                      f_monto +
-                      "</td><td class='text-left'>" +
                       v_centrocosto +
+                      "</td><td class='text-left'>" +
+                      f_monto +
                       "</td><td><a id=" +
                       v_idlinea +
                       " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";

@@ -41,13 +41,13 @@ $(function () {
       </ol >\
     <div class='carousel-inner' role='listbox'>\
       <div class='carousel-item active'>\
-        <img class='img-fluid' src='../public/dist/img/Productosss.jpg' alt='First slide' />\
+        <img class='img-fluid' src='../pedidos/public/dist/img/Productosss.jpg' alt='First slide' />\
       </div>\
       <div class='carousel-item'>\
-        <img class='img-fluid' src='../public/dist/img/Inicio.jpeg' alt='Second slide' />\
+        <img class='img-fluid' src='../pedidos/public/dist/img/Inicio.jpeg' alt='Second slide' />\
       </div>\
       <div class='carousel-item'>\
-        <img class='img-fluid' src='../public/dist/img/Productsssos.jpg' alt='Third slide' />\
+        <img class='img-fluid' src='../pedidos/public/dist/img/Productsssos.jpg' alt='Third slide' />\
       </div>\
     </div>\
     <a class='carousel-control-prev' href='#carousel-example-generic' role='button' data-slide='prev'>\
@@ -103,7 +103,7 @@ $(function () {
               <div class='timeline-event'>\
                 <div class='d-flex justify-content-between flex-sm-row flex-column mb-sm-0 mb-1'>\
                   <h6> <strong>"+ i_idorden + ".&nbsp;" + v_aprobador_uno + " </strong> </h6>\
-                  <div class='col-sm-4'>\
+                  <div class='col-sm-5'>\
                     <h6  class='badge badge-pill badge-"+ v_color_fase + "'>" + v_nombre_estado + "</h6>\
                     <span class='timeline-event-time'><strong>"+ d_fecha_registrotrk + "</strong></span>\
                   </div>\
@@ -234,7 +234,7 @@ $(function () {
             </svg>"
             +
             "</td><td><a" +
-            " <a href='http://localhost/pedidos/aprobarpedido/documentopedido/" + nu_correla + "' class='btn btn-danger btn-sm bol' target='_blank' style='color:white'><i class='fas fa-file-pdf fa-beat'></i></a>"
+            " <a href='https://verdum.com/pedidos/aprobarpedido/documentopedido/" + nu_correla + "' class='btn btn-danger btn-sm bol' target='_blank' style='color:white'><i class='fas fa-file-pdf fa-beat'></i></a>"
             +
             "</td><td><a id=" +
             nu_correla +
@@ -341,10 +341,6 @@ $(function () {
         });
       }
     });
-
-
-
-
 
   });
 
@@ -535,7 +531,7 @@ function checkInput(r) {
 
   if (respuesta == "Rechazar") {
 
-    $("#modal-retorno").modal("show");
+    // $("#modal-retorno").modal("show");
     // Swal.fire({
     //   title: "Seguro de Rechazar el pedido?",
     //   text: "Pedido sera Rechazado",
@@ -670,7 +666,7 @@ function checkInput(r) {
 
               let btn = document.createElement("tr");
               btn.innerHTML = fila;
-              document.getElementById("tablita-cotizacion").appendChild(btn);
+              document.getElementById("tablita-nota").appendChild(btn);
 
             }
 

@@ -12,6 +12,8 @@ class usuarioController extends Controller
 	{
 		if (isset($_SESSION['usuario'])) {
 
+			$this->_view->conctructor_menu('configuracion', 'usuario');
+
 			$this->_view->setCss_Specific(
 				array(
 					'dist/css/fontawesome/css/all',
@@ -187,7 +189,7 @@ class usuarioController extends Controller
 					$FilascomboUsuarioSolomon .= "<option " . $selsolomon . " value=" . $dp['v_userid'] . ">" . $dp['v_username'] . "</option>";
 				}
 
-				
+
 				$estado  =  1;
 				$v_dni  = $data[0]['v_dni'];
 				$v_nombres  = $data[0]['v_nombres'];

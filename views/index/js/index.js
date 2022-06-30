@@ -23,6 +23,7 @@ $("#btnlogin").on("click", function () {
       type: "POST",
       url: "/pedidos/index/login",
       data: { dni: dni, clave: clave },
+      
       beforeSend: function () {
         $("#div-login").html("");
         $("#div-login").append(

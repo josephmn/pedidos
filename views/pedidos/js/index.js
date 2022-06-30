@@ -2,8 +2,28 @@ $(function () {
 
 
   $('#btnagregar').on('click', function () {
+
+    var nombre = $(this).attr("name");
+
+    if (nombre == 0 || nombre == null) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'EL AREA QUE ESTA ASGINADO, NO TIENE FORMULA DE APROBACIONES, COORDINAR CON EL AREA DE COMPRAS',
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
+
     location.href = "https://verdum.com/pedidos/pedidos/realizarpedido/index";
   });
+
+
 
   var table = $("#tbpedidos").DataTable({
     lengthChange: true,

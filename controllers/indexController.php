@@ -19,8 +19,6 @@ class indexController extends Controller
 				'dist/css/components',
 				'dist/css/pages/page-auth',
 				'plugins/vendors/css/extensions/ext-component-sweet-alerts'
-
-				
 			)
 		);
 
@@ -272,7 +270,6 @@ class indexController extends Controller
 		$result = $soap->Login($param);
 		$login = json_decode($result->LoginResult, true);
 
-
 		// validamos que el logueo sea correcto
 		if (count($login) > 0) {
 			$perfil = array(
@@ -283,6 +280,110 @@ class indexController extends Controller
 
 			$rptusersubmenu = $soap->UsuarioSubMenu($perfil);
 			$usersubmenu = json_decode($rptusersubmenu->UsuarioSubMenuResult, true);
+
+			$filasmenu = "";
+			$filassub = "";
+			$menu1 = "dashboard";
+			$submenu1 = "";
+			$active = "";
+
+			foreach ($menu as $m) {
+				foreach ($submenu as $sm) {
+					$active = $sm['v_link'] == $submenu1 ? " active" : "";
+					if ($sm['i_idmenu'] == $m['i_id']) {
+						$filassub .= "
+						<ul class='nav-treeview'>
+							<li class='nav-item " . $active . "'>
+								<a href='" . BASE_URL . $sm['v_link'] . "/index' class='" . $sm['v_link'] . " nav-link'>
+									<i data-feather='" . $sm['v_icono'] . "'></i>
+									<span>" . $sm['v_nombre'] . "</span>
+									" . $sm['v_span'] . "
+								</a>
+							</li>
+						</ul>";
+					}
+					$active = "";
+				}
+				// menu-open
+				$activem = $menu1 == $m['v_link'] && $m['i_submenu'] != 1 ? 'active ' : "";
+
+				$filasmenu .= "
+					<li class='" . $activem . "nav-item'>
+						<a href=" . BASE_URL . $m['v_link'] . " class='" . $m['v_link'] . " nav-link'>
+							<i data-feather='" . $m['v_icono'] . "'></i>
+							<span class='menu-title text-truncate'>" . str_replace("&otilde;", "ó", $m['v_nombre']) . "</span>
+						</a>
+						" . $filassub . "
+					</li>";
+				$filassub = "";
+			}
+
+			$_SESSION['menuinicial'] = $filasmenu;
+
+
+			// $filasmenu = "";
+			// $filassub = "";
+			// $menu1 = "";
+			// $submenu1 = "dashboard";
+			// $active = "";
+
+
+			// foreach ($usermenu as $m) {
+
+			// 	if (($m['v_link'] == $menu1) && ($m['i_submenu'] == 0) && ($submenu1 == "")) {
+			// 		$active = " active";
+			// 	} else {
+			// 		$active = "";
+			// 	}
+
+			// 	$flecha = $m['i_submenu'] == 1 ? " has-sub" : "";
+
+
+			// 	foreach ($usersubmenu as $sm) {
+			// 		$activesm = $sm['v_link'] == $submenu1 ? " active" : "";
+			// 		if ($sm['i_idmenu'] == $m['i_id']) {
+			// 			$filassub .= "
+			// 			<ul class='nav-treeview'>
+			// 			<li class='nav-item " . $activesm . "'>
+			// 					<a href='" . BASE_URL . $sm['v_link'] . "/index' class='d-flex align-items-center nav-link" . $active . "'>
+			// 					<i data-feather=" . $sm['v_icono'] . "></i>
+			// 						<span>" . $sm['v_nombre'] . "</span>								 
+			// 					</a>
+			// 				</li>
+			// 			</ul>";
+			// 		}
+			// 		$activesm = "";
+			// 	}
+
+			// 	// menu-open
+			// 	// $mopen = $menu1 == $m['v_link'] && $m['i_submenu'] == 1  ?  ' open' : "";
+
+			// 	$mopen = $m['i_submenu'] == 1 ? " " : "";
+
+			// 	// if (strval($m['v_link']) == strval($menu1)) {
+
+			// 	// 	if (intval($m['i_submenu']) == 1) {
+			// 	// 		$mopen =  " open";
+			// 	// 	} else {
+			// 	// 		$mopen =  " open";
+			// 	// 	}
+			// 	// }
+
+
+			// 	$filasmenu .= "
+			// 		<li class='" . $active  . " nav-item " . $flecha . $mopen . "' >
+			// 			<a class='nav-link d-flex align-items-center' href=" . BASE_URL . $m['v_link'] . ">
+			// 			<i data-feather=" . $m['v_icono'] . "></i>
+			// 			<span class='menu-title text-truncate'> " . str_replace("&otilde;", "ó", $m['v_nombre']) . "</span>
+			// 			</a>
+			// 			" . $filassub . "
+			// 		</li>";
+			// 	$filassub = "";
+			// }
+
+			// $_SESSION['menuinicial'] = $filasmenu;
+
+
 
 			$estado = 1; // logueo exitoso
 			$url = "/pedidos/" . $usermenu[0]['v_link'] . "/index";

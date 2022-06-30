@@ -12,6 +12,8 @@ class grupopedidoController extends Controller
 	{
 		if (isset($_SESSION['usuario'])) {
 
+			$this->_view->conctructor_menu('configuracion','grupopedido');
+
 			$this->_view->setCss_Specific(
 				array(
 					'dist/css/fontawesome/css/all',
@@ -681,6 +683,62 @@ class grupopedidoController extends Controller
 		}
 	}
 
+
+	public function eliminar_grupoFormula() //1
+	{
+		if (isset($_SESSION['usuario'])) {
+
+			putenv("NLS_LANG=SPANISH_SPAIN.AL32UTF8");
+			putenv("NLS_CHARACTERSET=AL32UTF8");
+
+			$this->getLibrary('json_php/JSON');
+			$json = new Services_JSON();
+
+			$post           = $_POST['post'];
+			$v_id_grupo      = $_POST['v_id_grupo'];
+			$v_idarea      = $_POST['v_idarea'];
+			$i_idorden       = $_POST['i_idorden'];
+
+
+			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
+			$options = array(
+				"uri" => $wsdl,
+				"style" => SOAP_RPC,
+				"use" => SOAP_ENCODED,
+				"soap_version" => SOAP_1_1,
+				"connection_timeout" => 60,
+				"trace" => false,
+				"encoding" => "UTF-8",
+				"exceptions" => false,
+			);
+			$soap = new SoapClient($wsdl, $options);
+			$params = array(
+				'post'          => $post,
+				'v_id_grupo'     => $v_id_grupo,
+				'v_idarea'     => $v_idarea,
+				'i_idorden'      => $i_idorden,
+				'v_username'      => $_SESSION['dni']
+
+			);
+
+			$result2 = $soap->EliminarFilaFormula($params);
+			$EliminarFilaFormula = json_decode($result2->EliminarFilaFormulaResult, true);
+			header('Content-type: application/json; charset=utf-8');
+
+			echo $json->encode(
+				array(
+					"vicon" 		=> $EliminarFilaFormula[0]['v_icon'],
+					"vtitle" 		=> $EliminarFilaFormula[0]['v_title'],
+					"vtext" 		=> $EliminarFilaFormula[0]['v_text'],
+					"itimer" 		=> intval($EliminarFilaFormula[0]['i_timer']),
+					"icase" 		=> intval($EliminarFilaFormula[0]['i_case']),
+					"vprogressbar" 	=> $EliminarFilaFormula[0]['v_progressbar'],
+				)
+			);
+		} else {
+			$this->redireccionar('index/logout');
+		}
+	}
 
 	public function ListadoGrupoFormula() //1
 	{

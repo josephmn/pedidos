@@ -61,7 +61,7 @@
                                     <div class="col-xl-2 col-md-6 col-12 mb-1" style="height:60px">
                                         <label class="form-label font-weight-bolder">Fecha</label>
                                         <div class="input-group date" id="ffin" data-target-input="nearest">
-                                            <input type="text" id="fecha" style="color:rgb(0,0,0); background-color:rgb(188,229,175)" class="form-control" placeholder="YYYY-MM-DD" readonly="readonly">
+                                            <input type="text" id="fecha" style="color:rgb(0,0,0); background-color:rgb(97,194,80)" class="form-control" placeholder="YYYY-MM-DD" readonly="readonly">
                                         </div>
                                     </div>
 
@@ -71,7 +71,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-coins"></i></span>
                                             </div>
-                                            <input type="number" style="color:rgb(0,0,0); background-color:rgb(188,229,175)" id="tipocambio" value='<?php echo $this->ListadoTipoCambio[0]['tipocambio']; ?>' class="form-control" aria-describedby="itemquantity" placeholder="0" autocomplete="off" readonly="readonly" />
+                                            <input type="number" style="color:rgb(0,0,0); background-color:rgb(97,194,80)" id="tipocambio" value='<?php echo $this->ListadoTipoCambio[0]['tipocambio']; ?>' class="form-control" aria-describedby="itemquantity" placeholder="0" autocomplete="off" readonly="readonly" />
                                         </div>
                                     </div>
 
@@ -98,7 +98,7 @@
                                     <div class="col-xl-3 col-md-6 col-12 mb-1" style="height:60px">
                                         <div class="form-group">
                                             <label class="form-label font-weight-bolder">Encargado </label>
-                                            <input type="text" id="encargadoestado" style="color:rgb(0,0,0); background-color:rgb(188,229,175)" readonly=" readonly" class="form-control" placeholder="Encargado">
+                                            <input type="text" id="encargadoestado" style="color:rgb(0,0,0); background-color:rgb(97,194,80)" readonly=" readonly" class="form-control" placeholder="Encargado">
                                         </div>
                                     </div>
 
@@ -225,8 +225,23 @@
                     <div class="col-md-4 col-12">
                         <div class="card">
                             <div class="card-body">
-                                <ul class="nav nav-tabs" role="tablist">
-                                    <li class="nav-item">
+
+                                <div class="form-group row">
+                                    <div class="col-sm-3 col-form-label">
+                                        <label for="email-icon"><strong>&nbsp;&nbsp;<i class="fa-solid fa-filter fa-bounce"></i>&nbsp; TIPO</strong></label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <select id="tipoorden" class="form-control mb-1">
+                                            <?php foreach ($this->TipoOrden as $st) { ?>
+                                                <option value="<?php echo $st['i_id']; ?>"><?php echo $st['v_nombre']; ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <hr>
+
+                                <ul class="nav nav-tabs" id="tabs" role="tablist">
+                                    <!-- <li class="nav-item">
                                         <a class="nav-link active" id="homeIcon-tab" data-toggle="tab" href="#homeIcon" aria-controls="home" role="tab" aria-selected="true"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
                                                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -236,11 +251,11 @@
                                         <a class="nav-link" id="profileIcon-tab" data-toggle="tab" href="#profileIcon" aria-controls="profile" role="tab" aria-selected="false"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tool">
                                                 <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
                                             </svg> Opcion2</a>
-                                    </li>
+                                    </li> -->
                                 </ul>
 
                                 <div class="tab-content">
-                                    <div class="tab-pane active" id="homeIcon" aria-labelledby="homeIcon-tab" role="tabpanel">
+                                    <div class="tab-pane " id="homeIcon" aria-labelledby="homeIcon-tab" role="tabpanel">
                                         <div class="card-header">
                                             <h4 class="card-title"><i class="fa-solid fa-cart-flatbed"></i> Lista de productos para agregar</h4>
                                         </div>
@@ -377,7 +392,7 @@
         <div class="modal-content">
             <form id="myForm" method="post">
                 <div class="modal-header  bg-gradient-success">
-                    <label id="descripcion" style="color:rgb(179, 27, 0)" class="form-label font-weight-bolder text-center"></label>
+                    <label id="descripcion" style="color:rgb(179, 27, 0);text-transform:uppercase" class="form-label font-weight-bolder text-center"></label>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -610,7 +625,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-6">
-                        <div class="form-group mb-2">
+                        <div class="form-group mb-1">
                             <h4 class="invoice-title">
                                 #Pedido
                                 <span class="invoice-number">(<b id="nropedidoppto"></b>)</span>
@@ -618,7 +633,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="form-group mb-2">
+                        <div class="form-group mb-1">
                             <h4 class="invoice-title">
                                 Monto S/.
                                 <span class="invoice-number">(<b id="importepedido"></b>)</span>
@@ -659,16 +674,17 @@
                 <div class="form-group row">
                     <div class="col-sm-12">
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-8">
                                 <div class="form-group">
-                                    <label class="form-label  badge badge-light-success">Seleccione centro de costo </label>
-                                    <select id="idcentrocosto" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
-                                        <?php foreach ($this->ListadoSubAcct as $acct) { ?>
-                                            <option value="<?php echo $acct['v_sub']; ?>"><?php echo $acct['v_descripcion']; ?></option>
+                                    <label class="form-label badge badge-light-secondary">Seleccione Item del Pedido</label>
+                                    <select id="lineapedido" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
+                                        <?php foreach ($this->ComboDetPedido as $acct) { ?>
+                                            <option value="<?php echo $acct['v_codprod']; ?>"><?php echo $acct['v_descripcion']; ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
                             </div>
+
 
                             <div class="col-sm-2">
                                 <label class="form-label badge badge-light-success">Monto &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
@@ -683,10 +699,22 @@
                                 </div>
                             </div>
 
+
+
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <label class="form-label  badge badge-light-success">Seleccione centro de costo </label>
+                                    <select id="idcentrocosto" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
+                                        <?php foreach ($this->ListadoSubAcct as $acct) { ?>
+                                            <option value="<?php echo $acct['v_sub']; ?>"><?php echo $acct['v_descripcion']; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <label class="form-label badge badge-light-success">Guardar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    </label>
+                                    <label class="form-label badge badge-light-success">Guardar Ppto</label>
                                     <button type="button" id="agregarppto" name="agregarppto" class="btn btn-primary btn-block"><b><i class="fa-solid fa-floppy-disk fa-beat"></i></b></button>
                                 </div>
                             </div>
@@ -698,13 +726,13 @@
                         <table id="tbpptopedido" class="table table-sm">
                             <thead class="thead-dark">
                                 <tr class="text-left">
-                                    <th class="text-left">#Pedido</th>
-                                    <th class="text-left">#IdPpto</th>
+                                    <th class="text-left">IDProducto</th>
+                                    <th class="text-left">#IdPPto</th>
                                     <th class="text-left">#Partida</th>
                                     <th class="text-left">Periodo</th>
                                     <th class="text-left">Mes</th>
-                                    <th class="text-left">Monto</th>
                                     <th class="text-left">Centrocosto</th>
+                                    <th class="text-left">Monto</th>
                                     <th class="text-center"><i class="fa-solid fa-trash-can"></i> &nbsp;&nbsp;</th>
                                 </tr>
                             </thead>

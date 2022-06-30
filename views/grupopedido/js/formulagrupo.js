@@ -11,6 +11,7 @@ $(function () {
 
   document.getElementById("frmgrupo").innerHTML = variable1;
   document.getElementById("frmarea").innerHTML = '';
+  document.getElementById("customSwitch10").disabled = true;
   document.getElementById("customSwitch101").disabled = true;
 
   //#region                                                  (PARA MANT. DE AERA Y GRUPO)
@@ -298,7 +299,7 @@ $(function () {
 
         $("#fxnombrecorreo").val('');
         $("#mail").val('');
-        document.getElementById("customSwitch10").checked = false;
+        document.getElementById("customSwitch10").checked = true;
         document.getElementById("customSwitch101").checked = true;
         document.getElementById("customSwitch102").checked = false;
         document.getElementById("customSwitch103").checked = false;
@@ -369,6 +370,155 @@ $(function () {
   });
 
 
+  $("#tbformula tbody").on("click", "a.delete", function () {
+    let post = 0;
+    let v_id_grupo = variable1;
+    let v_idarea = document.getElementById("frmarea").innerHTML;
+    let v_id_area = document.getElementById("frmarea").innerHTML;
+    let i_idorden = $(this).attr("id");
+
+
+    if ((v_id_grupo == '' || v_id_grupo == null)) {
+      Swal.fire({
+        title: "DEBE ELEGIR UNA AREA",
+        timer: 3000,
+        timerProgressBar: true,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
+    Swal.fire({
+      title: "Seguro de Eliminar la Fila?",
+      text: "",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#61C250",
+      cancelButtonColor: "#ea5455",
+      confirmButtonText: "Si, Eliminar!",
+      cancelButtonText: "No",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          type: 'POST',
+          url: '/pedidos/grupopedido/eliminar_grupoFormula',
+          data: {
+            post: post,
+            v_id_grupo: v_id_grupo,
+            v_idarea: v_idarea,
+            i_idorden: i_idorden
+          },
+          success: function (res) {
+
+
+            $.ajax({
+              type: 'POST',
+              url: '/pedidos/grupopedido/ListadoGrupoFormula',
+              data: { v_id_grupo: v_id_grupo, v_id_area: v_id_area },
+
+              beforeSend: function () {
+                $("#div-load").html("");
+                $("#div-load").append(
+                  "<div id='div-load'>\<div class='d-flex justify-content-center my-1'>\<div class='spinner-border text-success' role='status' aria-hidden='true'></div>\</div>\ </div>"
+                );
+              },
+              success: function (res) {
+                document.getElementById("frmareanombre").innerHTML = res.v_nombre_area;
+                $("#div-load").html("");
+                console.log(res.data);
+                $("#tbformula").dataTable().fnDestroy();
+                $("#tablita-formula").children().remove();
+                for (const property in res.data) {
+                  let v_id_grupo = res.data[property].v_id_grupo;
+                  let v_idarea = res.data[property].v_idarea;
+                  let i_idorden = res.data[property].i_idorden;
+                  let v_descripcion_uno = res.data[property].v_descripcion_uno;
+                  let v_condicion_uno = res.data[property].v_condicion_uno;
+                  let f_valorinicio_condicion_uno = res.data[property].f_valorinicio_condicion_uno;
+                  let f_valortope_condicion_uno = res.data[property].f_valortope_condicion_uno;
+                  let v_idcargo = res.data[property].v_idcargo;
+                  let v_aprobador_uno = res.data[property].v_aprobador_uno;
+                  let v_correo = res.data[property].v_correo;
+                  let v_validar_tope = res.data[property].v_validar_tope;
+                  let i_btn_aprobar = res.data[property].i_btn_aprobar;
+                  let i_btn_rechazar = res.data[property].i_btn_rechazar;
+                  let i_btn_modificar = res.data[property].i_btn_modificar;
+                  let i_recepciona = res.data[property].i_recepciona;
+                  let v_btn1Nombre = res.data[property].v_btn1Nombre;
+                  let v_btn1Color = res.data[property].v_btn1Color;
+                  let v_correo_next = res.data[property].v_correo_next;
+                  let v_btn2Nombre = res.data[property].v_btn2Nombre;
+                  let v_btn2Color = res.data[property].v_btn2Color;
+                  let fila =
+                    "<tr><td class='text-center'>" +
+                    v_id_grupo +
+                    "</td><td class='text-left'>" +
+                    v_idarea +
+                    "</td><td class='text-center'>" +
+                    i_idorden +
+                    "</td><td class='text-left'>" +
+                    v_descripcion_uno +
+                    "</strong></td><td class='text-center'> <strong>" +
+                    f_valorinicio_condicion_uno +
+                    "</strong></td><td class='text-center'><strong>" +
+                    f_valortope_condicion_uno +
+                    "</strong></td><td class='text-center'>" +
+                    v_validar_tope +
+                    "</td><td class='text-left'><strong>" +
+                    v_aprobador_uno +
+                    "</td><td class='text-left'> <strong>" +
+                    v_correo +
+                    "</strong></td><td class='text-left'> <strong>" +
+                    v_correo_next +
+                    "</strong> </td><td class='text-center'>" +
+                    v_validar_tope +
+                    "</td><td class='text-center'>" +
+                    i_btn_aprobar +
+                    "</td><td class='text-center'>" +
+                    i_btn_rechazar +
+                    "</td><td class='text-center'>" +
+                    i_btn_modificar +
+                    "</td><td class='text-center'>" +
+                    i_recepciona +
+                    "</td><td><a id=" +
+                    i_idorden +
+                    " class='btn btn-" + v_btn1Color + " btn-sm text-white " + v_btn1Nombre + "'><span class='fa-solid fa-marker fa-beat'><b></b></span></a></td>" +
+                    "</td><td><a id=" +
+                    i_idorden +
+                    " class='btn btn-" + v_btn2Color + " btn-sm text-white " + v_btn2Nombre + "'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+                  let btn = document.createElement("tr");
+                  btn.innerHTML = fila;
+                  document.getElementById("tablita-formula").appendChild(btn);
+                }
+                creardatatable("#tbformula");
+              }
+            });
+
+            Swal.fire({
+              icon: res.vicon,
+              title: res.vtitle,
+              text: res.vtext,
+              timer: res.itimer,
+              timerProgressBar: res.vprogressbar,
+              showCancelButton: false,
+              showConfirmButton: false,
+            });
+            var id = setInterval(function () {
+              // location.reload();
+              clearInterval(id);
+            }, res.itimer);
+          }
+        });
+      }
+    });
+
+  });
+
 
   $("#fxusername").change(function () {
     var fxusername = $('#fxusername option:selected').text();
@@ -387,6 +537,8 @@ $(function () {
     var post = 0;
     var v_idgrupo = $('#fxid').val();
     var v_idarea = $('#fxidarea').val();
+    var v_id_area = $('#fxidarea').val();
+    var v_id_grupo = $('#fxid').val();
     i_idorden = i_idorden;
     var v_descripcion_uno = $('#fxdescripcion').val();
     var v_condicion_uno = '';
@@ -496,23 +648,6 @@ $(function () {
     }
 
 
-
-    // if ((success == '' || success == null)) {
-    //   $("#mail").focus();
-    //   Swal.fire({
-    //     title: "INGRESE CORREO VALIDO",
-    //     timer: 3000,
-    //     timerProgressBar: true,
-    //     showClass: {
-    //       popup: 'animate__animated animate__fadeInDown'
-    //     },
-    //     hideClass: {
-    //       popup: 'animate__animated animate__fadeOutUp'
-    //     }
-    //   })
-    //   return;
-    // }
-
     Swal.fire({
       title: "Estas seguro de guardar en el Sistema?",
       text: "",
@@ -550,6 +685,93 @@ $(function () {
 
           },
           success: function (res) {
+
+
+            $.ajax({
+              type: 'POST',
+              url: '/pedidos/grupopedido/ListadoGrupoFormula',
+              data: { v_id_grupo: v_id_grupo, v_id_area: v_id_area },
+
+              beforeSend: function () {
+                $("#div-load").html("");
+                $("#div-load").append(
+                  "<div id='div-load'>\<div class='d-flex justify-content-center my-1'>\<div class='spinner-border text-success' role='status' aria-hidden='true'></div>\</div>\ </div>"
+                );
+              },
+              success: function (res) {
+                document.getElementById("frmareanombre").innerHTML = res.v_nombre_area;
+                $("#div-load").html("");
+                console.log(res.data);
+                $("#tbformula").dataTable().fnDestroy();
+                $("#tablita-formula").children().remove();
+                for (const property in res.data) {
+                  let v_id_grupo = res.data[property].v_id_grupo;
+                  let v_idarea = res.data[property].v_idarea;
+                  let i_idorden = res.data[property].i_idorden;
+                  let v_descripcion_uno = res.data[property].v_descripcion_uno;
+                  let v_condicion_uno = res.data[property].v_condicion_uno;
+                  let f_valorinicio_condicion_uno = res.data[property].f_valorinicio_condicion_uno;
+                  let f_valortope_condicion_uno = res.data[property].f_valortope_condicion_uno;
+                  let v_idcargo = res.data[property].v_idcargo;
+                  let v_aprobador_uno = res.data[property].v_aprobador_uno;
+                  let v_correo = res.data[property].v_correo;
+                  let v_validar_tope = res.data[property].v_validar_tope;
+                  let i_btn_aprobar = res.data[property].i_btn_aprobar;
+                  let i_btn_rechazar = res.data[property].i_btn_rechazar;
+                  let i_btn_modificar = res.data[property].i_btn_modificar;
+                  let i_recepciona = res.data[property].i_recepciona;
+                  let v_btn1Nombre = res.data[property].v_btn1Nombre;
+                  let v_btn1Color = res.data[property].v_btn1Color;
+                  let v_correo_next = res.data[property].v_correo_next;
+                  let v_btn2Nombre = res.data[property].v_btn2Nombre;
+                  let v_btn2Color = res.data[property].v_btn2Color;
+                  let fila =
+                    "<tr><td class='text-center'>" +
+                    v_id_grupo +
+                    "</td><td class='text-left'>" +
+                    v_idarea +
+                    "</td><td class='text-center'>" +
+                    i_idorden +
+                    "</td><td class='text-left'>" +
+                    v_descripcion_uno +
+                    "</strong></td><td class='text-center'> <strong>" +
+                    f_valorinicio_condicion_uno +
+                    "</strong></td><td class='text-center'><strong>" +
+                    f_valortope_condicion_uno +
+                    "</strong></td><td class='text-center'>" +
+                    v_validar_tope +
+                    "</td><td class='text-left'><strong>" +
+                    v_aprobador_uno +
+                    "</td><td class='text-left'> <strong>" +
+                    v_correo +
+                    "</strong></td><td class='text-left'> <strong>" +
+                    v_correo_next +
+                    "</strong> </td><td class='text-center'>" +
+                    v_validar_tope +
+                    "</td><td class='text-center'>" +
+                    i_btn_aprobar +
+                    "</td><td class='text-center'>" +
+                    i_btn_rechazar +
+                    "</td><td class='text-center'>" +
+                    i_btn_modificar +
+                    "</td><td class='text-center'>" +
+                    i_recepciona +
+                    "</td><td><a id=" +
+                    i_idorden +
+                    " class='btn btn-" + v_btn1Color + " btn-sm text-white " + v_btn1Nombre + "'><span class='fa-solid fa-marker fa-beat'><b></b></span></a></td>" +
+                    "</td><td><a id=" +
+                    i_idorden +
+                    " class='btn btn-" + v_btn2Color + " btn-sm text-white " + v_btn2Nombre + "'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+                  let btn = document.createElement("tr");
+                  btn.innerHTML = fila;
+                  document.getElementById("tablita-formula").appendChild(btn);
+                }
+                creardatatable("#tbformula");
+              }
+            });
+
+            $("#modal-formula").modal('hide');
+
             Swal.fire({
               icon: res.vicon,
               title: res.vtitle,
@@ -560,7 +782,7 @@ $(function () {
               showConfirmButton: false,
             });
             var id = setInterval(function () {
-              location.reload();
+              // location.reload();
               clearInterval(id);
             }, res.itimer);
           }

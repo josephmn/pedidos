@@ -61,7 +61,8 @@ class dashboardController extends Controller
 			// <link rel="stylesheet" type="text/css" href="../../../app-assets/vendors/css/vendors.min.css">
 			// <link rel="stylesheet" type="text/css" href="../../../app-assets/css/components.css">
 			// <link rel="stylesheet" type="text/css" href="../../../assets/css/style.css">
-			$this->_view->conctructor_menu('dashboard', 'dashboard');
+
+			$this->_view->conctructor_menu('dashboard', '');
 
 
 			$this->_view->setCss_Specific(

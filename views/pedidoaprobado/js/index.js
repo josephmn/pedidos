@@ -8,17 +8,21 @@ $(function () {
     <li data-target='#carousel-example-generic' data-slide-to='0' class='active'></li>\
     <li data-target='#carousel-example-generic' data-slide-to='1'></li>\
     <li data-target='#carousel-example-generic' data-slide-to='2'></li>\
+    <li data-target='#carousel-example-generic' data-slide-to='3'></li>\
       </ol >\
     <div class='carousel-inner' role='listbox'>\
       <div class='carousel-item active'>\
-        <img class='img-fluid' src='../public/dist/img/Productosss.jpg' alt='First slide' />\
+        <img class='img-fluid' src='../pedidos/public/dist/img/Productosss.jpg' alt='First slide' />\
       </div>\
       <div class='carousel-item'>\
-        <img class='img-fluid' src='../public/dist/img/Inicio.jpeg' alt='Second slide' />\
+        <img class='img-fluid' src='../pedidos/public/dist/img/Inicio.jpeg' alt='Second slide' />\
       </div>\
       <div class='carousel-item'>\
-        <img class='img-fluid' src='../public/dist/img/Productsssos.jpg' alt='Third slide' />\
+        <img class='img-fluid' src='../pedidos/public/dist/img/Productsssos.jpg' alt='Third slide' />\
       </div>\
+      <div class='carousel-item'>\
+      <img class='img-fluid' src='../pedidos/public/dist/img/ALTOMAYO_KV_ALTA-scaledEsc.jpeg' alt='Third slide' />\
+    </div>\
     </div>\
     <a class='carousel-control-prev' href='#carousel-example-generic' role='button' data-slide='prev'>\
       <span class='carousel-control-prev-icon' aria-hidden='true'></span>\
@@ -241,7 +245,7 @@ $(function () {
             </svg>"
             +
             "</td><td><a" +
-            " <a href='http://localhost/pedidos/aprobarpedido/documentopedido/" + nu_correla + "' class='btn btn-danger btn-sm bol' target='_blank' style='color:white'><i class='fas fa-file-pdf fa-beat'></i></a>"
+            " <a href='https://verdum.com/pedidos/aprobarpedido/documentopedido/" + nu_correla + "' class='btn btn-danger btn-sm bol' target='_blank' style='color:white'><i class='fas fa-file-pdf fa-beat'></i></a>"
             +
             "</td><td><a id=" +
             nu_correla +
@@ -541,11 +545,10 @@ function checkInput(r) {
   var respuesta = r.value;
   var v_ruc = '';
 
-  if (respuesta == "Generar Orden de Compra") {
-    var post = 0;
-
+  if (respuesta == "Generar Orden de Servicio") {
+    var post = 1;
     Swal.fire({
-      title: "Seguro de generar una orden de Compra ?",
+      title: "Seguro de generar una orden de Servicio ?",
       text: "Se generará la orden con los datos de la SOLPED",
       icon: "warning",
       showCancelButton: true,
@@ -574,7 +577,6 @@ function checkInput(r) {
             }, 2000);
           },
 
-
           success: function (res) {
 
             $("#modal-insert").modal("hide");
@@ -598,8 +600,9 @@ function checkInput(r) {
     });
   }
 
-  if (respuesta == "Generar Orden de Servicio") {
-    var post = 1;
+
+  if (respuesta == "Generar Orden de Compra") {
+    var post = 0;
 
     Swal.fire({
       title: "Seguro de generar una orden de Compra ?",
@@ -735,8 +738,6 @@ function checkInput(r) {
 
 
   }
-
-
 
 }
 

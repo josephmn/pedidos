@@ -12,32 +12,10 @@ class pedidoaprobadoController extends Controller
 	{
 		if (isset($_SESSION['usuario'])) {
 
+			$this->_view->conctructor_menu('pedidoaprobado', '');
+
 			$this->_view->setCss_Specific(
 				array(
-
-					// 'dist/css/fontawesome/css/all',
-					// 'dist/css/forms/wizard/bs-stepper.min',
-					// 'plugins/vendors/css/extensions/sweetalert2.min',
-					// 'plugins/vendors/css/charts/vendors.min',
-					// 'plugins/vendors/css/charts/apexcharts',
-					// 'plugins/vendors/css/extensions/toastr.min',
-					// 'dist/css/bootstrap-extended',
-					// 'dist/css/themes/bordered-layout',
-					// 'plugins/plugins/charts/chart-apex',
-					// 'dist/css/forms/select/select2.min',
-					// 'dist/css/bootstrap',
-					// 'dist/css/colors',
-					// 'dist/css/components',
-					// 'dist/css/core/menu/menu-types/vertical-menu',
-					// 'dist/css/plugins/forms/form-validation',
-					// 'dist/css/plugins/forms/form-wizard',
-					// 'dist/css/custom',
-					// 'dist/css/style',
-					// 'dist/css/plugins/forms/wizard/form-wizard',
-					// 'plugins/vendors/css/extensions/ext-component-sweet-alerts',
-					// 'plugins/datatables-net/css/jquery.dataTables.min',
-					// 'plugins/datatables-net/css/responsive.dataTables.min',
-
 					'dist/css/fontawesome/css/all',
 					'dist/css/forms/wizard/bs-stepper.min',
 					'plugins/vendors/css/extensions/sweetalert2.min',

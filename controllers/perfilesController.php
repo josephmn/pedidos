@@ -34,20 +34,6 @@ class perfilesController extends Controller
 					'plugins/vendors/css/extensions/ext-component-sweet-alerts',
 					'plugins/datatables-net/css/jquery.dataTables.min',
 					'plugins/datatables-net/css/responsive.dataTables.min',
-
-					// 'plugins/vendors/css/vendors.min',
-					// 'dist/css/bootstrap',
-					// 'dist/css/bootstrap-extended',
-					// 'dist/css/colors',
-					// 'dist/css/components',
-					// 'dist/css/core/menu/menu-types/vertical-menu',
-					// 'dist/css/style',
-					// 'dist/css/fontawesome/css/all',
-					// 'plugins/vendors/css/extensions/ext-component-sweet-alerts',
-					// 'plugins/datatables-net/css/jquery.dataTables.min',
-					// 'plugins/datatables-net/css/responsive.dataTables.min',
-
-
 				)
 			);
 
@@ -66,18 +52,6 @@ class perfilesController extends Controller
 					'dist/js/scripts/forms/form-input-mask',
 					'plugins/vendors/js/forms/cleave/cleave.min',
 					'dist/js/scripts/forms/form-wizard',
-
-
-					// 'plugins/vendors/js/vendors.min',
-					// 'dist/js/scripts/components/components-modals',
-					// 'dist/js/core/app-menu',
-					// 'dist/js/core/app',
-					// 'plugins/vendors/js/extensions/sweetalert2.all.min',
-					// 'plugins/datatables-net/js/jquery.dataTables.min',
-					// 'plugins/datatables-net/js/dataTables.responsive.min',
-					// 'plugins/vendors/js/forms/select/select2.full.min',
-
-
 				)
 			);
 			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
@@ -95,7 +69,6 @@ class perfilesController extends Controller
 			$soap = new SoapClient($wsdl, $options);
 			$result = $soap->MostrarPerfil();
 			$ListadoPerfil = json_decode($result->MostrarPerfilResult, true);
-
 			$this->_view->ListadoPerfil = $ListadoPerfil;
 
 			$this->_view->setJs(array('index'));

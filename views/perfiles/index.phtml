@@ -39,29 +39,28 @@
                                             <?php if (isset($this->ListadoPerfil)) { ?>
                                                 <?php foreach ($this->ListadoPerfil as $user) { ?>
                                                     <tr>
-                                                        <td class="text-left">
-                                                            <div class="media">
-                                                                <div class="avatar bg-light-success mr-0">
-                                                                    <div class="avatar-content">
-                                                                        <i data-feather="user" stroke-width="3" class="avatar-icon"></i>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="media-body my-auto">
-                                                                    <h5 class="font-weight-bolder mb-0">&nbsp;<?php echo $user['i_id'] ?></h5>
-                                                                </div>
-                                                            </div>
-                                                        </td>
+                                                        <td class="text-left"> <i class="fa-solid fa-circle-user success"></i> <strong><?php echo $user['i_id'] ?></strong> </td>
                                                         <td class="text-left"><strong><?php echo $user['v_nombre'] ?></strong> </td>
                                                         <td class="text-left"><strong><?php echo $user['v_descripcion'] ?></strong> </td>
-                                                        <td class="text-center"><?php echo $user['i_estado'] ?></td>
+                  
+                                                        <td class="text-center"><span class="badge bg-<?php echo $user['v_btn1Color'] ?>"><?php echo $user['i_estado'] ?></td>
+
+
                                                         <td class="text-center"><?php echo $user['v_estado'] ?></td>
                                                         <td class="text-center"><a id='<?php echo $user['i_id'] ?>' class="btn btn-info btn-sm text-white editar"><span class="fa-solid fa-marker fa-beat"><b></b></span></a></td>
-
+                                                        
                                                         <td class='text-center'>
                                                             <a id='<?php echo $user['i_id'] ?>' <?php $perfil =  $user['i_id'];
-                                                                                                $nombreperfil =  $user['v_nombre'] ?> href="<?php echo BASE_URL ?><?php echo $user['v_url'] ?>=<?php echo urlencode($perfil); ?>&nombreperfil=<?php echo utf8_decode(urlencode($nombreperfil)) ?>" class="btn btn-<?php echo $user['v_btn1'] ?>"><i class="fas solid fa-<?php echo $user['v_btn1Imagen'] ?>"></i></a>
+                                                                                                $nombreperfil =  $user['v_nombre'] ?> 
+                                                        <?php 
+                                                            
+                                                            if ($user['v_url'] == '') { ?> class="" <?php } else { ?> href="<?php echo BASE_URL ?><?php echo $user['v_url'] ?>=<?php echo urlencode($perfil); ?>&nombreperfil=<?php echo utf8_decode(urlencode($nombreperfil)) ?>" <?php } ?>
+                                                        
+                                                         
+                                                         
+                                                         
+                                                         class="btn btn-<?php echo $user['v_btn1'] ?>"><i class="fas solid fa-<?php echo $user['v_btn1Imagen'] ?>"></i></a>
                                                         </td>
-
                                                     </tr>
                                                 <?php } ?>
                                             <?php } ?>

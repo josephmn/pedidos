@@ -8,7 +8,7 @@
             <section id="dashboard-analytics">
                 <div class="row" id="table-small">
 
-                    <div class="col-lg-8">
+                    <div class="col-lg-10">
                         <div class="card">
                             <div class="card-header border-bottom p-1">
                                 <div class="head-label">
@@ -29,7 +29,7 @@
                                     <table id="tbgrupo" class="table table-sm">
                                         <thead class="thead-dark">
                                             <tr>
-                                                <th class="text-left">#Id</th>
+                                                <th class="text-left">#ID</th>
                                                 <th class="text-left">Nombre Grupo</th>
                                                 <th class="text-center">#Estado</th>
                                                 <th class="text-left">Estado</th>
@@ -41,13 +41,17 @@
                                             <?php if (isset($this->ListadoGrupo)) { ?>
                                                 <?php foreach ($this->ListadoGrupo as $pd) { ?>
                                                     <tr>
-                                                        <td class="text-left"><strong><?php echo $pd['v_id_grupo'] ?></strong> </td>
+                                                        <td class="text-left"><i class="fa-solid fa-layer-group"></i> <strong><?php echo $pd['v_id_grupo'] ?></strong></td>
                                                         <td class="text-left"><strong><?php echo $pd['v_descripcion'] ?></strong> </td>
-                                                        <td class="text-center"><?php echo $pd['i_estado'] ?></td>
+
+                                                        <td class="text-center"><span class="badge bg-<?php echo $pd['v_btn1Color'] ?>"><?php echo $pd['i_estado'] ?></td>
+
                                                         <td class="text-left"><?php echo $pd['v_nombre_estado'] ?></td>
                                                         <td class="text-center"><a id='<?php echo $pd['v_id_grupo'] ?>' class="btn btn-info btn-sm text-white editar"><span class="fa-solid fa-marker fa-beat"><b></b></span></a></td>
                                                         <td class='text-center'>
-                                                            <a id='<?php echo $pd['v_id_grupo'] ?>' <?php $variable1 =  $pd['v_id_grupo'] ?> href="<?php echo BASE_URL ?><?php echo $pd['v_url'] ?>=<?php echo urlencode($variable1) ?>" class="btn btn-<?php echo $pd['v_btn1'] ?>"><i class="fas solid fa-<?php echo $pd['v_btn1Imagen'] ?>"></i></a>
+                                                            <a id='<?php echo $pd['v_id_grupo'] ?>' <?php $variable1 =  $pd['v_id_grupo'] ?> <?php 
+                                                            
+                                                            if ($pd['v_url'] == '') { ?> class="" <?php } else { ?> href="<?php echo BASE_URL ?><?php echo $pd['v_url'] ?>=<?php echo urlencode($variable1) ?>" <?php } ?> class="btn btn-<?php echo $pd['v_btn1'] ?>"><i class="fas solid fa-<?php echo $pd['v_btn1Imagen'] ?>"></i></a>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>
@@ -89,6 +93,12 @@
                         <label class="form-label font-weight-bolder">Nombre de grupo:</label>
                         <input type="text" id="xnombres" tabindex="1" class="form-control" placeholder="Ingrese nombre de grupo" autocomplete="off" />
                     </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="alert-success form-label font-weight-bolder">Estado</label>
+                        <select id="xestado" class="select2 form-control form-control-lg">
+                        </select>
+                    </div>
                 </div>
 
                 <hr>
@@ -112,5 +122,3 @@
         </div>
     </div>
 </div>
-
- 

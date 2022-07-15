@@ -12,7 +12,7 @@ class grupopedidoController extends Controller
 	{
 		if (isset($_SESSION['usuario'])) {
 
-			$this->_view->conctructor_menu('configuracion','grupopedido');
+			$this->_view->conctructor_menu('configuracion', 'grupopedido');
 
 			$this->_view->setCss_Specific(
 				array(
@@ -206,6 +206,7 @@ class grupopedidoController extends Controller
 			);
 
 			$soap = new SoapClient($wsdl, $options);
+
 			$result = $soap->MostrarGrupoArea($grparea);
 			$data = json_decode($result->MostrarGrupoAreaResult, true);
 
@@ -232,7 +233,7 @@ class grupopedidoController extends Controller
 				}
 				$v_area  = $data[0]['v_area'];
 
-				//Combo EstadO Grupo
+				//Combo Estad Grupo
 				$FilascomboEstado = "";
 				$selestado = "";
 				foreach ($ComboEstadoGrupo as $dp) {
@@ -277,7 +278,7 @@ class grupopedidoController extends Controller
 		}
 	}
 
-	public function Consultar_GrupoFormula() //1
+	public function Consultar_GrupoFormula() //1 RAAAAAAAAAAAA
 	{
 		if (isset($_SESSION['usuario'])) {
 			putenv("NLS_LANG=SPANISH_SPAIN.AL32UTF8");
@@ -518,14 +519,36 @@ class grupopedidoController extends Controller
 			$data = json_decode($result->MostrarListadoGrupoResult, true);
 
 
+			$result = $soap->ComboEstadoGrupo();
+			$ComboEstadoGrupo = json_decode($result->ComboEstadoGrupoResult, true);
+
 			if (count($data) > 0) {
 				$estado  =  1;
 				$v_id_grupo  = $data[0]['v_id_grupo'];
 				$v_descripcion  = $data[0]['v_descripcion'];
+
+				//Combo Estad Grupo
+				$FilascomboEstado = "";
+				$selestado = "";
+				foreach ($ComboEstadoGrupo as $dp) {
+					if ($dp['i_id'] == $data[0]['i_estado']) {
+						$selestado = "selected='selected'";
+					} else {
+						$selestado = "";
+					}
+					$FilascomboEstado .= "<option " . $selestado . " value=" . $dp['i_id'] . ">" . $dp['v_nombre'] . "</option>";
+				}
 			} else {
 				$estado  =  0;
 				$v_id_grupo  =  "";
 				$v_descripcion  =  "";
+
+				//Combo Estad Grupo
+				$FilascomboEstado = "";
+				$selestado = "";
+				foreach ($ComboEstadoGrupo as $dp) {
+					$FilascomboEstado .= "<option " . $selestado . " value=" . $dp['i_id'] . ">" . $dp['v_nombre'] . "</option>";
+				}
 			}
 
 
@@ -535,6 +558,7 @@ class grupopedidoController extends Controller
 					"estado" => $estado,
 					"v_id_grupo" => $v_id_grupo,
 					"v_descripcion" => $v_descripcion,
+					"FilascomboEstado" => $FilascomboEstado,
 				)
 			);
 		} else {

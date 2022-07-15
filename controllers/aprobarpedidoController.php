@@ -543,7 +543,7 @@ class aprobarpedidoController extends Controller
 
 					$mensaje_final_solped = 'CORREO PARA MODIFICACION DE SOLPED (' . $nu_correla . ')';
 					$saludo_envio = $alias_correo . (trim($ProcesoRetornoPedido[0]['m_v_alias_correo'])) . ', ' . $saludo;
-					$mensaje_final_detalle = 'El siguiente pedido, debe ser modificado debido a que: 
+					$mensaje_final_detalle = 'El siguiente pedido debe ser modificado. NOTA: 
 						<br>'
 						. $ProcesoRetornoPedido[0]['m_v_motivo'];
 				}
@@ -707,7 +707,7 @@ class aprobarpedidoController extends Controller
 			$pdf->WriteTable($columns4);
 
 			$col5 = array();
-			$col5[] = array('text' => 'Nombre del contacto para la entrega: ' . $data[0]['v_persona_recepciona'], 'width' => '105', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col5[] = array('text' => 'Nombre del contacto para la entrega: ' . utf8_decode($data[0]['v_persona_recepciona']), 'width' => '105', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
 			// $col5[] = array('text' => 'Presupuesto / Budget', 'width' => '84', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
 
 			$col5[] = array('text' => 'Presupuesto / Budget', 'width' => '40', 'height' => '10', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
@@ -728,7 +728,7 @@ class aprobarpedidoController extends Controller
 
 
 			$col7 = array();
-			$col7[] = array('text' => 'Direccion de entrega: ' . $data[0]['v_direccion_entrega'], 'width' => '105', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
+			$col7[] = array('text' => 'Direccion de entrega: ' . utf8_decode($data[0]['v_direccion_entrega']), 'width' => '105', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
 			$col7[] = array('text' => utf8_decode('Límite presupuesto en PEN / Budget limit PEN: ' . $data[0]['f_valortope_condicion_uno']), 'width' => '85', 'height' => '5', 'align' => 'L', 'font_name' => 'Arial', 'font_size' => '8', 'font_style' => '', 'fillcolor' => '255,255,255', 'textcolor' => '0,0,0', 'drawcolor' => '0,0,0', 'linewidth' => '0.4', 'linearea' => 'LTBR');
 			$columns7[] = $col7;
 			$pdf->SetXY(10, 72);

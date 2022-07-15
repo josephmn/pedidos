@@ -525,6 +525,10 @@ $(function () {
     $("#fxnombrecorreo").val(fxusername);
   });
 
+
+
+
+
   $('#fxbtnguardar').on('click', function () {
     var i_idorden = 0;
     var fxidformula = $('#fxidformula').val();
@@ -538,6 +542,8 @@ $(function () {
     var v_idgrupo = $('#fxid').val();
     var v_idarea = $('#fxidarea').val();
     var v_id_area = $('#fxidarea').val();
+
+
     var v_id_grupo = $('#fxid').val();
     i_idorden = i_idorden;
     var v_descripcion_uno = $('#fxdescripcion').val();
@@ -545,6 +551,10 @@ $(function () {
     var f_valorinicio_condicion_uno = $('#itemquantity1').val()
     var f_valortope_condicion_uno = $('#itemquantity2').val()
     var v_idcargo = $('#fxcargo option:selected').val();
+
+
+
+
     var v_aprobador_uno = $('#fxcargo option:selected').text();
     var v_correo = $('#mail').val();
     var v_correo_next = $('#mailfinal').val();
@@ -684,9 +694,19 @@ $(function () {
             v_genero: v_genero,
 
           },
+
+          beforeSend: function () {
+            $("#div-load").html("");
+            $("#div-load").append(
+              "<div id='div-load'>\<div class='d-flex justify-content-center my-1'>\<div class='spinner-border text-success' role='status' aria-hidden='true'></div>\</div>\ </div>"
+            );
+          },
+   
+
           success: function (res) {
 
-
+            $("#div-load").html("");
+            
             $.ajax({
               type: 'POST',
               url: '/pedidos/grupopedido/ListadoGrupoFormula',
@@ -699,6 +719,7 @@ $(function () {
                 );
               },
               success: function (res) {
+
                 document.getElementById("frmareanombre").innerHTML = res.v_nombre_area;
                 $("#div-load").html("");
                 console.log(res.data);
@@ -771,6 +792,7 @@ $(function () {
             });
 
             $("#modal-formula").modal('hide');
+ 
 
             Swal.fire({
               icon: res.vicon,

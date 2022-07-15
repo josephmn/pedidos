@@ -5,17 +5,38 @@ $(function () {
 
 
   $("#btnagregar").on("click", function () {
+    let v_id_grupo = '00';
     document.getElementById("titulomodal").innerHTML = "CREAR GRUPO";
     $('#xid').val('Nuevo');
     $('#xnombres').val('');
     $("#modal-agregar").modal("show");
     $('#modal-agregar').on('shown.bs.modal', function () {
+
+      $.ajax({
+        type: 'POST',
+        url: '/pedidos/grupopedido/Consultar_grupo',
+        data: {
+          v_id_grupo: v_id_grupo
+        },
+        beforeSend: function () {
+          $("#div-load").html("");
+          $("#div-load").append(
+            "<div id='div-load'>\<div class='d-flex justify-content-center my-1'>\<div class='spinner-border text-danger' role='status' aria-hidden='true'></div>\</div>\ </div>"
+          );
+        },
+        success: function (res) {
+          $("#div-load").html("");
+          $("#xestado").html("");
+          $("#xestado").append(res.FilascomboEstado);
+        }
+      });
       $("#xnombres").focus();
     });
   });
 
 
   $("#tbgrupo tbody").on("click", "a.editar", function () {
+
     let v_id_grupo = $(this).attr("id");
     document.getElementById("titulomodal").innerHTML = "EDITAR GRUPO";
     $.ajax({
@@ -34,12 +55,18 @@ $(function () {
         $("#div-load").html("");
         $('#xid').val(res.v_id_grupo.replace("&Ntilde;", "Ñ"));
         $('#xnombres').val(res.v_descripcion.replace("&Ntilde;", "Ñ"));
+
+
+        $("#xestado").html("");
+        $("#xestado").append(res.FilascomboEstado);
+
       }
     });
     $("#modal-agregar").modal("show");
     $('#modal-agregar').on('shown.bs.modal', function () {
       $("#xnombres").focus();
     });
+
   });
 
 
@@ -61,7 +88,7 @@ $(function () {
     var post = 0;
     var v_id_grupo = $('#xid').val();
     var v_descripcion = $('#xnombres').val();
-    var i_estado = 0;
+    var i_estado =  $('#xestado').val();;
 
 
     //Solo validacion        
@@ -82,7 +109,7 @@ $(function () {
     }
 
     Swal.fire({
-      title: "Estas seguro de guardar en el Sistema?",
+      title: "Estas seguro de Guardar?",
       text: "",
       icon: "warning",
       showCancelButton: true,

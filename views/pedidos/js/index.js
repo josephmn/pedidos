@@ -18,9 +18,9 @@ $(function () {
       })
       return;
     }
-
-
+    
     location.href = "https://verdum.com/pedidos/pedidos/realizarpedido/index";
+
   });
 
 

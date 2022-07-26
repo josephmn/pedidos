@@ -13,17 +13,23 @@ $(function () {
   $("#encargadoestado").val('USUARIO');
   document.getElementById("pptoadd").disabled = true;
 
+  $("#tabs").html("");
   $("#tabs").append(
     " <li class= 'nav-item' >\
     <a class='nav-link active' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
       <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
       <polyline points='9 22 9 12 15 12 15 22'></polyline>\
-    </svg> Opcion1</a>\
+    </svg> Orden de Compra</a>\
   </li >\
     <li class='nav-item'>\
       <a class='nav-link' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
         <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
-      </svg> Opcion2</a>\
+      </svg> Orden de Servicio</a>\
+    </li>\
+    <li class='nav-item'>\
+    <a class='nav-link' id='vacio-tab' data-toggle='tab' href='#panevacio' aria-controls='vacio' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+      <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+    </svg> Pedido Procesado</a>\
     </li>\
     ");
 
@@ -31,7 +37,8 @@ $(function () {
   document.getElementById("profileIcon-tab").disabled = true;
   document.getElementById("profileIcon-tab").style.color = "red";
 
-
+  document.getElementById("vacio-tab").disabled = true;
+  document.getElementById("vacio-tab").style.color = "red";
 
   document.getElementById("btnsendpedido").disabled = true;
   document.getElementById("customRadio1").disabled = true;
@@ -46,42 +53,16 @@ $(function () {
   creardatatable("#tbarchivo");
   creardatatable("#tbpptopedido");
   creardatatable("#tbarchivox");
+  var datosppto = [];
+  var codmes = "";
+  var nombremes = "";
+  var monto = 0;
 
-  var tbproducto = $("#tbproducto").DataTable({
-    lengthChange: true,
-    responsive: true,
-    autoWidth: false,
-    language: {
-      decimal: "",
-      emptyTable: "No hay información",
-      info: "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-      infoEmpty: "Mostrando 0 to 0 of 0 Entradas",
-      infoFiltered: "(Filtrado de _MAX_ total entradas)",
-      infoPostFix: "",
-      thousands: ",",
-      lengthMenu: "Mostrar _MENU_ Entradas",
-      loadingRecords: "Cargando...",
-      processing: "Procesando...",
-      search: "Buscar:",
-      zeroRecords: "Sin resultados encontrados",
-      paginate: {
-        first: "Primero",
-        last: "Ultimo",
-        next: "Siguiente",
-        previous: "Anterior",
-      },
-    },
-    order: [
-      [0, "asc"],
-    ],
-    lengthMenu: [
-      [15, 25, 50, -1],
-      ["15", "25", "50", "Todo"],
-    ],
-  });
+  //Array general par manejos de datos
+  var countaci = 1;
+  var datosaci = [];
 
   document.getElementById('monedaimporte').innerHTML = $('#moneda option:selected').text();
-
 
   $("#tipoorden").change(function () {
     var tipoorden = $("#tipoorden").val();
@@ -123,12 +104,17 @@ $(function () {
                 <a class='nav-link active' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
                   <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
                   <polyline points='9 22 9 12 15 12 15 22'></polyline>\
-                </svg> Opcion1</a>\
+                </svg> Orden de Compra</a>\
               </li >\
                 <li class='nav-item'>\
                   <a class='nav-link' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
                     <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
-                  </svg> Opcion2</a>\
+                  </svg> Orden de Servicio</a>\
+                </li>\
+                <li class='nav-item'>\
+                <a class='nav-link' id='vacio-tab' data-toggle='tab' href='#panevacio' aria-controls='vacio' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+                  <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+                </svg> Procesado</a>\
                 </li>\
                 ");
 
@@ -149,12 +135,17 @@ $(function () {
                 <a class='nav-link ' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
                   <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
                   <polyline points='9 22 9 12 15 12 15 22'></polyline>\
-                </svg> Opcion1</a>\
+                </svg> Orden de Compra</a>\
               </li >\
                 <li class='nav-item'>\
                   <a class='nav-link active' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
                     <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
-                  </svg> Opcion2</a>\
+                  </svg> Orden de Servicio</a>\
+                </li>\
+                <li class='nav-item'>\
+                <a class='nav-link' id='vacio-tab' data-toggle='tab' href='#panevacio' aria-controls='vacio' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+                  <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+                </svg> Procesado</a>\
                 </li>\
                 ");
 
@@ -174,6 +165,12 @@ $(function () {
         }
       });
     } else {
+      countaci = 1;
+      datosaci = [];
+
+      $("#example2").dataTable().fnDestroy();
+      $("#tablita-aci").children().remove();
+
 
       $("#tabs").html("");
       if (Number(tipoorden) == 1) {
@@ -183,12 +180,17 @@ $(function () {
           <a class='nav-link active' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
             <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
             <polyline points='9 22 9 12 15 12 15 22'></polyline>\
-          </svg> Opcion1</a>\
+          </svg> Orden de Compra</a>\
         </li >\
           <li class='nav-item'>\
             <a class='nav-link' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
               <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
-            </svg> Opcion2</a>\
+            </svg> Orden de Servicio</a>\
+          </li>\
+          <li class='nav-item'>\
+          <a class='nav-link' id='vacio-tab' data-toggle='tab' href='#panevacio' aria-controls='vacio' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+            <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+          </svg> Procesado</a>\
           </li>\
           ");
 
@@ -209,12 +211,17 @@ $(function () {
           <a class='nav-link ' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
             <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
             <polyline points='9 22 9 12 15 12 15 22'></polyline>\
-          </svg> Opcion1</a>\
+          </svg> Orden de Compra</a>\
         </li >\
           <li class='nav-item'>\
             <a class='nav-link active' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
               <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
-            </svg> Opcion2</a>\
+            </svg> Orden de Servicio</a>\
+          </li>\
+          <li class='nav-item'>\
+          <a class='nav-link' id='vacio-tab' data-toggle='tab' href='#panevacio' aria-controls='vacio' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+            <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+          </svg> Procesado</a>\
           </li>\
           ");
 
@@ -238,18 +245,6 @@ $(function () {
 
 
   });
-
-
-  var datosppto = [];
-  var codmes = "";
-  var nombremes = "";
-  var monto = 0;
-
-  //Array general par manejos de datos
-  var countaci = 1;
-  var datosaci = [];
-
-
 
 
   //#region                                               (CARGA CON EL NUMERO DE PEDIDO  QUE SE TRAE COMO PARAMETRO)
@@ -276,14 +271,137 @@ $(function () {
         $("#estado").html("");
         $("#estado").append(res.FilasEstado);
         //tutan
+
+
+
+
         if (Number(res.i_idorden_aprobacion) != 0) {
           document.getElementById("btnguardar").disabled = true;
           document.getElementById("btnsendpedido").disabled = true;
           $('#customRadio1').prop('checked', true);
+
+          $("#tabs").html("");
+          $("#tabs").append(
+            " <li class= 'nav-item' >\
+          <a class='nav-link' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='false'>  </a>\
+          </li >\
+          <li class='nav-item'>\
+            <a class='nav-link' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='false'> </a>\
+          </li>\
+          <li class='nav-item'>\
+          <a class='nav-link active' id='vacio-tab' data-toggle='tab' href='#panevacio' aria-controls='vacio' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+            <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+          </svg> Pedido Procesado</a>\
+          </li>\
+          ");
+
+          document.getElementById('profileIcon').className = "";
+          document.getElementById('profileIcon').className += "tab-pane";
+
+          document.getElementById('homeIcon').className = "";
+          document.getElementById('homeIcon').className += "tab-pane";
+
+          document.getElementById('panevacio').className = "";
+          document.getElementById('panevacio').className += "tab-pane active";
+
+          document.getElementById("homeIcon-tab").disabled = true;
+          document.getElementById("homeIcon-tab").style.color = "red";
+
+          document.getElementById("profileIcon-tab").disabled = true;
+          document.getElementById("profileIcon-tab").style.color = "red";
+
+          document.getElementById("vacio-tab").disabled = false;
+          document.getElementById("vacio-tab").style.color = "green";
+
+
         } else {
           document.getElementById("btnguardar").disabled = false;
           document.getElementById("btnsendpedido").disabled = false;
           $('#customRadio1').prop('checked', false);
+
+          $("#tabs").html("");
+          if (Number(res.i_tipo_pedido) == 1) {
+
+            $("#tabs").append(
+              " <li class= 'nav-item' >\
+            <a class='nav-link active' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
+              <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
+              <polyline points='9 22 9 12 15 12 15 22'></polyline>\
+            </svg> Orden de Compra</a>\
+          </li >\
+            <li class='nav-item'>\
+              <a class='nav-link' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+                <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+              </svg> Orden de Servicio</a>\
+            </li>\
+            <li class='nav-item'>\
+            <a class='nav-link' id='vacio-tab' data-toggle='tab' href='#panevacio' aria-controls='vacio' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+              <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+            </svg> Procesado</a>\
+            </li>\
+            ");
+
+            document.getElementById('profileIcon').className = "";
+            document.getElementById('profileIcon').className += "tab-pane";
+
+            document.getElementById('panevacio').className = "";
+            document.getElementById('panevacio').className += "tab-pane";
+
+            document.getElementById('homeIcon').className = "";
+            document.getElementById('homeIcon').className += "tab-pane active";
+
+            document.getElementById("profileIcon-tab").disabled = true;
+            document.getElementById("profileIcon-tab").style.color = "red";
+
+            document.getElementById("vacio-tab").disabled = true;
+            document.getElementById("vacio-tab").style.color = "red";
+
+            document.getElementById("homeIcon-tab").disabled = false;
+            document.getElementById("homeIcon-tab").style.color = "green";
+
+          } else {
+
+            $("#tabs").append(
+              " <li class= 'nav-item' >\
+            <a class='nav-link ' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
+              <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
+              <polyline points='9 22 9 12 15 12 15 22'></polyline>\
+            </svg> Orden de Compra</a>\
+          </li >\
+            <li class='nav-item'>\
+              <a class='nav-link active' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+                <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+              </svg> Orden de Servicio</a>\
+            </li>\
+            <li class='nav-item'>\
+            <a class='nav-link' id='vacio-tab' data-toggle='tab' href='#panevacio' aria-controls='profile' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
+              <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
+            </svg> Procesado</a>\
+            </li>\
+            ");
+
+            document.getElementById('homeIcon').className = "";
+            document.getElementById('homeIcon').className += "tab-pane";
+
+            document.getElementById('profileIcon').className = "";
+            document.getElementById('profileIcon').className += "tab-pane active";
+
+            document.getElementById('panevacio').className = "";
+            document.getElementById('panevacio').className += "tab-pane";
+
+            document.getElementById("homeIcon-tab").disabled = true;
+            document.getElementById("homeIcon-tab").style.color = "red";
+
+            document.getElementById("vacio-tab").disabled = true;
+            document.getElementById("vacio-tab").style.color = "red";
+
+
+            document.getElementById("profileIcon-tab").disabled = false;
+            document.getElementById("profileIcon-tab").style.color = "green";
+
+
+          }
+
         }
 
 
@@ -293,77 +411,20 @@ $(function () {
         $("#tipoorden").html("");
         $("#tipoorden").append(res.FilasTipo);
 
-
-        $("#tabs").html("");
-        if (Number(res.i_tipo_pedido) == 1) {
-
-          $("#tabs").append(
-            " <li class= 'nav-item' >\
-          <a class='nav-link active' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
-            <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
-            <polyline points='9 22 9 12 15 12 15 22'></polyline>\
-          </svg> Opcion1</a>\
-        </li >\
-          <li class='nav-item'>\
-            <a class='nav-link' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
-              <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
-            </svg> Opcion2</a>\
-          </li>\
-          ");
-
-          document.getElementById("homeIcon-tab").disabled = false;
-          document.getElementById("homeIcon-tab").style.color = "green";
-
-          document.getElementById('profileIcon').className = "";
-          document.getElementById('profileIcon').className += "tab-pane";
-          document.getElementById('homeIcon').className = "";
-          document.getElementById('homeIcon').className += "tab-pane active";
-
-          document.getElementById("profileIcon-tab").disabled = true;
-          document.getElementById("profileIcon-tab").style.color = "red";
-        } else {
-
-          $("#tabs").append(
-            " <li class= 'nav-item' >\
-          <a class='nav-link ' id='homeIcon-tab' data-toggle='tab' href='#homeIcon' aria-controls='home' role='tab' aria-selected='false'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-home'>\
-            <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'></path>\
-            <polyline points='9 22 9 12 15 12 15 22'></polyline>\
-          </svg> Opcion1</a>\
-        </li >\
-          <li class='nav-item'>\
-            <a class='nav-link active' id='profileIcon-tab' data-toggle='tab' href='#profileIcon' aria-controls='profile' role='tab' aria-selected='true'><svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-tool'>\
-              <path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'></path>\
-            </svg> Opcion2</a>\
-          </li>\
-          ");
-
-          document.getElementById('homeIcon').className = "";
-          document.getElementById('homeIcon').className += "tab-pane";
-          document.getElementById('profileIcon').className = "";
-          document.getElementById('profileIcon').className += "tab-pane active";
-
-
-          document.getElementById("homeIcon-tab").disabled = true;
-          document.getElementById("homeIcon-tab").style.color = "red";
-
-          document.getElementById("profileIcon-tab").disabled = false;
-          document.getElementById("profileIcon-tab").style.color = "green";
-        }
+        $("#cbocondicion").html("");
+        $("#cbocondicion").append(res.FilasModo);
 
 
         $('#contactoentrega').val(res.v_persona_recepciona);
         $("#iddireccion").html("");
         $("#iddireccion").append(res.FilasDireccion);
 
-
         document.getElementById('resumentotal').innerHTML = res.f_importotal;
         document.getElementById('importepresupuesto').innerHTML = res.f_montoppto;
-
 
         $('#note').val(res.v_nota);
         $("#example2").dataTable().fnDestroy();
         $("#tablita-aci").children().remove();
-
         let myArray = [];
         for (const property in res.data) {
           let id = res.data[property].id;
@@ -377,6 +438,9 @@ $(function () {
           let v_note_detalle = res.data[property].v_note_detalle;
           let v_id_local = res.data[property].v_id_local;
           let i_opcion = res.data[property].i_opcion;
+          let v_centrocosto = res.data[property].v_centrocosto;
+          let v_cuenta = res.data[property].v_cuenta;
+          let v_intercode = res.data[property].v_intercode;
 
           let fila =
             "<tr><td class='text-center'>" +
@@ -389,6 +453,10 @@ $(function () {
             nombre +
             "</td><td class='text-left'>" +
             v_id_local +
+            "</td><td class='text-left'>" +
+            v_centrocosto +
+            "</td><td class='text-left'>" +
+            v_cuenta +
             "</td><td class='text-left'>" +
             v_unidad +
             "</td><td class='text-left'>" +
@@ -407,25 +475,94 @@ $(function () {
           let btn = document.createElement("tr");
           btn.innerHTML = fila;
           document.getElementById("tablita-aci").appendChild(btn);
-          myArray.push({ id: parseInt(id), Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
+          myArray.push({ id: parseInt(id), Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion, v_centrocosto: v_centrocosto, v_cuenta: v_cuenta });
         }
         creardatatable("#example2");
         datosaci.splice(0, datosaci.length);
         datosaci = myArray;
         console.log(datosaci);
         document.getElementById('monedaimporte').innerHTML = $('#moneda option:selected').text();
-
       }
     });
   }
   //#endregion
 
-
-
-
-
   //#region                                               (OPCION DE PRODUCTOS)
-  $("#tbproducto tbody").on("click", "a.agregar", function () {
+  // $("#tbproducto tbody").on("click", "a.agregar", function () {
+  //   var chekcontrol = document.getElementById("customRadio1").checked;
+  //   if (chekcontrol == false) {
+  //     $("#descripcion").html("");
+  //     $("#unidad").html("");
+  //     document.getElementById("cantidad").value = null;
+  //     document.getElementById("precio").value = null;
+  //     document.getElementById("importe").value = null;
+  //     var v_invtid = $(this).attr("id");
+
+  //     var btrue = new Boolean(false);
+  //     $('#example2 tr').each(function () {
+  //       var codprod = $(this).find("td").eq(2).html();
+  //       if (codprod == v_invtid) {
+  //         btrue = true
+  //       }
+  //     });
+
+  //     if ((btrue == true)) {
+  //       Swal.fire({
+  //         icon: "error",
+  //         title: "YA AGREGO ESTE PRODUCTO" + '  ' + '(' + v_invtid + ')',
+  //         text: "Para volver a añadir quitar del detalle!",
+  //         timer: 4000,
+  //         timerProgressBar: true,
+  //       })
+  //       return;
+  //     }
+
+  //     $.ajax({
+  //       type: 'POST',
+  //       url: '/pedidos/pedidos/buscar_producto',
+  //       data: { v_invtid: v_invtid },
+
+  //       beforeSend: function () {
+  //         $("#losdatoproductos").html("");
+  //         $("#losdatoproductos").append(
+  //           "<div id='div-01'>\<div class='d-flex justify-content-center my-1'>\<div class='spinner-border text-danger' role='status' aria-hidden='true'></div>\</div>\ </div>"
+  //         );
+  //       },
+
+  //       success: function (res) {
+  //         $('#unidad').val(res.v_undmedida);
+  //         $("#descripcion").html(v_invtid + "-" + (res.v_nombreproducto));
+  //         document.getElementById("codproducto").value = v_invtid
+  //         document.getElementById("nombreproduco").value = (res.v_nombreproducto);
+
+  //         $("#xlocal").html("");
+  //         $("#xlocal").append(res.FilascomboLocal);
+  //         $("#losdatoproductos").html("");
+  //       }
+  //     });
+
+  //     $("#myModal").modal("show");
+  //     $('#myModal').on('shown.bs.modal', function () {
+  //       $("#cantidad").focus();
+  //     });
+
+
+  //   } else {
+  //     Swal.fire({
+  //       title: "PEDIDO YA FUE ENVIADO PARA SU APROBACION",
+  //       timer: 2400,
+  //       showClass: {
+  //         popup: 'animate__animated animate__fadeInDown'
+  //       },
+  //       hideClass: {
+  //         popup: 'animate__animated animate__fadeOutUp'
+  //       }
+  //     })
+  //     return;
+  //   }
+  // });
+
+  $("#cboproducto").change(function () {
     var chekcontrol = document.getElementById("customRadio1").checked;
     if (chekcontrol == false) {
       $("#descripcion").html("");
@@ -433,31 +570,17 @@ $(function () {
       document.getElementById("cantidad").value = null;
       document.getElementById("precio").value = null;
       document.getElementById("importe").value = null;
-      var v_invtid = $(this).attr("id");
 
-      var btrue = new Boolean(false);
-      $('#example2 tr').each(function () {
-        var codprod = $(this).find("td").eq(2).html();
-        if (codprod == v_invtid) {
-          btrue = true
-        }
-      });
+      var v_invtid = $("#cboproducto").val();
+      let v_id_local = $('#xlocal  option:selected').val();
+      let v_centrocosto = $('#xidcentrocosto  option:selected').val();
 
-      if ((btrue == true)) {
-        Swal.fire({
-          icon: "error",
-          title: "YA AGREGO ESTE PRODUCTO" + '  ' + '(' + v_invtid + ')',
-          text: "Para volver a añadir quitar del detalle!",
-          timer: 4000,
-          timerProgressBar: true,
-        })
-        return;
-      }
 
       $.ajax({
         type: 'POST',
         url: '/pedidos/pedidos/buscar_producto',
         data: { v_invtid: v_invtid },
+
 
         beforeSend: function () {
           $("#losdatoproductos").html("");
@@ -467,21 +590,15 @@ $(function () {
         },
 
         success: function (res) {
+          $("#losdatoproductos").html("");
           $('#unidad').val(res.v_undmedida);
-          $("#descripcion").html(v_invtid + "-" + (res.v_nombreproducto));
+          // $("#descripcion").html(v_invtid + "-" + (res.v_nombreproducto));
           document.getElementById("codproducto").value = v_invtid
           document.getElementById("nombreproduco").value = (res.v_nombreproducto);
-
-          $("#xlocal").html("");
-          $("#xlocal").append(res.FilascomboLocal);
-          $("#losdatoproductos").html("");
+          $("#cantidad").focus();
         }
       });
 
-      $("#myModal").modal("show");
-      $('#myModal').on('shown.bs.modal', function () {
-        $("#cantidad").focus();
-      });
 
 
     } else {
@@ -497,6 +614,8 @@ $(function () {
       })
       return;
     }
+
+
   });
 
   $("#cantidad").change(function () {
@@ -515,6 +634,31 @@ $(function () {
     $('#importe').val(parseFloat(parseFloat(total).toFixed(3)));
   });
 
+  $("#xidcentrocosto").change(function () {
+    let v_sub = $('#xidcentrocosto  option:selected').val();
+
+    $.ajax({
+      type: 'POST',
+      url: '/pedidos/pedidos/consulta_cuenta',
+      data: { v_sub: v_sub },
+      beforeSend: function () {
+        $("#losdatoproductos").html("");
+        $("#losdatoproductos").append(
+          "<div id='div-01'>\<div class='d-flex justify-content-center my-1'>\<div class='spinner-border text-success' role='status' aria-hidden='true'></div>\</div>\ </div>"
+        );
+      },
+      success: function (res) {
+
+        console.log(res.FilasCuenta);
+        $("#losdatoproductos").html("");
+        $("#xacctcontable").html("");
+        $("#xacctcontable").append(res.FilasCuenta);
+
+      }
+    });
+
+  });
+
   $("#insertar").on("click", function () {    //Insertar en la tabla detalle del pedido
     $('#resumentotal').val('');
     let item = document.getElementById("codproducto").value;
@@ -524,8 +668,12 @@ $(function () {
     let importe = $("#importe").val();
     let v_unidad = $("#unidad").val();
     let v_id_local = $('#xlocal  option:selected').val();
+    let v_centrocosto = $('#xidcentrocosto  option:selected').val();
+    let v_cuenta = $('#xacctcontable  option:selected').val();
     let v_note_detalle = 'NO';
     let i_opcion = 1;
+
+    var v_invtid = document.getElementById("codproducto").value;
 
     if ((qty == 0)) {
       $("#cantidad").focus();
@@ -551,7 +699,6 @@ $(function () {
       return;
     }
 
-
     if ((v_id_local == null || v_id_local == 'XXXXXXX')) {
       $("#xlocal").focus();
       Swal.fire({
@@ -566,6 +713,74 @@ $(function () {
       })
       return;
     }
+
+    if ((v_centrocosto == null || v_centrocosto == 'XXXXXXXXXX')) {
+      $("#xidcentrocosto").focus();
+      Swal.fire({
+        title: 'SELECCIONAR CENTRO DE COSTO',
+        timer: 3000,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
+    if ((v_cuenta == null)) {
+      $("#xacctcontable").focus();
+      Swal.fire({
+        title: 'NO EXISTE CUENTA, PARA EL CENTRO DE COSTO',
+        timer: 3000,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
+    if ((v_invtid == null || v_invtid == '')) {
+      $("#cboproducto").focus();
+      Swal.fire({
+        title: 'SELECCIONAR PRODUCTO',
+        timer: 3000,
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+        }
+      })
+      return;
+    }
+
+    var btrue = new Boolean(false);
+    $('#example2 tr').each(function () {
+      var codprod = $(this).find("td").eq(2).html();
+      var local = $(this).find("td").eq(4).html();
+      var centrocosto = $(this).find("td").eq(5).html();
+
+      if (codprod == v_invtid && local == v_id_local && centrocosto == v_centrocosto) {
+        btrue = true
+      }
+    });
+
+    if ((btrue == true)) {
+      Swal.fire({
+        icon: "error",
+        title: "YA AGREGO ESTE PRODUCTO " + '  ' + '(' + v_invtid + ') CON EL CENTRO DE COSTO ' + '(' + v_centrocosto + ') PARA EL ALMACEN DE' + '(' + v_id_local + ')',
+        text: "Para volver a añadir quitar del detalle!",
+        timer: 7000,
+        timerProgressBar: true,
+      })
+      return;
+    }
+
     $("#example2").dataTable().fnDestroy();
     // $("#tablita-aci").children().remove();
     let fila =
@@ -578,6 +793,10 @@ $(function () {
       nombre +
       "</td><td class='text-left'>" +
       v_id_local +
+      "</td><td class='text-left'>" +
+      v_centrocosto +
+      "</td><td class='text-left'>" +
+      v_cuenta +
       "</td><td class='text-left'>" +
       v_unidad +
       "</td><td class='text-left'>" +
@@ -596,7 +815,7 @@ $(function () {
     let btn = document.createElement("tr");
     btn.innerHTML = fila;
     document.getElementById("tablita-aci").appendChild(btn);
-    datosaci.push({ id: countaci, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
+    datosaci.push({ id: countaci, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion, v_centrocosto: v_centrocosto, v_cuenta: v_cuenta });
     console.log(datosaci);
     countaci = countaci + 1;
     creardatatable("#example2");
@@ -608,7 +827,7 @@ $(function () {
     var resumentotal = 0;
 
     $('#example2 tr').each(function () {
-      var total = $(this).find("td").eq(8).html();
+      var total = $(this).find("td").eq(10).html();
       if ((parseFloat(total)) > 0) {
         resumentotal = (parseFloat(resumentotal) + parseFloat(total));
       }
@@ -636,6 +855,29 @@ $(function () {
     $('#totalitem').val(parseFloat(parseFloat(total).toFixed(3)));
   });
 
+
+  $("#xidcentrocostoitem").change(function () {
+    let v_sub = $('#xidcentrocostoitem  option:selected').val();
+    $.ajax({
+      type: 'POST',
+      url: '/pedidos/pedidos/consulta_cuenta',
+      data: { v_sub: v_sub },
+      beforeSend: function () {
+        $("#losdatoproductos").html("");
+        $("#losdatoproductos").append(
+          "<div id='div-01'>\<div class='d-flex justify-content-center my-1'>\<div class='spinner-border text-success' role='status' aria-hidden='true'></div>\</div>\ </div>"
+        );
+      },
+      success: function (res) {
+        console.log(res.FilasCuenta);
+        $("#losdatoproductos").html("");
+        $("#xacctcontableitem").html("");
+        $("#xacctcontableitem").append(res.FilasCuenta);
+
+      }
+    });
+  });
+
   $("#additem").on("click", function () {
     var chekcontrol = document.getElementById("customRadio1").checked;
     if (chekcontrol == false) {
@@ -648,6 +890,9 @@ $(function () {
       let importe = $("#totalitem").val();
       let v_unidad = $("#unidaditem").val();
       let v_id_local = $('#x2local  option:selected').val();
+      let v_centrocosto = $('#xidcentrocostoitem  option:selected').val();
+      let v_cuenta = $('#xacctcontableitem  option:selected').val();
+
       let v_note_detalle = 'NO';
       let i_opcion = 2;
 
@@ -720,6 +965,59 @@ $(function () {
         return;
       }
 
+      if ((v_centrocosto == null || v_centrocosto == 'XXXXXXXXXX')) {
+        $("#xidcentrocostoitem").focus();
+        Swal.fire({
+          title: 'SELECCIONAR CENTRO DE COSTO',
+          timer: 3000,
+          showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+          }
+        })
+        return;
+      }
+
+
+      if ((v_cuenta == null)) {
+        $("#xacctcontableitem").focus();
+        Swal.fire({
+          title: 'NO EXISTE CUENTA, PARA EL CENTRO DE COSTO',
+          timer: 3000,
+          showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+          }
+        })
+        return;
+      }
+
+      var btrue = new Boolean(false);
+      $('#example2 tr').each(function () {
+        var local = $(this).find("td").eq(4).html();
+        var centrocosto = $(this).find("td").eq(5).html();
+
+        if (local == v_id_local && centrocosto == v_centrocosto) {
+          btrue = true
+        }
+      });
+
+      if ((btrue == true)) {
+        Swal.fire({
+          icon: "error",
+          title: 'YA AGREGO ESTE CENTRO DE COSTO ' + '(' + v_centrocosto + ') PARA EL ALMACEN DE' + '(' + v_id_local + ')',
+          text: "Para volver a añadir quitar del detalle!",
+          timer: 7000,
+          timerProgressBar: true,
+        })
+        return;
+      }
+
+
       $("#example2").dataTable().fnDestroy();
       // $("#tablita-aci").children().remove();
       let fila =
@@ -732,6 +1030,10 @@ $(function () {
         nombre +
         "</td><td class='text-left'>" +
         v_id_local +
+        "</td><td class='text-left'>" +
+        v_centrocosto +
+        "</td><td class='text-left'>" +
+        v_cuenta +
         "</td><td class='text-left'>" +
         v_unidad +
         "</td><td class='text-left'>" +
@@ -750,7 +1052,7 @@ $(function () {
       let btn = document.createElement("tr");
       btn.innerHTML = fila;
       document.getElementById("tablita-aci").appendChild(btn);
-      datosaci.push({ id: countaci, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
+      datosaci.push({ id: countaci, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion, v_centrocosto: v_centrocosto, v_cuenta: v_cuenta });
       console.log(datosaci);
       countaci = countaci + 1;
       creardatatable("#example2");
@@ -758,7 +1060,7 @@ $(function () {
       var resumentotal = 0;
 
       $('#example2 tr').each(function () {
-        var total = $(this).find("td").eq(8).html();
+        var total = $(this).find("td").eq(10).html();
         if ((parseFloat(total)) > 0) {
           resumentotal = (parseFloat(resumentotal) + parseFloat(total));
         }
@@ -791,290 +1093,599 @@ $(function () {
 
   });
 
-
-
   //#endregion
 
   //#region                                               (ACCIONES EN LA TABLA DETALLE DEL PEDIDO)
   $("#example2 tbody").on("click", "a.delete", function () {
     let id = $(this).attr("id");
-    Swal.fire({
-      title: "ESTAS SEGURO DE ELIMINAR LA FILA ?",
-      text: "",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#61C250",
-      cancelButtonColor: "#ea5455",
-      confirmButtonText: "Si, Eliminar!",
-      cancelButtonText: "No",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        var post = 0;
-        var nu_correla = document.getElementById("nropedido").innerHTML;
-        let i_item = parseInt(id);
 
-        if (nu_correla != "NUEVO") {
-          $.ajax({
-            type: "POST",
-            url: '/pedidos/pedidos/eliminar_fila',
-            data: { post: post, nu_correla: nu_correla, i_item: i_item },
-            success: function (res) {
+    var post = 0;
+    var nu_correla = document.getElementById("nropedido").innerHTML;
+    let i_item = parseInt(id);
+
+    if (nu_correla != "NUEVO") {
+      $.ajax({
+        type: "POST",
+        url: '/pedidos/pedidos/eliminar_fila',
+        data: { post: post, nu_correla: nu_correla, i_item: i_item },
+        beforeSend: function () {
+          $("#losdelete").html("");
+          $("#losdelete").append(
+            "<div id='div-01'>\<div class='d-flex justify-content-center my-1'>\<div class='spinner-border text-danger' role='status' aria-hidden='true'></div>\</div>\ </div>"
+          );
+        },
+
+        success: function (res) {
+          $("#losdelete").html("");
+          if (res.v_mensaje == '' && Number(res.respuesta) == 1) {
+
+            let valor = parseInt(id);
+            $('#resumentotal').val('');
+            $("#example2").dataTable().fnDestroy();
+            $("#tablita-aci").children().remove();
+
+            let index = datosaci.findIndex(object => object.id === valor);
+            datosaci.splice(index, 1);
+
+            let myArray = [];
+            let contador = 1;
+            let v_color = '';
+            for (const property in datosaci) {
+              let item = datosaci[property].Item;
+              let nombre = datosaci[property].Descripcion;
+              let v_unidad = datosaci[property].Unidad;
+              let qty = datosaci[property].Cantidad;
+              let price = datosaci[property].Precio;
+              let importe = datosaci[property].Total;
+              let v_note_detalle = datosaci[property].v_note_detalle;
+              let v_id_local = datosaci[property].v_id_local;
+              let i_opcion = datosaci[property].i_opcion;
+              let v_centrocosto = datosaci[property].v_centrocosto;
+              let v_cuenta = datosaci[property].v_cuenta;
 
 
+              if (Number(i_opcion) == 2) {
+                item = Number(contador);
+              }
 
-              if (res.v_mensaje == '' && Number(res.respuesta) == 1) {
-
-                let valor = parseInt(id);
-                $('#resumentotal').val('');
-                $("#example2").dataTable().fnDestroy();
-                $("#tablita-aci").children().remove();
-
-                let index = datosaci.findIndex(object => object.id === valor);
-                datosaci.splice(index, 1);
-
-                let myArray = [];
-                let contador = 1;
-                let v_color = '';
-                for (const property in datosaci) {
-                  let item = datosaci[property].Item;
-                  let nombre = datosaci[property].Descripcion;
-                  let v_unidad = datosaci[property].Unidad;
-                  let qty = datosaci[property].Cantidad;
-                  let price = datosaci[property].Precio;
-                  let importe = datosaci[property].Total;
-                  let v_note_detalle = datosaci[property].v_note_detalle;
-                  let v_id_local = datosaci[property].v_id_local;
-                  let i_opcion = datosaci[property].i_opcion;
-
-                  if (Number(i_opcion) == 2) {
-                    item = Number(contador);
-                  }
-
-                  if (v_note_detalle == 'SI') {
-                    v_color = 'color:rgb(66,222,10)';
-                  } else {
-                    v_color = 'color:rgb(3,164,90)';
-                  }
-
-                  let fila =
-                    "<tr><td class='text-center'>" +
-                    contador +
-                    "</td><td><span class='fa-solid fa-truck fa-beat'  style='" + v_color + "'></span>" +
-
-                    "</td><td class='text-left'>" +
-                    item +
-                    "</td><td class='text-left'>" +
-                    nombre +
-                    "</td><td class='text-left'>" +
-                    v_id_local +
-                    "</td><td class='text-left'>" +
-                    v_unidad +
-                    "</td><td class='text-left'>" +
-                    qty +
-                    "</td><td class='text-left'>" +
-                    price +
-                    "</td><td class='text-left'>" +
-                    importe +
-                    "</td><td><a id=" +
-                    item +
-                    " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
-                    "</td><td><a id=" +
-                    contador +
-                    " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
-                  let btn = document.createElement("tr");
-                  btn.innerHTML = fila;
-                  document.getElementById("tablita-aci").appendChild(btn);
-                  myArray.push({ id: parseInt(contador), Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
-                  contador = contador + 1;
-
-                  //CALCULAR
-                  var resumentotal = 0;
-                  $('#example2 tr').each(function () {
-                    var total = $(this).find("td").eq(8).html();
-                    if ((parseFloat(total)) > 0) {
-                      resumentotal = (parseFloat(resumentotal) + parseFloat(total));
-                    }
-                  });
-                  document.getElementById('resumentotal').innerHTML = resumentotal;
-                }
-                creardatatable("#example2");
-                datosaci.splice(0, datosaci.length);
-                datosaci = myArray;
-                countaci = contador;
-                console.log(datosaci);
-              } else if (res.v_mensaje != '' && Number(res.respuesta) == 2) {
-                Swal.fire(
-                  res.v_mensaje,
-                  '',
-                  'warning'
-                )
-                return
-
+              if (v_note_detalle == 'SI') {
+                v_color = 'color:rgb(66,222,10)';
               } else {
-                let valor = parseInt(id);
-                $('#resumentotal').val('');
-                $("#example2").dataTable().fnDestroy();
-                $("#tablita-aci").children().remove();
+                v_color = 'color:rgb(3,164,90)';
+              }
 
-                let index = datosaci.findIndex(object => object.id === valor);
-                datosaci.splice(index, 1);
+              let fila =
+                "<tr><td class='text-center'>" +
+                contador +
+                "</td><td><span class='fa-solid fa-truck fa-beat'  style='" + v_color + "'></span>" +
 
-                let myArray = [];
-                let contador = 1;
-                let v_color = '';
-                for (const property in datosaci) {
-                  let item = datosaci[property].Item;
-                  let nombre = datosaci[property].Descripcion;
-                  let v_unidad = datosaci[property].Unidad;
-                  let qty = datosaci[property].Cantidad;
-                  let price = datosaci[property].Precio;
-                  let importe = datosaci[property].Total;
-                  let v_note_detalle = datosaci[property].v_note_detalle;
-                  let v_id_local = datosaci[property].v_id_local;
-                  let i_opcion = datosaci[property].i_opcion;
+                "</td><td class='text-left'>" +
+                item +
+                "</td><td class='text-left'>" +
+                nombre +
+                "</td><td class='text-left'>" +
+                v_id_local +
+                "</td><td class='text-left'>" +
+                v_centrocosto +
+                "</td><td class='text-left'>" +
+                v_cuenta +
+                "</td><td class='text-left'>" +
+                v_unidad +
+                "</td><td class='text-left'>" +
+                qty +
+                "</td><td class='text-left'>" +
+                price +
+                "</td><td class='text-left'>" +
+                importe +
+                "</td><td><a id=" +
+                item +
+                " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
+                "</td><td><a id=" +
+                contador +
+                " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+              let btn = document.createElement("tr");
+              btn.innerHTML = fila;
+              document.getElementById("tablita-aci").appendChild(btn);
+              myArray.push({ id: parseInt(contador), Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion, v_centrocosto: v_centrocosto, v_cuenta: v_cuenta });
+              contador = contador + 1;
 
-                  if (Number(i_opcion) == 2) {
-                    item = Number(contador);
-                  }
-
-                  if (v_note_detalle == 'SI') {
-                    v_color = 'color:rgb(66,222,10)';
-                  } else {
-                    v_color = 'color:rgb(3,164,90)';
-                  }
-
-                  let fila =
-                    "<tr><td class='text-center'>" +
-                    contador +
-                    "</td><td><span class='fa-solid fa-truck fa-beat'  style='" + v_color + "'></span>" +
-
-                    "</td><td class='text-left'>" +
-                    item +
-                    "</td><td class='text-left'>" +
-                    nombre +
-                    "</td><td class='text-left'>" +
-                    v_id_local +
-                    "</td><td class='text-left'>" +
-                    v_unidad +
-                    "</td><td class='text-left'>" +
-                    qty +
-                    "</td><td class='text-left'>" +
-                    price +
-                    "</td><td class='text-left'>" +
-                    importe +
-                    "</td><td><a id=" +
-                    item +
-                    " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
-                    "</td><td><a id=" +
-                    contador +
-                    " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
-                  let btn = document.createElement("tr");
-                  btn.innerHTML = fila;
-                  document.getElementById("tablita-aci").appendChild(btn);
-                  myArray.push({ id: parseInt(contador), Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
-                  contador = contador + 1;
-
-                  //CALCULAR
-                  var resumentotal = 0;
-                  $('#example2 tr').each(function () {
-                    var total = $(this).find("td").eq(8).html();
-                    if ((parseFloat(total)) > 0) {
-                      resumentotal = (parseFloat(resumentotal) + parseFloat(total));
-                    }
-                  });
-                  document.getElementById('resumentotal').innerHTML = resumentotal;
+              //CALCULAR
+              var resumentotal = 0;
+              $('#example2 tr').each(function () {
+                var total = $(this).find("td").eq(10).html();
+                if ((parseFloat(total)) > 0) {
+                  resumentotal = (parseFloat(resumentotal) + parseFloat(total));
                 }
-                creardatatable("#example2");
-                datosaci.splice(0, datosaci.length);
-                datosaci = myArray;
-                countaci = contador;
-                console.log(datosaci);
-              }
-            },
-          });
-
-
-        } else {
-          let valor = parseInt(id);
-          $('#resumentotal').val('');
-          $("#example2").dataTable().fnDestroy();
-          $("#tablita-aci").children().remove();
-
-          let index = datosaci.findIndex(object => object.id === valor);
-          datosaci.splice(index, 1);
-
-          let myArray = [];
-          let contador = 1;
-          let v_color = '';
-          for (const property in datosaci) {
-            let item = datosaci[property].Item;
-            let nombre = datosaci[property].Descripcion;
-            let v_unidad = datosaci[property].Unidad;
-            let qty = datosaci[property].Cantidad;
-            let price = datosaci[property].Precio;
-            let importe = datosaci[property].Total;
-            let v_note_detalle = datosaci[property].v_note_detalle;
-            let v_id_local = datosaci[property].v_id_local;
-
-            if (Number(i_opcion) == 2) {
-              item = Number(contador);
+              });
+              document.getElementById('resumentotal').innerHTML = resumentotal;
             }
+            creardatatable("#example2");
+            datosaci.splice(0, datosaci.length);
+            datosaci = myArray;
+            countaci = contador;
+            console.log(datosaci);
+          } else if (res.v_mensaje != '' && Number(res.respuesta) == 2) {
+            Swal.fire(
+              res.v_mensaje,
+              '',
+              'warning'
+            )
+            return
 
-            if (v_note_detalle == 'SI') {
-              v_color = 'color:rgb(66,222,10)';
-            } else {
-              v_color = 'color:rgb(3,164,90)';
-            }
+          } else {
+            let valor = parseInt(id);
+            $('#resumentotal').val('');
+            $("#example2").dataTable().fnDestroy();
+            $("#tablita-aci").children().remove();
 
-            let fila =
-              "<tr><td class='text-center'>" +
-              contador +
-              "</td><td><span class='fa-solid fa-truck fa-beat'  style='" + v_color + "'></span>" +
+            let index = datosaci.findIndex(object => object.id === valor);
+            datosaci.splice(index, 1);
 
-              "</td><td class='text-left'>" +
-              item +
-              "</td><td class='text-left'>" +
-              nombre +
-              "</td><td class='text-left'>" +
-              v_id_local +
-              "</td><td class='text-left'>" +
-              v_unidad +
-              "</td><td class='text-left'>" +
-              qty +
-              "</td><td class='text-left'>" +
-              price +
-              "</td><td class='text-left'>" +
-              importe +
-              "</td><td><a id=" +
-              item +
-              " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
-              "</td><td><a id=" +
-              contador +
-              " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
-            let btn = document.createElement("tr");
-            btn.innerHTML = fila;
-            document.getElementById("tablita-aci").appendChild(btn);
-            myArray.push({ id: contador, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
-            contador = contador + 1;
+            let myArray = [];
+            let contador = 1;
+            let v_color = '';
+            for (const property in datosaci) {
+              let item = datosaci[property].Item;
+              let nombre = datosaci[property].Descripcion;
+              let v_unidad = datosaci[property].Unidad;
+              let qty = datosaci[property].Cantidad;
+              let price = datosaci[property].Precio;
+              let importe = datosaci[property].Total;
+              let v_note_detalle = datosaci[property].v_note_detalle;
+              let v_id_local = datosaci[property].v_id_local;
+              let i_opcion = datosaci[property].i_opcion;
+              let v_centrocosto = datosaci[property].v_centrocosto;
+              let v_cuenta = datosaci[property].v_cuenta;
 
-            //CALCULAR
-            var resumentotal = 0;
-            $('#example2 tr').each(function () {
-              var total = $(this).find("td").eq(8).html();
-              if ((parseFloat(total)) > 0) {
-                resumentotal = (parseFloat(resumentotal) + parseFloat(total));
+
+              if (Number(i_opcion) == 2) {
+                item = Number(contador);
               }
-            });
-            document.getElementById('resumentotal').innerHTML = resumentotal;
+
+              if (v_note_detalle == 'SI') {
+                v_color = 'color:rgb(66,222,10)';
+              } else {
+                v_color = 'color:rgb(3,164,90)';
+              }
+
+              let fila =
+                "<tr><td class='text-center'>" +
+                contador +
+                "</td><td><span class='fa-solid fa-truck fa-beat'  style='" + v_color + "'></span>" +
+
+                "</td><td class='text-left'>" +
+                item +
+                "</td><td class='text-left'>" +
+                nombre +
+                "</td><td class='text-left'>" +
+                v_id_local +
+                "</td><td class='text-left'>" +
+                v_centrocosto +
+                "</td><td class='text-left'>" +
+                v_cuenta +
+                "</td><td class='text-left'>" +
+                v_unidad +
+                "</td><td class='text-left'>" +
+                qty +
+                "</td><td class='text-left'>" +
+                price +
+                "</td><td class='text-left'>" +
+                importe +
+                "</td><td><a id=" +
+                item +
+                " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
+                "</td><td><a id=" +
+                contador +
+                " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+              let btn = document.createElement("tr");
+              btn.innerHTML = fila;
+              document.getElementById("tablita-aci").appendChild(btn);
+              myArray.push({ id: parseInt(contador), Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion, v_centrocosto: v_centrocosto, v_cuenta: v_cuenta });
+              contador = contador + 1;
+
+              //CALCULAR
+              var resumentotal = 0;
+              $('#example2 tr').each(function () {
+                var total = $(this).find("td").eq(10).html();
+                if ((parseFloat(total)) > 0) {
+                  resumentotal = (parseFloat(resumentotal) + parseFloat(total));
+                }
+              });
+              document.getElementById('resumentotal').innerHTML = resumentotal;
+            }
+            creardatatable("#example2");
+            datosaci.splice(0, datosaci.length);
+            datosaci = myArray;
+            countaci = contador;
+            console.log(datosaci);
           }
-          creardatatable("#example2");
-          datosaci.splice(0, datosaci.length);
-          datosaci = myArray;
-          countaci = contador;
-          console.log(datosaci);
+        },
+      });
+
+    } else {
+      let valor = parseInt(id);
+      $('#resumentotal').val('');
+      $("#example2").dataTable().fnDestroy();
+      $("#tablita-aci").children().remove();
+
+      let index = datosaci.findIndex(object => object.id === valor);
+      datosaci.splice(index, 1);
+
+      let myArray = [];
+      let contador = 1;
+      let v_color = '';
+      for (const property in datosaci) {
+        let item = datosaci[property].Item;
+        let nombre = datosaci[property].Descripcion;
+        let v_unidad = datosaci[property].Unidad;
+        let qty = datosaci[property].Cantidad;
+        let price = datosaci[property].Precio;
+        let importe = datosaci[property].Total;
+        let v_note_detalle = datosaci[property].v_note_detalle;
+        let v_id_local = datosaci[property].v_id_local;
+        let i_opcion = datosaci[property].i_opcion;
+        let v_centrocosto = datosaci[property].v_centrocosto;
+        let v_cuenta = datosaci[property].v_cuenta;
+
+
+        if (Number(i_opcion) == 2) {
+          item = Number(contador);
         }
+
+        if (v_note_detalle == 'SI') {
+          v_color = 'color:rgb(66,222,10)';
+        } else {
+          v_color = 'color:rgb(3,164,90)';
+        }
+
+        let fila =
+          "<tr><td class='text-center'>" +
+          contador +
+          "</td><td><span class='fa-solid fa-truck fa-beat'  style='" + v_color + "'></span>" +
+
+          "</td><td class='text-left'>" +
+          item +
+          "</td><td class='text-left'>" +
+          nombre +
+          "</td><td class='text-left'>" +
+          v_id_local +
+          "</td><td class='text-left'>" +
+          v_centrocosto +
+          "</td><td class='text-left'>" +
+          v_cuenta +
+          "</td><td class='text-left'>" +
+          v_unidad +
+          "</td><td class='text-left'>" +
+          qty +
+          "</td><td class='text-left'>" +
+          price +
+          "</td><td class='text-left'>" +
+          importe +
+          "</td><td><a id=" +
+          item +
+          " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
+          "</td><td><a id=" +
+          contador +
+          " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+        let btn = document.createElement("tr");
+        btn.innerHTML = fila;
+        document.getElementById("tablita-aci").appendChild(btn);
+        myArray.push({ id: contador, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, v_centrocosto: v_centrocosto, v_cuenta: v_cuenta });
+        contador = contador + 1;
+
+        //CALCULAR
+        var resumentotal = 0;
+        $('#example2 tr').each(function () {
+          var total = $(this).find("td").eq(10).html();
+          if ((parseFloat(total)) > 0) {
+            resumentotal = (parseFloat(resumentotal) + parseFloat(total));
+          }
+        });
+        document.getElementById('resumentotal').innerHTML = resumentotal;
       }
-    });
+      creardatatable("#example2");
+      datosaci.splice(0, datosaci.length);
+      datosaci = myArray;
+      countaci = contador;
+      console.log(datosaci);
+    }
+
+    // Swal.fire({
+    //   title: "ESTAS SEGURO DE ELIMINAR LA FILA ?",
+    //   text: "",
+    //   icon: "warning",
+    //   showCancelButton: true,
+    //   confirmButtonColor: "#61C250",
+    //   cancelButtonColor: "#ea5455",
+    //   confirmButtonText: "Si, Eliminar!",
+    //   cancelButtonText: "No",
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     var post = 0;
+    //     var nu_correla = document.getElementById("nropedido").innerHTML;
+    //     let i_item = parseInt(id);
+
+    //     if (nu_correla != "NUEVO") {
+    //       $.ajax({
+    //         type: "POST",
+    //         url: '/pedidos/pedidos/eliminar_fila',
+    //         data: { post: post, nu_correla: nu_correla, i_item: i_item },
+    //         success: function (res) {
+    //           if (res.v_mensaje == '' && Number(res.respuesta) == 1) {
+
+    //             let valor = parseInt(id);
+    //             $('#resumentotal').val('');
+    //             $("#example2").dataTable().fnDestroy();
+    //             $("#tablita-aci").children().remove();
+
+    //             let index = datosaci.findIndex(object => object.id === valor);
+    //             datosaci.splice(index, 1);
+
+    //             let myArray = [];
+    //             let contador = 1;
+    //             let v_color = '';
+    //             for (const property in datosaci) {
+    //               let item = datosaci[property].Item;
+    //               let nombre = datosaci[property].Descripcion;
+    //               let v_unidad = datosaci[property].Unidad;
+    //               let qty = datosaci[property].Cantidad;
+    //               let price = datosaci[property].Precio;
+    //               let importe = datosaci[property].Total;
+    //               let v_note_detalle = datosaci[property].v_note_detalle;
+    //               let v_id_local = datosaci[property].v_id_local;
+    //               let i_opcion = datosaci[property].i_opcion;
+    //               let v_centrocosto = datosaci[property].v_centrocosto;
+    //               let v_cuenta = datosaci[property].v_cuenta;
+
+
+    //               if (Number(i_opcion) == 2) {
+    //                 item = Number(contador);
+    //               }
+
+    //               if (v_note_detalle == 'SI') {
+    //                 v_color = 'color:rgb(66,222,10)';
+    //               } else {
+    //                 v_color = 'color:rgb(3,164,90)';
+    //               }
+
+    //               let fila =
+    //                 "<tr><td class='text-center'>" +
+    //                 contador +
+    //                 "</td><td><span class='fa-solid fa-truck fa-beat'  style='" + v_color + "'></span>" +
+
+    //                 "</td><td class='text-left'>" +
+    //                 item +
+    //                 "</td><td class='text-left'>" +
+    //                 nombre +
+    //                 "</td><td class='text-left'>" +
+    //                 v_id_local +
+    //                 "</td><td class='text-left'>" +
+    //                 v_centrocosto +
+    //                 "</td><td class='text-left'>" +
+    //                 v_cuenta +
+    //                 "</td><td class='text-left'>" +
+    //                 v_unidad +
+    //                 "</td><td class='text-left'>" +
+    //                 qty +
+    //                 "</td><td class='text-left'>" +
+    //                 price +
+    //                 "</td><td class='text-left'>" +
+    //                 importe +
+    //                 "</td><td><a id=" +
+    //                 item +
+    //                 " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
+    //                 "</td><td><a id=" +
+    //                 contador +
+    //                 " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+    //               let btn = document.createElement("tr");
+    //               btn.innerHTML = fila;
+    //               document.getElementById("tablita-aci").appendChild(btn);
+    //               myArray.push({ id: parseInt(contador), Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion, v_centrocosto: v_centrocosto, v_cuenta: v_cuenta });
+    //               contador = contador + 1;
+
+    //               //CALCULAR
+    //               var resumentotal = 0;
+    //               $('#example2 tr').each(function () {
+    //                 var total = $(this).find("td").eq(10).html();
+    //                 if ((parseFloat(total)) > 0) {
+    //                   resumentotal = (parseFloat(resumentotal) + parseFloat(total));
+    //                 }
+    //               });
+    //               document.getElementById('resumentotal').innerHTML = resumentotal;
+    //             }
+    //             creardatatable("#example2");
+    //             datosaci.splice(0, datosaci.length);
+    //             datosaci = myArray;
+    //             countaci = contador;
+    //             console.log(datosaci);
+    //           } else if (res.v_mensaje != '' && Number(res.respuesta) == 2) {
+    //             Swal.fire(
+    //               res.v_mensaje,
+    //               '',
+    //               'warning'
+    //             )
+    //             return
+
+    //           } else {
+    //             let valor = parseInt(id);
+    //             $('#resumentotal').val('');
+    //             $("#example2").dataTable().fnDestroy();
+    //             $("#tablita-aci").children().remove();
+
+    //             let index = datosaci.findIndex(object => object.id === valor);
+    //             datosaci.splice(index, 1);
+
+    //             let myArray = [];
+    //             let contador = 1;
+    //             let v_color = '';
+    //             for (const property in datosaci) {
+    //               let item = datosaci[property].Item;
+    //               let nombre = datosaci[property].Descripcion;
+    //               let v_unidad = datosaci[property].Unidad;
+    //               let qty = datosaci[property].Cantidad;
+    //               let price = datosaci[property].Precio;
+    //               let importe = datosaci[property].Total;
+    //               let v_note_detalle = datosaci[property].v_note_detalle;
+    //               let v_id_local = datosaci[property].v_id_local;
+    //               let i_opcion = datosaci[property].i_opcion;
+    //               let v_centrocosto = datosaci[property].v_centrocosto;
+    //               let v_cuenta = datosaci[property].v_cuenta;
+
+
+    //               if (Number(i_opcion) == 2) {
+    //                 item = Number(contador);
+    //               }
+
+    //               if (v_note_detalle == 'SI') {
+    //                 v_color = 'color:rgb(66,222,10)';
+    //               } else {
+    //                 v_color = 'color:rgb(3,164,90)';
+    //               }
+
+    //               let fila =
+    //                 "<tr><td class='text-center'>" +
+    //                 contador +
+    //                 "</td><td><span class='fa-solid fa-truck fa-beat'  style='" + v_color + "'></span>" +
+
+    //                 "</td><td class='text-left'>" +
+    //                 item +
+    //                 "</td><td class='text-left'>" +
+    //                 nombre +
+    //                 "</td><td class='text-left'>" +
+    //                 v_id_local +
+    //                 "</td><td class='text-left'>" +
+    //                 v_centrocosto +
+    //                 "</td><td class='text-left'>" +
+    //                 v_cuenta +
+    //                 "</td><td class='text-left'>" +
+    //                 v_unidad +
+    //                 "</td><td class='text-left'>" +
+    //                 qty +
+    //                 "</td><td class='text-left'>" +
+    //                 price +
+    //                 "</td><td class='text-left'>" +
+    //                 importe +
+    //                 "</td><td><a id=" +
+    //                 item +
+    //                 " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
+    //                 "</td><td><a id=" +
+    //                 contador +
+    //                 " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+    //               let btn = document.createElement("tr");
+    //               btn.innerHTML = fila;
+    //               document.getElementById("tablita-aci").appendChild(btn);
+    //               myArray.push({ id: parseInt(contador), Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion, v_centrocosto: v_centrocosto, v_cuenta: v_cuenta });
+    //               contador = contador + 1;
+
+    //               //CALCULAR
+    //               var resumentotal = 0;
+    //               $('#example2 tr').each(function () {
+    //                 var total = $(this).find("td").eq(10).html();
+    //                 if ((parseFloat(total)) > 0) {
+    //                   resumentotal = (parseFloat(resumentotal) + parseFloat(total));
+    //                 }
+    //               });
+    //               document.getElementById('resumentotal').innerHTML = resumentotal;
+    //             }
+    //             creardatatable("#example2");
+    //             datosaci.splice(0, datosaci.length);
+    //             datosaci = myArray;
+    //             countaci = contador;
+    //             console.log(datosaci);
+    //           }
+    //         },
+    //       });
+
+
+    //     } else {
+    //       let valor = parseInt(id);
+    //       $('#resumentotal').val('');
+    //       $("#example2").dataTable().fnDestroy();
+    //       $("#tablita-aci").children().remove();
+
+    //       let index = datosaci.findIndex(object => object.id === valor);
+    //       datosaci.splice(index, 1);
+
+    //       let myArray = [];
+    //       let contador = 1;
+    //       let v_color = '';
+    //       for (const property in datosaci) {
+    //         let item = datosaci[property].Item;
+    //         let nombre = datosaci[property].Descripcion;
+    //         let v_unidad = datosaci[property].Unidad;
+    //         let qty = datosaci[property].Cantidad;
+    //         let price = datosaci[property].Precio;
+    //         let importe = datosaci[property].Total;
+    //         let v_note_detalle = datosaci[property].v_note_detalle;
+    //         let v_id_local = datosaci[property].v_id_local;
+    //         let i_opcion = datosaci[property].i_opcion;
+    //         let v_centrocosto = datosaci[property].v_centrocosto;
+    //         let v_cuenta = datosaci[property].v_cuenta;
+
+
+    //         if (Number(i_opcion) == 2) {
+    //           item = Number(contador);
+    //         }
+
+    //         if (v_note_detalle == 'SI') {
+    //           v_color = 'color:rgb(66,222,10)';
+    //         } else {
+    //           v_color = 'color:rgb(3,164,90)';
+    //         }
+
+    //         let fila =
+    //           "<tr><td class='text-center'>" +
+    //           contador +
+    //           "</td><td><span class='fa-solid fa-truck fa-beat'  style='" + v_color + "'></span>" +
+
+    //           "</td><td class='text-left'>" +
+    //           item +
+    //           "</td><td class='text-left'>" +
+    //           nombre +
+    //           "</td><td class='text-left'>" +
+    //           v_id_local +
+    //           "</td><td class='text-left'>" +
+    //           v_centrocosto +
+    //           "</td><td class='text-left'>" +
+    //           v_cuenta +
+    //           "</td><td class='text-left'>" +
+    //           v_unidad +
+    //           "</td><td class='text-left'>" +
+    //           qty +
+    //           "</td><td class='text-left'>" +
+    //           price +
+    //           "</td><td class='text-left'>" +
+    //           importe +
+    //           "</td><td><a id=" +
+    //           item +
+    //           " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
+    //           "</td><td><a id=" +
+    //           contador +
+    //           " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+    //         let btn = document.createElement("tr");
+    //         btn.innerHTML = fila;
+    //         document.getElementById("tablita-aci").appendChild(btn);
+    //         myArray.push({ id: contador, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, v_centrocosto: v_centrocosto, v_cuenta: v_cuenta });
+    //         contador = contador + 1;
+
+    //         //CALCULAR
+    //         var resumentotal = 0;
+    //         $('#example2 tr').each(function () {
+    //           var total = $(this).find("td").eq(10).html();
+    //           if ((parseFloat(total)) > 0) {
+    //             resumentotal = (parseFloat(resumentotal) + parseFloat(total));
+    //           }
+    //         });
+    //         document.getElementById('resumentotal').innerHTML = resumentotal;
+    //       }
+    //       creardatatable("#example2");
+    //       datosaci.splice(0, datosaci.length);
+    //       datosaci = myArray;
+    //       countaci = contador;
+    //       console.log(datosaci);
+    //     }
+    //   }
+    // });
 
   });
 
@@ -1150,7 +1761,7 @@ $(function () {
                   },
 
                   success: function (res) {
-                 
+
 
                     $("#div-01").html("");
                     let myArray = [];
@@ -1258,7 +1869,6 @@ $(function () {
     }
   });
 
-
   $("#moneda").change(function () {
     var moneda = $('#moneda option:selected').text();
     var tipocambio = $('#tipocambio').val();
@@ -1285,7 +1895,6 @@ $(function () {
     }
   });
 
-
   $("#btnguardar").on("click", function () {
     var nu_correla = document.getElementById("nropedido").innerHTML;
     var idarea = document.getElementById("idarea").innerHTML;
@@ -1307,6 +1916,7 @@ $(function () {
       resumentotalsol = resumentotal;
       resumentotaldol = 0;
     }
+
     var nota = $('#note').val();
     var d_fechaentrega = $('#fechaentrega').val();
     var v_numerophone = $('#nrophone').val();
@@ -1327,7 +1937,7 @@ $(function () {
     var i_tipo_pedido = $('#tipoorden option:selected').val();
     var v_tipo_pedido = $('#tipoorden option:selected').text();
 
-
+    var i_id_modo = $('#cbocondicion option:selected').val();
 
 
 
@@ -1457,6 +2067,8 @@ $(function () {
             v_direccion_entrega: v_direccion_entrega,
             i_tipo_pedido: i_tipo_pedido,
             v_tipo_pedido: v_tipo_pedido,
+            i_id_modo: i_id_modo,
+
             datosaci: datosaci
           },
 
@@ -1547,7 +2159,8 @@ $(function () {
                   let v_note_detalle = res.data[property].v_note_detalle;
                   let v_id_local = res.data[property].v_id_local;
                   let i_opcion = res.data[property].i_opcion;
-
+                  let v_centrocosto = res.data[property].v_centrocosto;
+                  let v_cuenta = res.data[property].v_cuenta;
 
                   if (v_note_detalle == 'SI') {
                     v_color = 'color:rgb(66,222,10)';
@@ -1559,13 +2172,16 @@ $(function () {
                     "<tr><td class='text-center'>" +
                     id +
                     "</td><td><span class='fa-solid fa-truck fa-beat'  style='" + v_color + "'></span>" +
-
                     "</td><td class='text-left'>" +
                     item +
                     "</td><td class='text-left'>" +
                     nombre +
                     "</td><td class='text-left'>" +
                     v_id_local +
+                    "</td><td class='text-left'>" +
+                    v_centrocosto +
+                    "</td><td class='text-left'>" +
+                    v_cuenta +
                     "</td><td class='text-left'>" +
                     v_unidad +
                     "</td><td class='text-left'>" +
@@ -1584,7 +2200,7 @@ $(function () {
                   let btn = document.createElement("tr");
                   btn.innerHTML = fila;
                   document.getElementById("tablita-aci").appendChild(btn);
-                  myArray.push({ id: id, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
+                  myArray.push({ id: id, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion, v_centrocosto: v_centrocosto, v_cuenta: v_cuenta });
                 }
                 creardatatable("#example2");
                 datosaci.splice(0, datosaci.length);
@@ -1624,7 +2240,6 @@ $(function () {
     });
   });
 
-
   $('#btnsendpedido').on('click', function () {  //ENVIAR CORREO raaa
     var post = 0;
     var nu_correla = document.getElementById("nropedido").innerHTML;
@@ -1646,7 +2261,6 @@ $(function () {
       })
       return;
     }
-
 
     if (nombre == 0 || nombre == null) {
       Swal.fire({
@@ -1853,6 +2467,9 @@ $(function () {
               for (const property in res.data) {
                 let nu_correla = res.data[property].nu_correla;
                 let v_item_pedido = res.data[property].v_item_pedido;
+                let v_codprod = res.data[property].v_codprod;
+                let v_id_local = res.data[property].v_id_local;
+
                 let v_idlinea = res.data[property].v_idlinea;
                 let v_idppto = res.data[property].v_idppto;
                 let v_idpartida = res.data[property].v_idpartida;
@@ -1863,7 +2480,9 @@ $(function () {
 
                 let fila =
                   "<tr><td class='text-left'>" +
-                  v_item_pedido +
+                  v_codprod +
+                  "</td><td class='text-left'>" +
+                  v_id_local +
                   "</td><td class='text-left'>" +
                   v_idppto +
                   "</td><td class='text-left'>" +
@@ -1924,6 +2543,8 @@ $(function () {
               for (const property in res.data) {
                 let nu_correla = res.data[property].nu_correla;
                 let v_item_pedido = res.data[property].v_item_pedido;
+                let v_codprod = res.data[property].v_codprod;
+                let v_id_local = res.data[property].v_id_local;
                 let v_idlinea = res.data[property].v_idlinea;
                 let v_idppto = res.data[property].v_idppto;
                 let v_idpartida = res.data[property].v_idpartida;
@@ -1934,7 +2555,9 @@ $(function () {
 
                 let fila =
                   "<tr><td class='text-center'>" +
-                  v_item_pedido +
+                  v_codprod +
+                  "</td><td class='text-left'>" +
+                  v_id_local +
                   "</td><td class='text-left'>" +
                   v_idppto +
                   "</td><td class='text-left'>" +
@@ -2090,7 +2713,6 @@ $(function () {
   });
 
   $("#idpartida").change(function () {
-
     $("#montolleva").val('');
     var v_codigo = $("#idppto").val();
     var v_idpartida = $("#idpartida").val();
@@ -2219,7 +2841,6 @@ $(function () {
     if (cantidadx > montox) {
       $("#montolleva").focus();
       $('#montolleva').val(monto);
-
       Swal.fire({
         title: 'EL MONTO INGRESADO ES MAYOR AL SALDO DEL MES SELECCIONADO',
         showClass: {
@@ -2233,20 +2854,60 @@ $(function () {
     }
   });
 
+  $("#lineapedido").change(function () {
+    var nu_correla = document.getElementById("nropedido").innerHTML;
+    var i_item = $('#lineapedido  option:selected').val();
+
+    $('#montoitem').val(0);
+
+    $.ajax({
+      type: "POST",
+      url: "/pedidos/pedidos/consulta_monto_item",
+      data: { nu_correla: nu_correla, i_item: i_item },
+
+      beforeSend: function () {
+        $("#div-ppto").html("");
+        $("#div-ppto").append(
+          "<div id='div-ppto'>\<div class='d-flex justify-content-center my-1'>\<div class='spinner-border text-danger' role='status' aria-hidden='true'></div>\</div>\ </div>"
+        );
+      },
+      success: function (res) {
+        $("#div-ppto").html("");
+        $('#montoitem').val(res.nu_total);
+        $('#pptoalmacen').val(res.v_id_local);
+        $('#pptocentrocosto').val(res.v_centrocosto);
+        $('#codigoproducto').val(res.v_codprod);
+        $('#itemcuenta').val(res.v_cuenta);
+      },
+    });
+  });
+
+
+  // consulta_monto_item
+
   $("#agregarppto").on("click", function () { //perro
     var post = 0;
     var nu_correla = document.getElementById("nropedido").innerHTML;
     var v_idppto = $('#idppto  option:selected').val();
     var v_idpartida = $('#idpartida  option:selected').val();
-    var v_centrocosto = $('#idcentrocosto  option:selected').val();
     var linedetalle = $('#lineapedido option:selected').val();
 
+    var v_id_local = $('#pptoalmacen').val();
+    var v_centrocosto = $('#pptocentrocosto').val();
+    var v_cuenta = $('#itemcuenta').val();
+
+    var v_codprod = $('#codigoproducto').val();
+
+
+    var montoitem = $('#montoitem').val();
     var cantidad = $('#montolleva').val();
+
     var cantidadx = parseFloat(cantidad);
     var montox = parseFloat(monto);
+    var montoitemx = parseFloat(montoitem);
 
 
-    if (linedetalle == "XXX" || linedetalle == null) {
+    if (linedetalle == 0 || linedetalle == null) {
       $("#lineapedido").focus();
       Swal.fire({
         title: 'SELECCIONE UN ITEM DEL PEDIDO',
@@ -2290,10 +2951,13 @@ $(function () {
       return;
     }
 
-    if (v_centrocosto == "XXXXXXXXXX" || v_centrocosto == null) {
-      $("#idcentrocosto").focus();
+
+    if (cantidadx != montoitem) {
+      $("#montolleva").focus();
+      $('#montolleva').val(monto);
       Swal.fire({
-        title: 'SELECCIONE CENTRO DE COSTO',
+        title: "MONTO DEL PRESUPUESTO (" + cantidadx + ') ES DIFERENTE QUE DEL ITEM (' + montoitem + ')',
+        // title: "YA AGREGO ESTE PRODUCTO " + '  ' + '(' + v_invtid + ') CON EL CENTRO DE COSTO ' + '(' + v_centrocosto + ') PARA EL ALMACEN DE' + '(' + v_id_local + ')',
         showClass: {
           popup: 'animate__animated animate__fadeInDown'
         },
@@ -2304,109 +2968,221 @@ $(function () {
       return;
     }
 
-    Swal.fire({
-      title: "Estas seguro de guardar en el Sistema?",
-      text: "",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#61C250",
-      cancelButtonColor: "#ea5455",
-      confirmButtonText: "Si, Guardar!",
-      cancelButtonText: "No",
-    }).then((result) => {
-      if (result.isConfirmed) {
+    $.ajax({
+      type: 'POST',
+      url: '/pedidos/pedidos/registro_pedido_ppto',
+      data: {
+        post: post,
+        nu_correla: nu_correla,
+        linedetalle: linedetalle,
+        v_codprod: v_codprod,
+        v_idppto: v_idppto,
+        v_idpartida: v_idpartida,
+        codmes: codmes,
+        nombremes: nombremes,
+        cantidadx: cantidadx,
+        v_id_local: v_id_local,
+        v_centrocosto: v_centrocosto,
+        v_cuenta: v_cuenta,
+      },
+
+      beforeSend: function () {
+        $("#loadppto").html("");
+        $("#loadppto").append(
+          "<div id='loadppto'>\<div class='d-flex justify-content-center my-1'>\<div class='spinner-border text-danger' role='status' aria-hidden='true'></div>\</div>\ </div>"
+        );
+      },
+
+      success: function (res) {
+        $("#loadppto").html("");
         $.ajax({
           type: 'POST',
-          url: '/pedidos/pedidos/registro_pedido_ppto',
-          data: {
-            post: post,
-            nu_correla: nu_correla,
-            linedetalle: linedetalle,
-            v_idppto: v_idppto,
-            v_idpartida: v_idpartida,
-            codmes: codmes,
-            nombremes: nombremes,
-            cantidadx: cantidadx,
-            v_centrocosto: v_centrocosto,
-          },
-
+          url: '/pedidos/pedidos/Mostrar_pedido_ppto',
+          data: { nu_correla: nu_correla },
           success: function (res) {
-            $.ajax({
-              type: 'POST',
-              url: '/pedidos/pedidos/Mostrar_pedido_ppto',
-              data: { nu_correla: nu_correla },
-              success: function (res) {
 
-                document.getElementById('resumenppto').innerHTML = res.f_montoppto;
-                document.getElementById('diferenciappto').innerHTML = res.f_diferencia;
-                if (Number(res.f_diferencia) == 0) {
-                  document.getElementById("diferenciappto").style.color = "green";
-                } else {
-                  document.getElementById("diferenciappto").style.color = "red";
-                }
+            document.getElementById('resumenppto').innerHTML = res.f_montoppto;
+            document.getElementById('diferenciappto').innerHTML = res.f_diferencia;
+            if (Number(res.f_diferencia) == 0) {
+              document.getElementById("diferenciappto").style.color = "green";
+            } else {
+              document.getElementById("diferenciappto").style.color = "red";
+            }
 
-                // $("#idppto").html("");
-                // $("#idppto").append(res.FilasPresupuesto);
+            $("#lineapedido").html("");
+            $("#lineapedido").append(res.FilasDetPedido);
 
 
-                $("#tbpptopedido").dataTable().fnDestroy();
-                $("#tablita-ppto").children().remove();
+            $("#tbpptopedido").dataTable().fnDestroy();
+            $("#tablita-ppto").children().remove();
 
-                let myArray = [];
-                for (const property in res.data) {
-                  let nu_correla = res.data[property].nu_correla;
-                  let v_item_pedido = res.data[property].v_item_pedido;
-                  let v_idlinea = res.data[property].v_idlinea;
-                  let v_idppto = res.data[property].v_idppto;
-                  let v_idpartida = res.data[property].v_idpartida;
-                  let v_idmes = res.data[property].v_idmes;
-                  let v_nombremes = res.data[property].v_nombremes;
-                  let f_monto = res.data[property].f_monto;
-                  let v_centrocosto = res.data[property].v_centrocosto;
+            let myArray = [];
+            for (const property in res.data) {
+              let nu_correla = res.data[property].nu_correla;
+              let v_item_pedido = res.data[property].v_item_pedido;
+              let v_id_local = res.data[property].v_id_local;
+              let v_codprod = res.data[property].v_codprod;
+              let v_idlinea = res.data[property].v_idlinea;
+              let v_idppto = res.data[property].v_idppto;
+              let v_idpartida = res.data[property].v_idpartida;
+              let v_idmes = res.data[property].v_idmes;
+              let v_nombremes = res.data[property].v_nombremes;
+              let f_monto = res.data[property].f_monto;
+              let v_centrocosto = res.data[property].v_centrocosto;
 
-                  let fila =
-                    "<tr><td class='text-left'>" +
-                    v_item_pedido +
-                    "</td><td class='text-left'>" +
-                    v_idppto +
-                    "</td><td class='text-left'>" +
-                    v_idpartida +
-                    "</td><td class='text-left'>" +
-                    v_idmes +
-                    "</td><td class='text-left'>" +
-                    v_nombremes +
-                    "</td><td class='text-left'>" +
-                    v_centrocosto +
-                    "</td><td class='text-left'>" +
-                    f_monto +
-                    "</td><td><a id=" +
-                    v_idlinea +
-                    " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+              let fila =
+                "<tr><td class='text-left'>" +
+                v_codprod +
+                "</td><td class='text-left'>" +
+                v_id_local +
+                "</td><td class='text-left'>" +
+                v_idppto +
+                "</td><td class='text-left'>" +
+                v_idpartida +
+                "</td><td class='text-left'>" +
+                v_idmes +
+                "</td><td class='text-left'>" +
+                v_nombremes +
+                "</td><td class='text-left'>" +
+                v_centrocosto +
+                "</td><td class='text-left'>" +
+                f_monto +
+                "</td><td><a id=" +
+                v_idlinea +
+                " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
 
-                  let btn = document.createElement("tr");
-                  btn.innerHTML = fila;
-                  document.getElementById("tablita-ppto").appendChild(btn);
-                }
-                creardatatable("#tbpptopedido"); //perro
-              }
-            });
-
-            Swal.fire({
-              icon: res.vicon,
-              title: res.vtitle,
-              text: res.vtext,
-              timer: res.itimer,
-              timerProgressBar: res.vprogressbar,
-              showCancelButton: false,
-              showConfirmButton: false,
-            });
-            var id = setInterval(function () {
-              clearInterval(id);
-            }, res.itimer);
+              let btn = document.createElement("tr");
+              btn.innerHTML = fila;
+              document.getElementById("tablita-ppto").appendChild(btn);
+            }
+            creardatatable("#tbpptopedido"); //perro
           }
         });
+
+        Swal.fire({
+          icon: res.vicon,
+          title: res.vtitle,
+          text: res.vtext,
+          timer: res.itimer,
+          timerProgressBar: res.vprogressbar,
+          showCancelButton: false,
+          showConfirmButton: false,
+        });
+        var id = setInterval(function () {
+          clearInterval(id);
+        }, res.itimer);
       }
     });
+
+    // Swal.fire({
+    //   title: "Estas seguro de guardar en el Sistema?",
+    //   text: "",
+    //   icon: "warning",
+    //   showCancelButton: true,
+    //   confirmButtonColor: "#61C250",
+    //   cancelButtonColor: "#ea5455",
+    //   confirmButtonText: "Si, Guardar!",
+    //   cancelButtonText: "No",
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     $.ajax({
+    //       type: 'POST',
+    //       url: '/pedidos/pedidos/registro_pedido_ppto',
+    //       data: {
+    //         post: post,
+    //         nu_correla: nu_correla,
+    //         linedetalle: linedetalle,
+    //         v_codprod: v_codprod,
+    //         v_idppto: v_idppto,
+    //         v_idpartida: v_idpartida,
+    //         codmes: codmes,
+    //         nombremes: nombremes,
+    //         cantidadx: cantidadx,
+    //         v_id_local: v_id_local,
+    //         v_centrocosto: v_centrocosto,
+    //         v_cuenta: v_cuenta,
+    //       },
+    //       success: function (res) {
+    //         $.ajax({
+    //           type: 'POST',
+    //           url: '/pedidos/pedidos/Mostrar_pedido_ppto',
+    //           data: { nu_correla: nu_correla },
+    //           success: function (res) {
+
+    //             document.getElementById('resumenppto').innerHTML = res.f_montoppto;
+    //             document.getElementById('diferenciappto').innerHTML = res.f_diferencia;
+    //             if (Number(res.f_diferencia) == 0) {
+    //               document.getElementById("diferenciappto").style.color = "green";
+    //             } else {
+    //               document.getElementById("diferenciappto").style.color = "red";
+    //             }
+
+    //             $("#lineapedido").html("");
+    //             $("#lineapedido").append(res.FilasDetPedido);
+
+
+    //             $("#tbpptopedido").dataTable().fnDestroy();
+    //             $("#tablita-ppto").children().remove();
+
+    //             let myArray = [];
+    //             for (const property in res.data) {
+    //               let nu_correla = res.data[property].nu_correla;
+    //               let v_item_pedido = res.data[property].v_item_pedido;
+    //               let v_id_local = res.data[property].v_id_local;
+    //               let v_codprod = res.data[property].v_codprod;
+    //               let v_idlinea = res.data[property].v_idlinea;
+    //               let v_idppto = res.data[property].v_idppto;
+    //               let v_idpartida = res.data[property].v_idpartida;
+    //               let v_idmes = res.data[property].v_idmes;
+    //               let v_nombremes = res.data[property].v_nombremes;
+    //               let f_monto = res.data[property].f_monto;
+    //               let v_centrocosto = res.data[property].v_centrocosto;
+
+    //               let fila =
+    //                 "<tr><td class='text-left'>" +
+    //                 v_codprod +
+    //                 "</td><td class='text-left'>" +
+    //                 v_id_local +
+    //                 "</td><td class='text-left'>" +
+    //                 v_idppto +
+    //                 "</td><td class='text-left'>" +
+    //                 v_idpartida +
+    //                 "</td><td class='text-left'>" +
+    //                 v_idmes +
+    //                 "</td><td class='text-left'>" +
+    //                 v_nombremes +
+    //                 "</td><td class='text-left'>" +
+    //                 v_centrocosto +
+    //                 "</td><td class='text-left'>" +
+    //                 f_monto +
+    //                 "</td><td><a id=" +
+    //                 v_idlinea +
+    //                 " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+
+    //               let btn = document.createElement("tr");
+    //               btn.innerHTML = fila;
+    //               document.getElementById("tablita-ppto").appendChild(btn);
+    //             }
+    //             creardatatable("#tbpptopedido"); //perro
+    //           }
+    //         });
+
+    //         Swal.fire({
+    //           icon: res.vicon,
+    //           title: res.vtitle,
+    //           text: res.vtext,
+    //           timer: res.itimer,
+    //           timerProgressBar: res.vprogressbar,
+    //           showCancelButton: false,
+    //           showConfirmButton: false,
+    //         });
+    //         var id = setInterval(function () {
+    //           clearInterval(id);
+    //         }, res.itimer);
+    //       }
+    //     });
+    //   }
+    // });
 
   });
 
@@ -2414,89 +3190,169 @@ $(function () {
     let v_idlinea = $(this).attr("id");
     var nu_correla = document.getElementById("nropedido").innerHTML;
 
-    Swal.fire({
-      title: "Estas seguro de eliminar la Fila?",
-      text: "Se eliminar la fila del Ppto",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#61C250",
-      cancelButtonColor: "#ea5455",
-      confirmButtonText: "Si, Procesar!",
-      cancelButtonText: "No",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        $.ajax({
-          type: 'POST',
-          url: '/pedidos/pedidos/eliminar_fila_ppto',
-          data: { nu_correla: nu_correla, v_idlinea: v_idlinea },
-          success: function (res) {
 
-            if (res.respuesta == 1) {
-              $.ajax({
-                type: 'POST',
-                url: '/pedidos/pedidos/Mostrar_pedido_ppto',
-                data: { nu_correla: nu_correla },
-                success: function (res) {
+    $.ajax({
+      type: 'POST',
+      url: '/pedidos/pedidos/eliminar_fila_ppto',
+      data: { nu_correla: nu_correla, v_idlinea: v_idlinea },
+      success: function (res) {
 
-                  document.getElementById('resumenppto').innerHTML = res.f_montoppto;
-                  document.getElementById('diferenciappto').innerHTML = res.f_diferencia;
-                  if (Number(res.f_diferencia) == 0) {
-                    document.getElementById("diferenciappto").style.color = "green";
-                  } else {
-                    document.getElementById("diferenciappto").style.color = "red";
-                  }
+        if (res.respuesta == 1) {
+          $.ajax({
+            type: 'POST',
+            url: '/pedidos/pedidos/Mostrar_pedido_ppto',
+            data: { nu_correla: nu_correla },
+            success: function (res) {
 
-                  $("#idppto").html("");
-                  $("#idppto").append(res.FilasPresupuesto);
+              document.getElementById('resumenppto').innerHTML = res.f_montoppto;
+              document.getElementById('diferenciappto').innerHTML = res.f_diferencia;
+              if (Number(res.f_diferencia) == 0) {
+                document.getElementById("diferenciappto").style.color = "green";
+              } else {
+                document.getElementById("diferenciappto").style.color = "red";
+              }
+
+              $("#idppto").html("");
+              $("#idppto").append(res.FilasPresupuesto);
 
 
-                  $("#tbpptopedido").dataTable().fnDestroy();
-                  $("#tablita-ppto").children().remove();
+              $("#tbpptopedido").dataTable().fnDestroy();
+              $("#tablita-ppto").children().remove();
 
-                  let myArray = [];
-                  for (const property in res.data) {
-                    let nu_correla = res.data[property].nu_correla;
-                    let v_idlinea = res.data[property].v_idlinea;
-                    let v_idppto = res.data[property].v_idppto;
-                    let v_idpartida = res.data[property].v_idpartida;
-                    let v_idmes = res.data[property].v_idmes;
-                    let v_nombremes = res.data[property].v_nombremes;
-                    let f_monto = res.data[property].f_monto;
-                    let v_centrocosto = res.data[property].v_centrocosto;
+              let myArray = [];
+              for (const property in res.data) {
+                let nu_correla = res.data[property].nu_correla;
+                let v_idlinea = res.data[property].v_idlinea;
+                let v_codprod = res.data[property].v_codprod;
+                let v_id_local = res.data[property].v_id_local;
+                let v_idppto = res.data[property].v_idppto;
+                let v_idpartida = res.data[property].v_idpartida;
+                let v_idmes = res.data[property].v_idmes;
+                let v_nombremes = res.data[property].v_nombremes;
+                let f_monto = res.data[property].f_monto;
+                let v_centrocosto = res.data[property].v_centrocosto;
 
-                    let fila =
-                      "<tr><td class='text-left'>" +
-                      nu_correla +
-                      "</td><td class='text-left'>" +
-                      v_idppto +
-                      "</td><td class='text-left'>" +
-                      v_idpartida +
-                      "</td><td class='text-left'>" +
-                      v_idmes +
-                      "</td><td class='text-left'>" +
-                      v_nombremes +
-                      "</td><td class='text-left'>" +
-                      v_centrocosto +
-                      "</td><td class='text-left'>" +
-                      f_monto +
-                      "</td><td><a id=" +
-                      v_idlinea +
-                      " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+                let fila =
+                  "<tr><td class='text-left'>" +
+                  v_codprod +
+                  "</td><td class='text-left'>" +
+                  v_id_local +
+                  "</td><td class='text-left'>" +
+                  v_idppto +
+                  "</td><td class='text-left'>" +
+                  v_idpartida +
+                  "</td><td class='text-left'>" +
+                  v_idmes +
+                  "</td><td class='text-left'>" +
+                  v_nombremes +
+                  "</td><td class='text-left'>" +
+                  v_centrocosto +
+                  "</td><td class='text-left'>" +
+                  f_monto +
+                  "</td><td><a id=" +
+                  v_idlinea +
+                  " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
 
-                    let btn = document.createElement("tr");
-                    btn.innerHTML = fila;
-                    document.getElementById("tablita-ppto").appendChild(btn);
-                  }
-                  creardatatable("#tbpptopedido"); //perro
-                }
-              });
+                let btn = document.createElement("tr");
+                btn.innerHTML = fila;
+                document.getElementById("tablita-ppto").appendChild(btn);
+              }
+              creardatatable("#tbpptopedido"); //perro
             }
-
-          }
-        });
+          });
+        }
 
       }
     });
+
+
+    // Swal.fire({
+    //   title: "Estas seguro de eliminar la Fila?",
+    //   text: "Se eliminar la fila del Ppto",
+    //   icon: "warning",
+    //   showCancelButton: true,
+    //   confirmButtonColor: "#61C250",
+    //   cancelButtonColor: "#ea5455",
+    //   confirmButtonText: "Si, Procesar!",
+    //   cancelButtonText: "No",
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     $.ajax({
+    //       type: 'POST',
+    //       url: '/pedidos/pedidos/eliminar_fila_ppto',
+    //       data: { nu_correla: nu_correla, v_idlinea: v_idlinea },
+    //       success: function (res) {
+
+    //         if (res.respuesta == 1) {
+    //           $.ajax({
+    //             type: 'POST',
+    //             url: '/pedidos/pedidos/Mostrar_pedido_ppto',
+    //             data: { nu_correla: nu_correla },
+    //             success: function (res) {
+
+    //               document.getElementById('resumenppto').innerHTML = res.f_montoppto;
+    //               document.getElementById('diferenciappto').innerHTML = res.f_diferencia;
+    //               if (Number(res.f_diferencia) == 0) {
+    //                 document.getElementById("diferenciappto").style.color = "green";
+    //               } else {
+    //                 document.getElementById("diferenciappto").style.color = "red";
+    //               }
+
+    //               $("#idppto").html("");
+    //               $("#idppto").append(res.FilasPresupuesto);
+
+
+    //               $("#tbpptopedido").dataTable().fnDestroy();
+    //               $("#tablita-ppto").children().remove();
+
+    //               let myArray = [];
+    //               for (const property in res.data) {
+    //                 let nu_correla = res.data[property].nu_correla;
+    //                 let v_idlinea = res.data[property].v_idlinea;
+    //                 let v_codprod = res.data[property].v_codprod;
+    //                 let v_id_local = res.data[property].v_id_local;
+    //                 let v_idppto = res.data[property].v_idppto;
+    //                 let v_idpartida = res.data[property].v_idpartida;
+    //                 let v_idmes = res.data[property].v_idmes;
+    //                 let v_nombremes = res.data[property].v_nombremes;
+    //                 let f_monto = res.data[property].f_monto;
+    //                 let v_centrocosto = res.data[property].v_centrocosto;
+
+    //                 let fila =
+    //                   "<tr><td class='text-left'>" +
+    //                   v_codprod +
+    //                   "</td><td class='text-left'>" +
+    //                   v_id_local +
+    //                   "</td><td class='text-left'>" +
+    //                   v_idppto +
+    //                   "</td><td class='text-left'>" +
+    //                   v_idpartida +
+    //                   "</td><td class='text-left'>" +
+    //                   v_idmes +
+    //                   "</td><td class='text-left'>" +
+    //                   v_nombremes +
+    //                   "</td><td class='text-left'>" +
+    //                   v_centrocosto +
+    //                   "</td><td class='text-left'>" +
+    //                   f_monto +
+    //                   "</td><td><a id=" +
+    //                   v_idlinea +
+    //                   " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
+
+    //                 let btn = document.createElement("tr");
+    //                 btn.innerHTML = fila;
+    //                 document.getElementById("tablita-ppto").appendChild(btn);
+    //               }
+    //               creardatatable("#tbpptopedido"); //perro
+    //             }
+    //           });
+    //         }
+
+    //       }
+    //     });
+
+    //   }
+    // });
   });
 
   $('#close_ppto1').on('click', function () {
@@ -2559,6 +3415,8 @@ $(function () {
           let v_disabled = res.data[property].v_disabled;
           let v_id_local = res.data[property].v_id_local;
           let i_opcion = res.data[property].i_opcion;
+          let v_centrocosto = res.data[property].v_centrocosto;
+          let v_cuenta = res.data[property].v_cuenta;
 
 
           if (v_note_detalle == 'SI') {
@@ -2566,7 +3424,6 @@ $(function () {
           } else {
             v_color = 'color:rgb(3,164,90)';
           }
-
 
           let fila =
             "<tr><td class='text-center'>" +
@@ -2579,6 +3436,10 @@ $(function () {
             nombre +
             "</td><td class='text-left'>" +
             v_id_local +
+            "</td><td class='text-left'>" +
+            v_centrocosto +
+            "</td><td class='text-left'>" +
+            v_cuenta +
             "</td><td class='text-left'>" +
             v_unidad +
             "</td><td class='text-left'>" +
@@ -2596,7 +3457,7 @@ $(function () {
           let btn = document.createElement("tr");
           btn.innerHTML = fila;
           document.getElementById("tablita-aci").appendChild(btn);
-          myArray.push({ id: id, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
+          myArray.push({ id: id, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion, v_centrocosto: v_centrocosto, v_cuenta: v_cuenta });
         }
         creardatatable("#example2");
         datosaci.splice(0, datosaci.length);
@@ -2636,7 +3497,8 @@ $(function () {
           let v_disabled = res.data[property].v_disabled;
           let v_id_local = res.data[property].v_id_local;
           let i_opcion = res.data[property].i_opcion;
-
+          let v_centrocosto = res.data[property].v_centrocosto;
+          let v_cuenta = res.data[property].v_cuenta;
 
           if (v_note_detalle == 'SI') {
             v_color = 'color:rgb(66,222,10)';
@@ -2657,6 +3519,10 @@ $(function () {
             "</td><td class='text-left'>" +
             v_id_local +
             "</td><td class='text-left'>" +
+            v_centrocosto +
+            "</td><td class='text-left'>" +
+            v_cuenta +
+            "</td><td class='text-left'>" +
             v_unidad +
             "</td><td class='text-left'>" +
             qty +
@@ -2673,7 +3539,7 @@ $(function () {
           let btn = document.createElement("tr");
           btn.innerHTML = fila;
           document.getElementById("tablita-aci").appendChild(btn);
-          myArray.push({ id: id, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
+          myArray.push({ id: id, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion, v_centrocosto: v_centrocosto, v_cuenta: v_cuenta });
         }
         creardatatable("#example2");
         datosaci.splice(0, datosaci.length);
@@ -2703,7 +3569,11 @@ $(function () {
       let price = datosaci[property].Precio;
       let importe = datosaci[property].Total;
       let v_note_detalle = datosaci[property].v_note_detalle;
+      let v_disabled = datosaci[property].v_disabled;
       let v_id_local = datosaci[property].v_id_local;
+      let i_opcion = datosaci[property].i_opcion;
+      let v_centrocosto = datosaci[property].v_centrocosto;
+      let v_cuenta = datosaci[property].v_cuenta;
 
       if (v_note_detalle == 'SI') {
         v_color = 'color:rgb(66,222,10)';
@@ -2716,7 +3586,7 @@ $(function () {
       let fila =
         "<tr><td class='text-center'>" +
         contador +
-        "</td><td><span class= 'fa-solid fa-truck fa-beat'  style='" + v_color + "'></span>" +
+        "</td><td><span class='fa-solid fa-truck fa-beat'  style='" + v_color + "'></span>" +
 
         "</td><td class='text-left'>" +
         item +
@@ -2724,6 +3594,10 @@ $(function () {
         nombre +
         "</td><td class='text-left'>" +
         v_id_local +
+        "</td><td class='text-left'>" +
+        v_centrocosto +
+        "</td><td class='text-left'>" +
+        v_cuenta +
         "</td><td class='text-left'>" +
         v_unidad +
         "</td><td class='text-left'>" +
@@ -2737,12 +3611,11 @@ $(function () {
         " class='btn btn-info btn-sm text-white file'><span class='fa-solid fa-file-arrow-up fa-beat'><b></b></span></a></td>" +
         "</td><td><a id=" +
         contador +
-        " class='btn btn-danger btn-sm text-white delete'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
-
+        " class='btn btn-danger btn-sm text-white delete " + v_disabled + "'><span class='fa-solid fa-trash-can'><b></b></span></a></td></tr>";
       let btn = document.createElement("tr");
       btn.innerHTML = fila;
       document.getElementById("tablita-aci").appendChild(btn);
-      myArray.push({ id: contador, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle });
+      myArray.push({ id: contador, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion, v_centrocosto: v_centrocosto, v_cuenta: v_cuenta });
     }
 
     creardatatable("#example2");
@@ -2751,7 +3624,7 @@ $(function () {
     //CALCULAR
     var resumentotal = 0;
     $('#example2 tr').each(function () {
-      var total = $(this).find("td").eq(8).html();
+      var total = $(this).find("td").eq(10).html();
       if ((parseFloat(total)) > 0) {
         resumentotal = (parseFloat(resumentotal) + parseFloat(total));
       }
@@ -2847,7 +3720,8 @@ $(function () {
           let v_disabled = res.data[property].v_disabled;
           let v_id_local = res.data[property].v_id_local;
           let i_opcion = res.data[property].i_opcion;
-
+          let v_centrocosto = res.data[property].v_centrocosto;
+          let v_cuenta = res.data[property].v_cuenta;
 
           if (v_note_detalle == 'SI') {
             v_color = 'color:rgb(66,222,10)';
@@ -2868,6 +3742,10 @@ $(function () {
             "</td><td class='text-left'>" +
             v_id_local +
             "</td><td class='text-left'>" +
+            v_centrocosto +
+            "</td><td class='text-left'>" +
+            v_cuenta +
+            "</td><td class='text-left'>" +
             v_unidad +
             "</td><td class='text-left'>" +
             qty +
@@ -2884,7 +3762,7 @@ $(function () {
           let btn = document.createElement("tr");
           btn.innerHTML = fila;
           document.getElementById("tablita-aci").appendChild(btn);
-          myArray.push({ id: id, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion });
+          myArray.push({ id: id, Item: item, Descripcion: nombre, v_id_local: v_id_local, Unidad: v_unidad, Cantidad: qty, Precio: price, Total: importe, v_note_detalle: v_note_detalle, i_opcion: i_opcion, v_centrocosto: v_centrocosto, v_cuenta: v_cuenta });
         }
         creardatatable("#example2");
         datosaci.splice(0, datosaci.length);
@@ -3149,6 +4027,7 @@ $(function () {
   //#endregion 
 
 });
+
 
 
 

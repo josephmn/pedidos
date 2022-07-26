@@ -100,75 +100,67 @@ class perfilController extends Controller
 			$json = new Services_JSON();
 
 			if (is_array($_FILES) && count($_FILES) > 0) {
-
-				// VARIABLE EN DONDE GUARDAMOS LA FECHA Y HORA
-				// $fecha_hora = date("Ymd_His", time());
-
 				// RECORTAMOS EL TIPO DE ARCHIVO Y LO GUADAMOS EN UNA VARIABLE
 				$extdoc = explode("/", $_FILES["archivo"]["type"]);
-				// DECIMOS EN QUE RUTA SE GUARDARA EL ARCHIVO
-				// $destino = "public/doc/perfil_foto/" . ltrim(rtrim($_SESSION['dni'])) . "_" . $fecha_hora . "." .$extdoc[1];
+				// DECIMOS EN QUE RUTA SE GUARDARA EL ARCHIVO				
 				$destino = "public/doc/perfil/" . ltrim(rtrim($_SESSION['id'])) . "." . $extdoc[1];
-
-				//var_dump(BASE_URL.$destino);exit;
-
 				if (($_FILES["archivo"]["type"] == "image/jpeg") || ($_FILES["archivo"]["type"] == "image/jpg") || ($_FILES["archivo"]["type"] == "image/png")) {
 
-					if ($_FILES['archivo']['size'] > 1050000) {
-						echo $json->encode( // tipo archivo erroneo
+					// if ($_FILES['archivo']['size'] > 1050000) {
+					// 	echo $json->encode( // tipo archivo erroneo
+					// 		array(
+					// 			"vicon" 		=> "info",
+					// 			"vtitle" 		=> "Archivo sobrepasa 1 Mb.",
+					// 			"vtext" 		=> "Favor de subir un archivo mas ligero...!!!",
+					// 			"itimer" 		=> 3000,
+					// 			"icase" 		=> 4,
+					// 			"vprogressbar" 	=> true,
+					// 		)
+					// 	);
+					// } else {
+					if (move_uploaded_file($_FILES["archivo"]["tmp_name"], $destino)) {
+
+						$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
+
+						$options = array(
+							"uri" => $wsdl,
+							"style" => SOAP_RPC,
+							"use" => SOAP_ENCODED,
+							"soap_version" => SOAP_1_1,
+							"connection_timeout" => 60,
+							"trace" => false,
+							"encoding" => "UTF-8",
+							"exceptions" => false,
+						);
+
+						$params = array(
+							'post' => 1,
+							'id' => intval($_SESSION['id']),
+							'nombres' => "",
+							'apellidos' => "",
+							'foto' => $destino,
+							'user' => intval($_SESSION['id']),
+						);
+
+						$soap = new SoapClient($wsdl, $options);
+						$result = $soap->MantUsuarioLogin($params);
+						$fotoperfil = json_decode($result->MantUsuarioLoginResult, true);
+
+						$_SESSION['foto'] = $destino;
+
+						header('Content-type: application/json; charset=utf-8');
+						echo $json->encode(
 							array(
-								"vicon" 		=> "info",
-								"vtitle" 		=> "Archivo sobrepasa 1 Mb.",
-								"vtext" 		=> "Favor de subir un archivo mas ligero...!!!",
-								"itimer" 		=> 3000,
-								"icase" 		=> 4,
-								"vprogressbar" 	=> true,
+								"vicon" 		=> $fotoperfil[0]['v_icon'],
+								"vtitle" 		=> $fotoperfil[0]['v_title'],
+								"vtext" 		=> $fotoperfil[0]['v_text'],
+								"itimer" 		=> intval($fotoperfil[0]['i_timer']),
+								"icase" 		=> intval($fotoperfil[0]['i_case']),
+								"vprogressbar" 	=> $fotoperfil[0]['v_progressbar'],
 							)
 						);
-					} else {
-						if (move_uploaded_file($_FILES["archivo"]["tmp_name"], $destino)) {
-
-							$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
-
-							$options = array(
-								"uri" => $wsdl,
-								"style" => SOAP_RPC,
-								"use" => SOAP_ENCODED,
-								"soap_version" => SOAP_1_1,
-								"connection_timeout" => 60,
-								"trace" => false,
-								"encoding" => "UTF-8",
-								"exceptions" => false,
-							);
-
-							$params = array(
-								'post' => 1,
-								'id' => intval($_SESSION['id']),
-								'nombres' => "",
-								'apellidos' => "",
-								'foto' => $destino,
-								'user' => intval($_SESSION['id']),
-							);
-
-							$soap = new SoapClient($wsdl, $options);
-							$result = $soap->MantUsuarioLogin($params);
-							$fotoperfil = json_decode($result->MantUsuarioLoginResult, true);
-
-							$_SESSION['foto'] = $destino;
-
-							header('Content-type: application/json; charset=utf-8');
-							echo $json->encode(
-								array(
-									"vicon" 		=> $fotoperfil[0]['v_icon'],
-									"vtitle" 		=> $fotoperfil[0]['v_title'],
-									"vtext" 		=> $fotoperfil[0]['v_text'],
-									"itimer" 		=> intval($fotoperfil[0]['i_timer']),
-									"icase" 		=> intval($fotoperfil[0]['i_case']),
-									"vprogressbar" 	=> $fotoperfil[0]['v_progressbar'],
-								)
-							);
-						}
 					}
+					// }
 				} else {
 					header('Content-type: application/json; charset=utf-8');
 					echo $json->encode( // tipo archivo erroneo

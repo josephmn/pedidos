@@ -9,7 +9,7 @@
                 <div class="row breadcrumbs-top">
                     <div class="col-12">
                         <h4 class="content-header-title float-left mb-0">
-                            <a href=" https://verdum.com/pedidos/pedidos/index"><strong><i class="fa-solid fa-caret-left fa-beat"></i> Regresar</strong></a>
+                            <a href="https://verdum.com/pedidos/pedidos/index"><strong><i class="fa-solid fa-caret-left fa-beat"></i> Regresar</strong></a>
                         </h4>
                     </div>
                 </div>
@@ -19,10 +19,11 @@
         <div class="content-body">
             <section id="basic-horizontal-layouts">
                 <div class="row">
-                    <div class="col-md-8 col-12">
+                    <div class="col-md-12 col-12">
                         <div class="card">
                             <div class="card-body">
                                 <p></p>
+
                                 <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
                                     <div>
                                         <h3 class="text-success invoice-logo"><strong> VERDUM PERÚ S.A.C</strong></h3>
@@ -31,7 +32,7 @@
                                     </div>
                                     <br>
                                     <br>
-                                    <div class="col-md-4 invoice-col">
+                                    <div class="col-md-2 invoice-col">
                                         <b style="color:rgb(0,0,0)"><strong>#Pedido &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</strong> </b> <strong><label id="nropedido"></label></strong>
                                         <br>
                                         <b style="color:rgb(0,0,0)">Area Solícita &nbsp;:&nbsp;</b> <strong><label id="area"><?php echo $_SESSION['area'] ?></label></strong> <br>
@@ -40,18 +41,39 @@
                                 </div>
                                 <hr>
                                 <input value='<?php echo $_SESSION['idarea'] ?>' type="hidden" id="idarea">
-
                                 <div class="row">
-                                    <div class="col-xl-6 col-md-6 col-12 mb-1" style="height:60px">
+
+                                    <div class="col-xl-3 col-md-3 col-12 mb-1" style="height:60px">
+                                        <label><strong>&nbsp;&nbsp;<i class="alert-danger fa-solid fa-filter fa-bounce"></i>&nbsp; TIPO DE PEDIDO</strong></label>
+                                        <select id="tipoorden" class="form-control mb-1" style="color:rgb(0,0,0);background-color:rgb(184,224,122)">
+                                            <?php foreach ($this->TipoOrden as $st) { ?>
+                                                <option value="<?php echo $st['i_id']; ?>"><?php echo $st['v_nombre']; ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+
+
+                                    <div class="col-xl-2 col-md-3 col-12 mb-1" style="height:60px">
+                                        <label class="form-label font-weight-bolder">Modo Atencion </label>
+                                        <select id="cbocondicion" class="form-control mb-1">
+                                            <?php foreach ($this->ComboModoPedido as $st) { ?>
+                                                <option value="<?php echo $st['i_id']; ?>"><?php echo $st['v_nombre']; ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+
+
+                                    <div class="col-xl-4 col-md-5 col-12 mb-1" style="height:60px">
                                         <div class="form-group">
                                             <label class="form-label font-weight-bolder">Nombre del pedido </label>
                                             <input type="text" id="namepedido" style="text-transform:uppercase" autocomplete="of" class="form-control" placeholder="Ingrese nombre del pedido">
                                         </div>
                                     </div>
 
-                                    <div class="col-xl-2 col-md-6 col-12 mb-1" style="height:60px">
-                                        <label class="alert-success   form-label font-weight-bolder">Moneda</label>
-                                        <select id="moneda" class="select2 form-control form-control-lg">
+                                    <div class="col-xl-1 col-md-6 col-12 mb-1" style="height:60px">
+                                        <!-- <label class="alert-success   form-label font-weight-bolder">Moneda</label> -->
+                                        <label class="form-label font-weight-bolder">Moneda</label>
+                                        <select id="moneda" class="form-control mb-1">
                                             <?php foreach ($this->ListadoMoneda as $mn) { ?>
                                                 <option value="<?php echo $mn['i_id']; ?>"><?php echo $mn['v_nombre']; ?></option>
                                             <?php } ?>
@@ -61,17 +83,17 @@
                                     <div class="col-xl-2 col-md-6 col-12 mb-1" style="height:60px">
                                         <label class="form-label font-weight-bolder">Fecha</label>
                                         <div class="input-group date" id="ffin" data-target-input="nearest">
-                                            <input type="text" id="fecha" style="color:rgb(0,0,0); background-color:rgb(97,194,80)" class="form-control" placeholder="YYYY-MM-DD" readonly="readonly">
+                                            <input type="text" id="fecha" style="color:rgb(0,0,0); background-color:rgb(255,255,255)" class="form-control" placeholder="YYYY-MM-DD" readonly="readonly">
                                         </div>
                                     </div>
 
-                                    <div class="col-xl-2 col-md-6 col-12 mb-1" style="height:60px">
+                                    <div class="col-xl-2 col-md-2 col-12 mb-1" style="height:60px">
                                         <label class="form-label font-weight-bolder">Tipo de cambio</label>
                                         <div class="input-group input-group-merge">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fas fa-coins"></i></span>
                                             </div>
-                                            <input type="number" style="color:rgb(0,0,0); background-color:rgb(97,194,80)" id="tipocambio" value='<?php echo $this->ListadoTipoCambio[0]['tipocambio']; ?>' class="form-control" aria-describedby="itemquantity" placeholder="0" autocomplete="off" readonly="readonly" />
+                                            <input type="number" style="color:rgb(0,0,0); background-color:rgb(255,255,255)" id="tipocambio" value='<?php echo $this->ListadoTipoCambio[0]['tipocambio']; ?>' class="form-control" aria-describedby="itemquantity" placeholder="0" autocomplete="off" readonly="readonly" />
                                         </div>
                                     </div>
 
@@ -88,7 +110,7 @@
 
                                     <div class="col-xl-3 col-md-6 col-12 mb-1" style="height:60px">
                                         <label class="form-label font-weight-bolder">Estado</label>
-                                        <select id="estado" class="alert-success select2 form-control form-control-lg">
+                                        <select id="estado" class="form-control mb-1">
                                             <?php foreach ($this->PedidoEstado as $st) { ?>
                                                 <option value="<?php echo $st['i_id']; ?>"><?php echo $st['v_nombre']; ?></option>
                                             <?php } ?>
@@ -98,13 +120,8 @@
                                     <div class="col-xl-3 col-md-6 col-12 mb-1" style="height:60px">
                                         <div class="form-group">
                                             <label class="form-label font-weight-bolder">Encargado </label>
-                                            <input type="text" id="encargadoestado" style="color:rgb(0,0,0); background-color:rgb(97,194,80)" readonly=" readonly" class="form-control" placeholder="Encargado">
+                                            <input type="text" id="encargadoestado" style="color:rgb(0,0,0); background-color:rgb(255,255,255)" readonly=" readonly" class="form-control" placeholder="Encargado">
                                         </div>
-                                    </div>
-
-                                    <div class="col-xl-2 col-md-6 col-12 mb-1" style="height:60px">
-                                        <br>
-                                        <button id="pptoadd" type="button" style="height:40px" class="btn btn-relief-primary bg-darken-2 colors-container rounded text-white btn-block btn-sm"><i class="fa-solid fa-coins fa-beat"></i><strong>&nbsp; Presupuesto</strong></button>
                                     </div>
 
 
@@ -121,7 +138,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-xl-6 col-md-6 col-12 mb-1" style="height:60px">
+                                    <div class="col-xl-4 col-md-6 col-12 mb-1" style="height:60px">
                                         <label class="form-label font-weight-bolder">Direccion de entrega</label>
                                         <select id="iddireccion" class="alert-success select2 form-control form-control-lg">
                                             <?php foreach ($this->ListadoDirecciones as $st) { ?>
@@ -129,11 +146,178 @@
                                             <?php } ?>
                                         </select>
                                     </div>
+
+                                    <div class="col-xl-2 col-md-6 col-12 mb-1" style="height:60px">
+                                        <br>
+                                        <button id="pptoadd" type="button" style="height:40px" class="btn btn-relief-primary bg-darken-2 colors-container rounded text-white btn-block btn-sm"><i class="fa-solid fa-coins fa-beat"></i><strong>&nbsp; Presupuesto</strong></button>
+                                    </div>
                                 </div>
+
+                                <hr>
+
+
+                                <div id="losdatoproductos"></div>
+                                <ul class="nav nav-tabs" id="tabs" role="tablist">
+                                </ul>
+
+                                <div class="tab-content" style="color:rgb(0,0,0); background-color:rgb(184,224,122)">
+                                    <!-- PRODUCTOS DEL SOLOMON -->
+
+                                    <div class="tab-pane " id="homeIcon" aria-labelledby="homeIcon-tab" role="tabpanel">
+                                        <div class="card-body">
+                                            <form class="form form-horizontal" style="color:rgb(0,0,0)">
+                                                <div class="row">
+                                                    <div class="col-xl-4 col-md-6 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Almacen</label>
+                                                        <select id="xlocal" class="alert-success select2 form-control form-control-lg">
+                                                            <?php foreach ($this->ComboLocal as $local) { ?>
+                                                                <option value="<?php echo $local['v_id_local']; ?>"><?php echo $local['v_local']; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-xl-4 col-md-6 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Centro de Costo</label>
+                                                        <select id="xidcentrocosto" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
+                                                            <?php foreach ($this->ListadoSubAcct as $acct) { ?>
+                                                                <option value="<?php echo $acct['v_sub']; ?>"><?php echo $acct['v_descripcion']; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-xl-4 col-md-6 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Cuenta contable</label>
+                                                        <select id="xacctcontable" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-xl-4 col-md-4 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Producto</label>
+                                                        <select id="cboproducto" class="alert-success select2 form-control form-control-lg">
+                                                            <?php foreach ($this->ComboProducto as $prod) { ?>
+                                                                <option value="<?php echo $prod['v_invtid']; ?>"><?php echo $prod['v_nombre']; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+
+                                                    <input type="hidden" id="codproducto">
+                                                    <input type="hidden" id="nombreproduco">
+
+                                                    <div class="col-xl-1 col-md-2 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Unidad</label>
+                                                        <input type="text" id="unidad" style="color:rgb(0,0,0); background-color:rgb(255,255,255)" class="form-control" name="fname-icon" placeholder="" readonly="readonly">
+                                                    </div>
+
+                                                    <div class="col-xl-2 col-md-2 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Cantidad</label>
+                                                        <input type="number" id="cantidad" class="form-control" id="itemquantity" aria-describedby="itemquantity" placeholder="0" autocomplete="off" />
+                                                    </div>
+
+                                                    <div class="col-xl-2 col-md-2 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Precio</label>
+                                                        <input type="number" id="precio" class="form-control" id="itemquantity" aria-describedby="itemquantity" placeholder="0" />
+                                                    </div>
+
+                                                    <div class="col-xl-2 col-md-2 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Total</label>
+                                                        <input type="number" id="importe" style="color:rgb(0,0,0); background-color:rgb(255,255,255)" class="form-control" id="itemquantity" aria-describedby="itemquantity" placeholder="0" readonly="readonly" />
+                                                    </div>
+
+                                                    <div class="col-xl-1 col-md-1 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Agregar</label>
+                                                        <button class="btn btn-flat btn-danger" type="button" id="insertar"><i class="fa fa-plus fa-beat"></i></button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="tab-pane" id="profileIcon" aria-labelledby="profileIcon-tab" role="tabpanel">
+                                        <!-- PRODUCTOS QUE NO ESTAN SOLOMON -->
+                                        <div class="card-body">
+                                            <form class="form form-horizontal" style="color:rgb(0,0,0)">
+                                                <div class="row">
+
+
+                                                    <div class="col-xl-4 col-md-6 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Almacen</label>
+                                                        <select id="x2local" class="select2 form-control form-control-lg">
+                                                            <?php foreach ($this->ComboLocal as $und) { ?>
+                                                                <option value="<?php echo $und['v_id_local']; ?>"><?php echo $und['v_local']; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+
+
+                                                    <div class="col-xl-4 col-md-6 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Centro de Costo</label>
+                                                        <select id="xidcentrocostoitem" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
+                                                            <?php foreach ($this->ListadoSubAcct as $acct) { ?>
+                                                                <option value="<?php echo $acct['v_sub']; ?>"><?php echo $acct['v_descripcion']; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+
+
+                                                    <div class="col-xl-4 col-md-6 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Cuenta contable</label>
+                                                        <select id="xacctcontableitem" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
+                                                        </select>
+                                                    </div>
+
+
+
+
+                                                    <div class="col-xl-5 col-md-4 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Descripcion</label>
+                                                        <input type="text" id="descripcionitem" placeholder="Ingrese nombre de item" class="form-control" autocomplete="off" name="fname-icon" placeholder="">
+
+                                                    </div>
+
+                                                    <div class="col-xl-1 col-md-5 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Unidad</label>
+                                                        <select id="unidaditem" class="alert-success select2 form-control form-control-lg">
+                                                            <?php foreach ($this->ListadoUnidad as $und) { ?>
+                                                                <option value="<?php echo $und['v_codund']; ?>"><?php echo $und['v_descripcion']; ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-xl-1 col-md-2 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Cantidad</label>
+                                                        <input id="cantidaditem" type="number" class="form-control" placeholder="0">
+                                                    </div>
+
+                                                    <div class="col-xl-2 col-md-2 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Precio</label>
+                                                        <input id="precioitem" type="number" class="form-control" placeholder="0">
+                                                    </div>
+
+                                                    <div class="col-xl-2 col-md-2 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Total</label>
+                                                        <input id="totalitem" type="number" class="form-control" style="color:rgb(0,0,0); background-color:rgb(255,255,255)" placeholder="0" readonly="readonly">
+                                                    </div>
+
+                                                    <div class="col-xl-1 col-md-1 col-12 mb-1" style="height:60px">
+                                                        <label class="form-label font-weight-bolder" style="color:rgb(0,0,0)">Agregar</label>
+                                                        <button class="btn btn-flat btn-warning" type="button" id="additem"><i class="fa fa-plus"></i></button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="tab-pane" id="panevacio" aria-labelledby="vacio-tab" role="tabpanel">
+                                        <!-- PRODUCTOS QUE NO ESTAN SOLOMON -->
+                                    </div>
+
+                                </div>
+
 
                                 <p style="text-align:center;height:5px;color:rgb(22,142,53)"><strong>Detalle del Pedido</strong></p>
                                 <hr>
-
+                                <div id="losdelete"></div>
                                 <table id="example2" class="table table-sm table-hover">
                                     <thead class="thead-dark">
                                         <tr class="text-center">
@@ -142,6 +326,8 @@
                                             <th class="text-left">Código</th>
                                             <th class="text-left">Descripción</th>
                                             <th class="text-left">Almacén</th>
+                                            <th class="text-left">CentroCosto</th>
+                                            <th class="text-left">Cuenta</th>
                                             <th class="text-left">Unidad</th>
                                             <th class="text-left">Cantidad</th>
                                             <th class="text-left"><i class="fas fa-coins"></i> Precio</th>
@@ -155,10 +341,11 @@
                                 </table>
                             </div>
 
+
                             <div class="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
                                 <div>
                                 </div>
-                                <div class="col-md-6 invoice-col">
+                                <div class="col-md-4 invoice-col">
                                     <h6 class="mb-0" style="color:rgb(0,0,0)" id="fecharesumen"><strong></strong> </h6>
                                     <hr style="color:rgb(122,182,21)">
                                     <b style="color:rgb(0,0,0)">Importe total &nbsp; (<b id="monedaimporte"></b>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </b> <strong><b style="font-weight: bold" id="resumentotal"></b></strong>
@@ -170,7 +357,6 @@
                             </div>
 
                             <br>
-
                             <div class="col-md-12">
                                 <div class="input-group input-group-merge">
                                     <div class="input-group-prepend">
@@ -180,7 +366,6 @@
                                 </div>
                             </div>
                             <hr>
-
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-2" style="height:50px;">
@@ -221,163 +406,6 @@
                             <hr>
                         </div>
                     </div>
-
-                    <div class="col-md-4 col-12">
-                        <div class="card">
-                            <div class="card-body">
-
-                                <div class="form-group row">
-                                    <div class="col-sm-3 col-form-label">
-                                        <label for="email-icon"><strong>&nbsp;&nbsp;<i class="fa-solid fa-filter fa-bounce"></i>&nbsp; TIPO</strong></label>
-                                    </div>
-                                    <div class="col-sm-9">
-                                        <select id="tipoorden" class="form-control mb-1">
-                                            <?php foreach ($this->TipoOrden as $st) { ?>
-                                                <option value="<?php echo $st['i_id']; ?>"><?php echo $st['v_nombre']; ?></option>
-                                            <?php } ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <hr>
-
-                                <ul class="nav nav-tabs" id="tabs" role="tablist">
-                                    <!-- <li class="nav-item">
-                                        <a class="nav-link active" id="homeIcon-tab" data-toggle="tab" href="#homeIcon" aria-controls="home" role="tab" aria-selected="true"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
-                                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                            </svg> Opcion1</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="profileIcon-tab" data-toggle="tab" href="#profileIcon" aria-controls="profile" role="tab" aria-selected="false"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tool">
-                                                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-                                            </svg> Opcion2</a>
-                                    </li> -->
-                                </ul>
-
-                                <div class="tab-content">
-                                    <div class="tab-pane " id="homeIcon" aria-labelledby="homeIcon-tab" role="tabpanel">
-                                        <div class="card-header">
-                                            <h4 class="card-title"><i class="fa-solid fa-cart-flatbed"></i> Lista de productos para agregar</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <form class="form form-horizontal">
-                                                <div class="row">
-
-                                                    <table id="tbproducto" class="table table-sm table-hover">
-                                                        <thead class="thead-dark">
-                                                            <tr>
-                                                                <th>Codigo</th>
-                                                                <th>Nombre</th>
-                                                                <th class='text-left'>Und</th>
-                                                                <th class='text-center'><i class="fa-solid fa-plus"></i> &nbsp;</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <?php if (isset($this->ListadoProducto)) { ?>
-                                                                <?php foreach ($this->ListadoProducto as $prod) { ?>
-                                                                    <tr>
-                                                                        <td class="text-center"><strong><?php echo $prod['v_invtid'] ?></strong> </td>
-                                                                        <td class="text-left"><?php echo $prod['v_nombre'] ?></td>
-                                                                        <td class="text-center"><?php echo $prod['v_unidad'] ?></td>
-                                                                        <td class='text-center'>
-                                                                            <a id="<?php echo $prod['v_invtid'] ?>" class="btn btn-<?php echo $prod['v_btn1Boton'] ?>"><i class="fa-solid fa-<?php echo $prod['v_btn1Imagen'] ?>"></i></a>
-                                                                        </td>
-                                                                    </tr>
-                                                                <?php } ?>
-                                                            <?php } ?>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-
-                                    <div class="tab-pane" id="profileIcon" aria-labelledby="profileIcon-tab" role="tabpanel">
-                                        <div class="card-header">
-                                            <h4 class="card-title"><i class="fa-solid fa-pen-to-square"></i> Agregar item sin código de producto </h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <form class="form form-horizontal">
-                                                <div class="row">
-                                                    <form class="source-item">
-                                                        <div data-repeater-list="group-a">
-                                                            <div class="repeater-wrapper" data-repeater-item="">
-                                                                <div class="row">
-                                                                    <div class="col-12 d-flex product-details-border position-relative pr-0">
-                                                                        <div class="row w-100 pr-lg-0 pr-1 py-0">
-                                                                            <div class="col-lg-12 col-12 my-lg-0 my-0">
-                                                                                <p class="card-text col-title mb-md-0 mb-0">Descripcion</p>
-                                                                                <div class="input-group input-group-merge">
-                                                                                    <div class="input-group-prepend">
-                                                                                        <span class="input-group-text"><i class="fa-solid fa-file-signature"></i></span>
-                                                                                    </div>
-                                                                                    <input type="text" id="descripcionitem" class="form-control" autocomplete="off" name="fname-icon" placeholder="">
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <div class="col-lg-12 col-12 my-lg-0 my-0">
-                                                                                <hr>
-                                                                            </div>
-
-                                                                            <div class="col-lg-12 col-12 my-lg-0 my-0">
-                                                                                <p class="card-text col-title mb-md-0 mb-0">Almacen</p>
-                                                                                <select id="x2local" class="alert-success select2 form-control form-control-lg">
-                                                                                    <?php foreach ($this->ComboLocal as $und) { ?>
-                                                                                        <option value="<?php echo $und['v_id_local']; ?>"><?php echo $und['v_local']; ?></option>
-                                                                                    <?php } ?>
-                                                                                </select>
-                                                                            </div>
-
-                                                                            <div class="col-lg-12 col-12 my-lg-0 my-0">
-                                                                                <hr>
-                                                                            </div>
-
-                                                                            <div class="col-lg-4 col-12 my-lg-0 my-0">
-                                                                                <p class="card-text col-title mb-md-0 mb-0">Cantidad</p>
-                                                                                <input id="cantidaditem" type="number" class="form-control" placeholder="0">
-                                                                            </div>
-                                                                            <div class="col-lg-4 col-12 my-lg-0 my-0">
-                                                                                <p class="card-text col-title mb-md-0 mb-0">Precio</p>
-                                                                                <input id="precioitem" type="number" class="form-control" placeholder="0">
-                                                                            </div>
-                                                                            <div class="col-lg-4 col-12 my-lg-0 my-0">
-                                                                                <p class="card-text col-title mb-md-0 mb-0">Total</p>
-                                                                                <input id="totalitem" type="number" class="form-control" style="color:rgb(0,0,0); background-color:rgb(188,229,175)" placeholder="0" readonly="readonly">
-                                                                            </div>
-
-                                                                            <div class="col-lg-12 col-12 my-lg-0 my-0">
-                                                                                <br>
-                                                                            </div>
-
-                                                                            <div class="col-lg-8 col-12 my-lg-0 my-0">
-                                                                                <p class="card-text col-title mb-md-0 mb-0">Unidad</p>
-                                                                                <select id="unidaditem" class="alert-success select2 form-control form-control-lg">
-                                                                                    <?php foreach ($this->ListadoUnidad as $und) { ?>
-                                                                                        <option value="<?php echo $und['v_codund']; ?>"><?php echo $und['v_descripcion']; ?></option>
-                                                                                    <?php } ?>
-                                                                                </select>
-                                                                            </div>
-
-                                                                            <div class="col-lg-4 col-12 my-lg-0 my-0">
-                                                                                <p class="card-text col-title mb-md-0 mb-0"><br> </p>
-                                                                                <button type="button" id="additem" class="btn btn-primary waves-effect waves-float waves-light"><i class="fa-solid fa-cart-plus fa-beat"></i>&nbsp; Agregar</button>
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </form>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
         </div>
@@ -387,7 +415,7 @@
 
 
 <!-- DE AQUI EMPIEZA MODAL PARA DATOS DE PRODUCTOS -->
-<div class="modal fade text-left modal-secondary" id="myModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
+<!-- <div class="modal fade text-left modal-secondary" id="myModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel160" aria-hidden="true">
     <div class="modal-dialog modal-xM" role="document">
         <div class="modal-content">
             <form id="myForm" method="post">
@@ -505,7 +533,7 @@
             </form>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- MODAL AGREGAR ARCHIVOS -->
 <div class="modal fade" id="modal-nota" data-backdrop="static">
@@ -580,7 +608,6 @@
 </div>
 
 
-
 <!-- MODAL AGREGAR ARCHIVOS (CUANDO YA GENERA EL PEDIDO Y LO ENVIA)-->
 <div class="modal fade" id="modal-files" data-backdrop="static">
     <div class="modal-dialog modal-lg">
@@ -644,7 +671,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group mb-2">
-                            <label class="form-label">1. Seleccione nombre del proyecto</label>
+                            <label class="form-label badge badge-light-success">1. Seleccione nombre del proyecto</label>
                             <select id="idppto" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
                                 <?php foreach ($this->ListadoNombrePppto as $ppt) { ?>
                                     <option value="<?php echo $ppt['v_codigo']; ?>"><?php echo $ppt['v_proyecto']; ?></option>
@@ -655,7 +682,7 @@
 
                     <div class="col-sm-6">
                         <div class="form-group mb-2">
-                            <label class="form-label">2. Seleccione nombre de partida</label>
+                            <label class="form-label badge badge-light-success">2. Seleccione nombre de partida</label>
                             <select id="idpartida" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
                                 <option value="-- SELECCIONE --">-- SELECCIONE --</option>
                             </select>
@@ -671,15 +698,17 @@
                     </div>
                 </div>
 
+                <div id="loadppto"></div>
+
                 <div class="form-group row">
                     <div class="col-sm-12">
                         <div class="row">
-                            <div class="col-sm-8">
+                            <div class="col-sm-10">
                                 <div class="form-group">
-                                    <label class="form-label badge badge-light-secondary">Seleccione Item del Pedido</label>
+                                    <label class="form-label badge badge-light-warning">Item del Pedido</label>
                                     <select id="lineapedido" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
                                         <?php foreach ($this->ComboDetPedido as $acct) { ?>
-                                            <option value="<?php echo $acct['v_codprod']; ?>"><?php echo $acct['v_descripcion']; ?></option>
+                                            <option value="<?php echo $acct['i_item']; ?>"><?php echo $acct['v_descripcion']; ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -687,34 +716,38 @@
 
 
                             <div class="col-sm-2">
-                                <label class="form-label badge badge-light-success">Monto &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                                <input type="number" id="montolleva" class="form-control" placeholder="0">
-                            </div>
-
-
-                            <div class="col-sm-2">
                                 <div class="form-group">
-                                    <label class="form-label badge badge-light-success">Habilitar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                    <label class="form-label badge badge-light-warning">Habilitar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                                     <button type="button" id="btnhabilitar" name="btnhabilitar" class="btn btn-danger btn-block"><b><i class="fa-solid fa-lock-open fa-beat"></i></b></button>
                                 </div>
                             </div>
 
+                            <input type="hidden" id="codigoproducto">
+                            <input type="hidden" id="itemcuenta">
 
+                            <div class="col-sm-3">
+                                <label class="form-label badge badge-light-warning">Almacen&nbsp;&nbsp;&nbsp;</label>
+                                <input type="text" id="pptoalmacen" class="form-control" readonly="readonly">
+                            </div>
 
-                            <div class="col-sm-8">
-                                <div class="form-group">
-                                    <label class="form-label  badge badge-light-success">Seleccione centro de costo </label>
-                                    <select id="idcentrocosto" class="alert-success select2 form-control form-control-lg" readonly=" readonly">
-                                        <?php foreach ($this->ListadoSubAcct as $acct) { ?>
-                                            <option value="<?php echo $acct['v_sub']; ?>"><?php echo $acct['v_descripcion']; ?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
+                            <div class="col-sm-3">
+                                <label class="form-label badge badge-light-warning">Centro costo &nbsp;&nbsp;&nbsp;</label>
+                                <input type="text" id="pptocentrocosto" class="form-control" readonly="readonly">
+                            </div>
+
+                            <div class="col-sm-2">
+                                <label class="form-label badge badge-light-warning">Monto Item &nbsp;&nbsp;&nbsp;</label>
+                                <input type="number" id="montoitem" class="form-control" placeholder="0" readonly="readonly">
+                            </div>
+
+                            <div class="col-sm-2">
+                                <label class="form-label badge badge-light-warning">Presupuesto &nbsp;&nbsp;&nbsp;</label>
+                                <input type="number" id="montolleva" class="form-control" placeholder="0">
                             </div>
 
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                    <label class="form-label badge badge-light-success">Guardar Ppto</label>
+                                    <label class="form-label badge badge-light-warning">Guardar Ppto</label>
                                     <button type="button" id="agregarppto" name="agregarppto" class="btn btn-primary btn-block"><b><i class="fa-solid fa-floppy-disk fa-beat"></i></b></button>
                                 </div>
                             </div>
@@ -726,7 +759,8 @@
                         <table id="tbpptopedido" class="table table-sm">
                             <thead class="thead-dark">
                                 <tr class="text-left">
-                                    <th class="text-left">IDProducto</th>
+                                    <th class="text-left">Item</th>
+                                    <th class="text-left">Almacen</th>
                                     <th class="text-left">#IdPPto</th>
                                     <th class="text-left">#Partida</th>
                                     <th class="text-left">Periodo</th>

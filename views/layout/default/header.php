@@ -57,16 +57,15 @@
                 <li class="nav-item dropdown dropdown-notification mr-25">
                     <a class="nav-link" href="javascript:void(0);" data-toggle="dropdown">
                         <i class="ficon" data-feather="bell"></i>
-                        <span class="badge badge-pill badge-danger badge-up">3</span>
+                        <span class="badge badge-pill badge-danger badge-up">0</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
                         <li class="dropdown-menu-header">
                             <div class="dropdown-header d-flex">
                                 <h4 class="notification-title mb-0 mr-auto">Notificaciones</h4>
-                                <div class="badge badge-pill badge-light-primary">3 Nuevos</div>
+                                <div class="badge badge-pill badge-light-primary">0 Nuevos</div>
                             </div>
                         </li>
-
                         <!-- <li class="scrollable-container media-list">
                             <a class="d-flex" href="javascript:void(0)">
                                 <div class="media d-flex align-items-start">

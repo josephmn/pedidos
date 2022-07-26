@@ -94,6 +94,7 @@ class pedidosController extends Controller
 			$this->_view->ConsultaTopePedido = $ConsultaTopePedido;
 
 
+
 			$this->_view->setJs(array('index'));
 			$this->_view->renderizar('index');
 		} else {
@@ -223,7 +224,6 @@ class pedidosController extends Controller
 			$result = $soap->PedidoEstados($tipoorden);
 			$TipoOrden = json_decode($result->PedidoEstadosResult, true);
 
-
 			$result = $soap->ListadoProducto();
 			$ListadoProducto = json_decode($result->ListadoProductoResult, true);
 
@@ -239,25 +239,23 @@ class pedidosController extends Controller
 			$result = $soap->ListadoSubAcct();
 			$ListadoSubAcct = json_decode($result->ListadoSubAcctResult, true);
 
+			$result = $soap->ComboProducto($tope);
+			$ComboProducto = json_decode($result->ComboProductoResult, true);
 
-			// $result = $soap->ComboDetPedido();
-			// $ComboDetPedido = json_decode($result->ComboDetPedidoResult, true);
-
+			$result = $soap->ComboModoPedido();
+			$ComboModoPedido = json_decode($result->ComboModoPedidoResult, true);
 
 			$result = $soap->ListadoUnidad();
 			$ListadoUnidad = json_decode($result->ListadoUnidadResult, true);
 
-
 			$result = $soap->ConsultaTopePedido($tope);
 			$ConsultaTopePedido = json_decode($result->ConsultaTopePedidoResult, true);
-
 
 			$result = $soap->ComboLocal();
 			$ComboLocal = json_decode($result->ComboLocalResult, true);
 
 			$result = $soap->ListadoDirecciones();
 			$ListadoDirecciones = json_decode($result->ListadoDireccionesResult, true);
-
 
 			$this->_view->proveedores = $proveedores;
 			$this->_view->PedidoEstado  = $PedidoEstado;
@@ -268,7 +266,8 @@ class pedidosController extends Controller
 			$this->_view->ListadoSubAcct  = $ListadoSubAcct;
 			$this->_view->TipoOrden  = $TipoOrden;
 			// $this->_view->ComboDetPedido  = $ComboDetPedido;
-
+			$this->_view->ComboProducto = $ComboProducto;
+			$this->_view->ComboModoPedido = $ComboModoPedido;
 
 			$this->_view->ListadoUnidad  = $ListadoUnidad;
 			$this->_view->ConsultaTopePedido = $ConsultaTopePedido;
@@ -405,6 +404,7 @@ class pedidosController extends Controller
 		}
 	}
 
+
 	public function registro_pedido() //1
 	{
 		if (isset($_SESSION['usuario'])) {
@@ -441,6 +441,7 @@ class pedidosController extends Controller
 
 			$i_tipo_pedido  = $_POST['i_tipo_pedido'];
 			$v_tipo_pedido  = $_POST['v_tipo_pedido'];
+			$i_id_modo  = $_POST['i_id_modo'];
 
 			$datosaci = $_POST['datosaci']; //Array del detalle
 
@@ -485,6 +486,7 @@ class pedidosController extends Controller
 				'v_direccion_entrega' => $v_direccion_entrega,
 				'i_tipo_pedido' => $i_tipo_pedido,
 				'v_tipo_pedido' => $v_tipo_pedido,
+				'i_id_modo' => $i_id_modo,
 			);
 
 			$result2 = $soap->GuardarPedido($params);
@@ -509,6 +511,8 @@ class pedidosController extends Controller
 					'v_username' 		=> $_SESSION['dni'],
 					'v_id_local' 		=> $di['v_id_local'],
 					'i_opcion' 		    => $di['i_opcion'],
+					'v_centrocosto' 	=> $di['v_centrocosto'],
+					'v_cuenta' 	        => $di['v_cuenta'],
 				);
 
 				$result3 = $soap->GuardarDetallePedido($params[$i]);
@@ -545,7 +549,6 @@ class pedidosController extends Controller
 
 			$nu_correla = $_POST['nu_correla'];
 			//$nu_correla = 1000000001;
-
 			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
 
 			$options = array(
@@ -582,8 +585,12 @@ class pedidosController extends Controller
 			$result = $soap->PedidoEstados($tipoorden);
 			$TipoOrden = json_decode($result->PedidoEstadosResult, true);
 
+			$result = $soap->ComboModoPedido();
+			$ComboModoPedido = json_decode($result->ComboModoPedidoResult, true);
+
 
 			if (count($data) > 0) {
+
 				$nu_correla =   $data[0]['nu_correla'];
 				$v_areid =   $data[0]['v_areid'];
 				$v_area =   $data[0]['v_area'];
@@ -601,8 +608,21 @@ class pedidosController extends Controller
 				$i_filas =   $data[0]['i_filas'];
 				$f_montoppto =   $data[0]['f_montoppto'];
 				$v_persona_recepciona =   $data[0]['v_persona_recepciona'];
-
 				$i_tipo_pedido =   $data[0]['i_tipo_pedido'];
+
+
+				//Combo Modo
+				$FilasModo = "";
+				$selModo = "";
+				foreach ($ComboModoPedido as $dp) {
+					if ($dp['i_id'] == $data[0]['i_id_modo']) {
+						$selModo = "selected='selected'";
+					} else {
+						$selModo = "";
+					}
+					$FilasModo .= "<option " . $selModo . " value=" . $dp['i_id'] . ">" . $dp['v_nombre'] . "</option>";
+				}
+
 
 
 				//Combo Local
@@ -665,6 +685,9 @@ class pedidosController extends Controller
 							"v_note_detalle" => $da['v_note_detalle'],
 							"v_id_local" => $da['v_id_local'],
 							"i_opcion" => $da['i_opcion'],
+							"v_centrocosto" => $da['v_centrocosto'],
+							"v_cuenta" => $da['v_cuenta'],
+							"v_intercode" => $da['v_intercode'],
 						);
 						$filas += ["$i" => $propiedades1];
 						$i++;
@@ -701,6 +724,7 @@ class pedidosController extends Controller
 					'FilasEstado' => $FilasEstado,
 					'FilasDireccion' => $FilasDireccion,
 					'FilasTipo' => $FilasTipo,
+					'FilasModo' => $FilasModo,
 
 					'data' => $filas
 
@@ -1203,14 +1227,18 @@ class pedidosController extends Controller
 			$post = $_POST['post'];
 			$nu_correla = $_POST['nu_correla'];
 			$v_item_pedido = $_POST['linedetalle'];
+			$v_codprod = $_POST['v_codprod'];
+
 			$v_idppto =  $_POST['v_idppto'];
 			$v_idpartida =  $_POST['v_idpartida'];
 			$v_idmes =  $_POST['codmes'];
 			$v_nombremes = $_POST['nombremes'];
 			$f_monto = $_POST['cantidadx'];
+			$v_id_local = $_POST['v_id_local'];
 			$v_centrocosto = $_POST['v_centrocosto'];
+			$v_acct = $_POST['v_cuenta'];
 			$v_token =  $_SESSION['v_token'];
-			$v_idlinea = trim($nu_correla) . '_' . trim($v_idppto) . '_' . trim($v_idpartida) . '_' . trim($v_nombremes) . '_' . trim($v_centrocosto);
+			$v_idlinea = trim($nu_correla) . '_' . trim($v_idppto) . '_' . trim($v_idpartida) . '_' . trim($v_nombremes) . '_' . trim($v_id_local) . '_' . trim($v_centrocosto). '_' . trim($v_acct);
 
 			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
 
@@ -1228,6 +1256,7 @@ class pedidosController extends Controller
 			$params = array(
 				'post' => $post,
 				'v_idlinea' => $v_idlinea,
+				'v_codprod' => $v_codprod,
 				'nu_correla' => $nu_correla,
 				'v_item_pedido' => $v_item_pedido,
 				'v_idppto' => $v_idppto,
@@ -1235,13 +1264,14 @@ class pedidosController extends Controller
 				'v_idmes' =>  $v_idmes,
 				'v_nombremes' =>  $v_nombremes,
 				'f_monto' =>  $f_monto,
+				'v_id_local' =>  $v_id_local,
 				'v_centrocosto' =>  $v_centrocosto,
+				'v_acct' =>  $v_acct,
 				'v_token' =>  $v_token,
 			);
 			$soap = new SoapClient($wsdl, $options);
 			$result2 = $soap->GuardarPedidoPpto($params);
 			$GuardarPedidoPpto = json_decode($result2->GuardarPedidoPptoResult, true);
-
 
 			header('Content-type: application/json; charset=utf-8');
 
@@ -1287,7 +1317,6 @@ class pedidosController extends Controller
 				"encoding" => "UTF-8",
 				"exceptions" => false,
 			);
-
 			$partida = array(
 				'nu_correla' => $nu_correla,
 			);
@@ -1310,7 +1339,7 @@ class pedidosController extends Controller
 			$FilasDetPedido = "";
 			$selDetPedido = "";
 			foreach ($ComboDetPedido as $dp) {
-				$FilasDetPedido .= "<option " . $selDetPedido . " value=" . $dp['v_codprod'] . ">" . $dp['v_descripcion'] . "</option>";
+				$FilasDetPedido .= "<option " . $selDetPedido . " value=" . $dp['i_item'] . ">" . $dp['v_descripcion'] . "</option>";
 			}
 
 			//Combo Presupuesto
@@ -1328,6 +1357,8 @@ class pedidosController extends Controller
 				$propiedades1 = array(
 					"nu_correla" => ($da['nu_correla']),
 					"v_item_pedido" => ($da['v_item_pedido']),
+					"v_codprod" => ($da['v_codprod']),
+					"v_id_local" => ($da['v_id_local']),
 					"v_idlinea" => ($da['v_idlinea']),
 					"v_idppto" => $da['v_idppto'],
 					"v_idpartida" => $da['v_idpartida'],
@@ -1354,6 +1385,122 @@ class pedidosController extends Controller
 			$this->redireccionar('index/logout');
 		}
 	}
+
+
+
+	public function consulta_monto_item() //3 REE
+	{
+		if (isset($_SESSION['usuario'])) {
+
+			putenv("NLS_LANG=SPANISH_SPAIN.AL32UTF8");
+			putenv("NLS_CHARACTERSET=AL32UTF8");
+
+			$this->getLibrary('json_php/JSON');
+			$json = new Services_JSON();
+
+			$nu_correla = $_POST['nu_correla'];
+			$i_item = $_POST['i_item'];
+
+
+			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
+
+			$options = array(
+				"uri" => $wsdl,
+				"style" => SOAP_RPC,
+				"use" => SOAP_ENCODED,
+				"soap_version" => SOAP_1_1,
+				"connection_timeout" => 60,
+				"trace" => false,
+				"encoding" => "UTF-8",
+				"exceptions" => false,
+			);
+			$partida = array(
+				'nu_correla' => $nu_correla,
+				'i_item' => $i_item,
+			);
+
+			$soap = new SoapClient($wsdl, $options);
+			$result = $soap->ConsultaDetMonto($partida);
+			$data = json_decode($result->ConsultaDetMontoResult, true);
+
+
+			$nu_total =   $data[0]['nu_total'];
+			$v_id_local =   $data[0]['v_id_local'];
+			$v_centrocosto =   $data[0]['v_centrocosto'];
+			$v_codprod =   $data[0]['v_codprod'];
+			$v_cuenta =   $data[0]['v_cuenta'];
+
+			header('Content-type: application/json; charset=utf-8');
+
+			echo $json->encode(
+				array(
+					'nu_total' => $nu_total,
+					'v_id_local' => $v_id_local,
+					'v_centrocosto' => $v_centrocosto,
+					'v_codprod' => $v_codprod,
+					'v_cuenta' => $v_cuenta,
+				)
+			);
+		} else {
+			$this->redireccionar('index/logout');
+		}
+	}
+
+
+	public function consulta_cuenta() //3 REE
+	{
+		if (isset($_SESSION['usuario'])) {
+
+			putenv("NLS_LANG=SPANISH_SPAIN.AL32UTF8");
+			putenv("NLS_CHARACTERSET=AL32UTF8");
+
+			$this->getLibrary('json_php/JSON');
+			$json = new Services_JSON();
+			$v_sub = $_POST['v_sub'];
+
+
+			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
+
+			$options = array(
+				"uri" => $wsdl,
+				"style" => SOAP_RPC,
+				"use" => SOAP_ENCODED,
+				"soap_version" => SOAP_1_1,
+				"connection_timeout" => 60,
+				"trace" => false,
+				"encoding" => "UTF-8",
+				"exceptions" => false,
+			);
+			$sub = array(
+				'v_sub' => $v_sub,
+			);
+
+			$soap = new SoapClient($wsdl, $options);
+			$result = $soap->ComboCuenta($sub);
+			$ComboCuenta = json_decode($result->ComboCuentaResult, true);
+
+			//Combo detalle pedido
+			$FilasCuenta = "";
+			$selCuenta = "";
+			foreach ($ComboCuenta as $dp) {
+				$FilasCuenta .= "<option " . $selCuenta . " value=" . $dp['v_acct'] . ">" . $dp['v_descripcion'] . "</option>";
+			}
+
+			header('Content-type: application/json; charset=utf-8');
+
+			echo $json->encode(
+				array(
+					'FilasCuenta' => $FilasCuenta,
+				)
+			);
+		} else {
+			$this->redireccionar('index/logout');
+		}
+	}
+
+
+
+
 
 	public function eliminar_fila_ppto() //2
 	{

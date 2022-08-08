@@ -764,8 +764,9 @@ $(function () {
       var codprod = $(this).find("td").eq(2).html();
       var local = $(this).find("td").eq(4).html();
       var centrocosto = $(this).find("td").eq(5).html();
+      var cuenta = $(this).find("td").eq(6).html();
 
-      if (codprod == v_invtid && local == v_id_local && centrocosto == v_centrocosto) {
+      if (codprod == v_invtid && local == v_id_local && centrocosto == v_centrocosto && cuenta == v_cuenta) {
         btrue = true
       }
     });
@@ -773,7 +774,7 @@ $(function () {
     if ((btrue == true)) {
       Swal.fire({
         icon: "error",
-        title: "YA AGREGO ESTE PRODUCTO " + '  ' + '(' + v_invtid + ') CON EL CENTRO DE COSTO ' + '(' + v_centrocosto + ') PARA EL ALMACEN DE' + '(' + v_id_local + ')',
+        title: "YA AGREGO ESTE PRODUCTO " + '  ' + '(' + v_invtid + ') CON EL CENTRO DE COSTO ' + '(' + v_centrocosto + ')  Y CUENTA ' + '(' + v_cuenta + ') PARA EL ALMACEN DE' + '(' + v_id_local + ')',
         text: "Para volver a añadir quitar del detalle!",
         timer: 7000,
         timerProgressBar: true,

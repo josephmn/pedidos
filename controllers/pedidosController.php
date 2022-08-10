@@ -236,7 +236,12 @@ class pedidosController extends Controller
 			$result = $soap->ListadoNombrePppto();
 			$ListadoNombrePppto = json_decode($result->ListadoNombrePpptoResult, true);
 
-			$result = $soap->ListadoSubAcct();
+			$acct = array(
+				'v_username' => $_SESSION['dni'],
+			);
+
+
+			$result = $soap->ListadoSubAcct($acct);
 			$ListadoSubAcct = json_decode($result->ListadoSubAcctResult, true);
 
 			$result = $soap->ComboProducto($tope);
@@ -1238,7 +1243,7 @@ class pedidosController extends Controller
 			$v_centrocosto = $_POST['v_centrocosto'];
 			$v_acct = $_POST['v_cuenta'];
 			$v_token =  $_SESSION['v_token'];
-			$v_idlinea = trim($nu_correla) . '_' . trim($v_idppto) . '_' . trim($v_idpartida) . '_' . trim($v_nombremes) . '_' . trim($v_id_local) . '_' . trim($v_centrocosto). '_' . trim($v_acct);
+			$v_idlinea = trim($nu_correla) . '_' . trim($v_idppto) . '_' . trim($v_idpartida) . '_' . trim($v_nombremes) . '_' . trim($v_id_local) . '_' . trim($v_centrocosto) . '_' . trim($v_acct);
 
 			$wsdl = 'http://localhost:81/VWPEDIDO/WSPedidoweb.asmx?WSDL';
 

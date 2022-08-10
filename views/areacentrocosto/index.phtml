@@ -1,0 +1,110 @@
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+
+    <div class="content-wrapper">
+        <div class="content-body">
+            <section id="dashboard-analytics">
+                <div class="row" id="table-small">
+
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title"> <i class="fa-solid fa-house"></i> Areas y Centros de Costo</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="tbgrupo" class="table table-sm">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th class="text-left">#Codigo</th>
+                                                <th class="text-left">Nombre Area</th>
+                                                <th class="text-center">Conf. Centro Costo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if (isset($this->ListadoArea)) { ?>
+                                                <?php foreach ($this->ListadoArea as $pd) { ?>
+                                                    <tr>
+                                                        <td class="text-left"><i class="fa-solid fa-house"></i> <strong><?php echo $pd['v_areid'] ?></strong></td>
+                                                        <td class="text-left"><strong><?php echo $pd['v_nombre'] ?></strong> </td>
+                                                        <td class='text-center'>
+                                                         
+
+                                                            <a id='<?php echo $pd['v_areid'] ?>' <?php $variable1 =  $pd['v_areid'] ?> <?php $variable2 =  $pd['v_nombre'] ?> href="<?php echo BASE_URL ?><?php echo $pd['v_url'] ?>=<?php echo urlencode($variable1); ?>&variable2=<?php echo utf8_decode(urlencode($variable2)); ?>" class="btn btn-<?php echo $pd['v_btn1'] ?>"><i class="fas solid fa-<?php echo $pd['v_btn1Imagen'] ?>"></i></a>
+                                                        </td>
+
+
+
+
+
+                                                    </tr>
+                                                <?php } ?>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- MODAL CREAR USUARIO-->
+<div class="modal fade" id="modal-agregar" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header  bg-gradient-success">
+                <h5 class="modal-title"><i class="fa-solid fa-layer-group"></i> &nbsp;<b id="titulomodal"></b></h5><b><span id="idtabla"></span></b>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div id="div-load"></div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label font-weight-bolder">Codigo</label>
+                        <input type="text" id="xid" tabindex="1" class="form-control" readonly="readonly" autocomplete="off" />
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="form-label font-weight-bolder">Nombre de grupo:</label>
+                        <input type="text" id="xnombres" tabindex="1" class="form-control" placeholder="Ingrese nombre de grupo" autocomplete="off" />
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="alert-success form-label font-weight-bolder">Estado</label>
+                        <select id="xestado" class="select2 form-control form-control-lg">
+                        </select>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <button id="xbtnguardar" type="button" class="btn btn-success btn-block">
+                            <i class="fas fa-save"></i>
+                            <b>Guardar</b></button>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="col-sm-6">
+                        <button id="xbtncancelar" type="button" class="btn btn-danger btn-block">
+                            <i class="fas fa-ban"></i>
+                            <b>Cancelar</b></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

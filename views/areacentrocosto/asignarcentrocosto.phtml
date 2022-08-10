@@ -1,0 +1,182 @@
+<!-- BEGIN: Content-->
+<div class="app-content content ">
+    <div class="content-overlay"></div>
+    <div class="header-navbar-shadow"></div>
+    <div class="content-wrapper">
+
+        <br>
+        <div class="content-header row">
+            <div class="content-header-left col-md-9 col-12 mb-2">
+                <div class="row breadcrumbs-top">
+                    <div class="col-12">
+                        <h4 class="content-header-title float-left mb-0">
+                            <a href="https://verdum.com/pedidos/areacentrocosto/index"><strong><i class="fa-solid fa-caret-left fa-beat"></i> Regresar</strong></a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-body">
+            <section id="dashboard-analytics">
+                <div class="row" id="table-small">
+                    <div class="col-lg-6">
+                        <div class="card">
+                        <div class="card-header border-bottom p-1">
+                                <div class="head-label">
+                                    <h6 class="mb-0"></h6>
+                                </div>
+                                <div class="dt-action-buttons text-right">
+                                    <div class="dt-buttons d-inline-flex">
+                                        <button id="btnagregartodo" type="button" class="dt-button create-new btn btn-primary"><i class="fa-solid fa-arrow-down-short-wide"></i>&nbsp; Todo </button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                           
+                            <div class="card-header">
+                                <h4 class="card-title"> <i class="fa-solid fa-building-columns"></i> Matriz de Centros de Costo</h4>
+                            </div>
+                            <div class="card-body">
+                            <div id="div-load"></div>
+                                <div class="table-responsive">
+                                    <table id="tbarea" class="table table-sm">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th class="text-left">#Grupo</th>
+                                                <th class="text-left">Descripcion</th>
+                                                <th class="text-left">Variable</th>
+                                                <!-- <th class="text-center">Eliminar</th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tablita-matriz">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card">                        
+                            <div class="card-header">
+                                <h4 class="card-title"> <i class="fa-solid fa-shop"></i> &nbsp;Area y Centro de Costo (<b id="frmarea" style="color:#14AC33"></b>) (<b id="frmareanombre" style="color:#14AC33"></b>) &nbsp;del IDArea : (<b id="frmgrupo" style="color:#14AC33"></b>)&nbsp;Nombre : (<b id="frmnombrearea" style="color:#14AC33"></b>) </h4>
+                            </div>
+
+                            <div class="card-body">
+                                <div id="div-loadx"></div>
+                                <div class="table-responsive">
+                                    <table id="tbformula" class="table table-sm">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th class="text-left">#Area</th>
+                                                <th class="text-left">#CentroCosto</th>
+                                                <th class="text-left">Fec.Registro</th>
+                                                <th class="text-center">Estado</th>
+                                                <th class="text-center">#</th>                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tablita-formula">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade text-left" id="modal-editar" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="myModalLabel160" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-gradient-primary">
+                <h5 style="color:rgb(255,255,255)" class="modal-title"><i class="fa-solid fa-square-check"></i> EDITAR CENTRO DE COSTO </h5>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="alert-success  form-label font-weight-bolder">NOTA</label>
+                        <div class="input-group input-group-merge">
+                            <div class="input-group-prepend">
+                            </div>
+                            <label id="cod" class="form-label font-weight-bolder text-center"></label>
+                            <h5 style="color:rgb(0,0,0)" class="modal-title">Centro de costo ya cuenta con movimientos para el Area, solo puede Inactivar</h5>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label style="color:rgb(255,165,0)" class="form-label font-weight-bolder">Codigo de Area</label>
+                        <div class="input-group input-group-merge">
+                            <div class=" input-group-prepend">
+                                <span class="input-group-text"><i data-feather='folder-plus'></i></span>
+                            </div>
+                            <input type="text" id="xidarea" tabindex="1" class="form-control" readonly="readonly" autocomplete="off" />
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label style="color:rgb(255,165,0)" class="form-label font-weight-bolder">Centro de Costo</label>
+                        <div class="input-group input-group-merge">
+                            <div class=" input-group-prepend">
+                                <span class="input-group-text"><i data-feather='folder-plus'></i></span>
+                            </div>
+                            <input type="text" id="txtcentrocosto" tabindex="1" class="form-control" readonly="readonly" autocomplete="off" />
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                    <label class="form-label font-weight-bolder">Estado</label>
+                        <select id="xcomboestado" class="select2 form-control form-control-lg">                       
+                        </select>
+                    </div>
+
+                </div>                
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <button id="btnguardaretorno" type="button" class="btn btn-warning btn-block waves-effect waves-float waves-light"><b>Inactivar</b></button>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="col-sm-6">
+                            <button id="btncancelaretorno" type="button" class="btn btn-danger btn-block waves-effect waves-float waves-light"><b>Cancelar</b></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- MODAL PARA PROCESOS -->
+<div class="modal fade" id="modal-insert" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-warning" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-warning"><strong> <i class="fa-solid fa-spinner fa-spin-pulse"></i>&nbsp; PROCESANDO...</strong></h5>
+            </div>
+
+            <div class="modal-body">
+                <p>
+                    <strong>Se estan procesando los datos</strong>
+                </p>
+                <p>
+                    <strong>Tiempo transcurrido: <b id="number"></b> segundos</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
